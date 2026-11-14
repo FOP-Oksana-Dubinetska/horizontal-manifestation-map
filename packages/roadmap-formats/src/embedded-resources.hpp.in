@@ -1,0 +1,7 @@
+#pragma once
+#include <string_view>
+namespace roadmap::formats::resources {
+inline constexpr std::string_view schema = R"hmap_resource(@HMAP_SCHEMA@)hmap_resource";
+inline constexpr std::string_view legacySchema = R"hmap_resource(@HMAP_LEGACY_SCHEMA@)hmap_resource";
+inline constexpr std::string_view example = R"hmap_resource(@HMAP_EXAMPLE@)hmap_resource";
+}

@@ -1,0 +1,14 @@
+{
+  "sourceRepository": "pan-canon/TheWorldOfCanon",
+  "sourceRevision": "1dda1e19de5033e48c296842851c320298a8be39",
+  "files": [
+    {
+      "path": "packages/roadmap-core/src/roadmap/domain/roadmap-project.hpp",
+      "sha256": "be7b79fbac4a1615322a6aaa1260b02b98da7607e984d0849e64312749305993"
+    },
+    {
+      "path": "tests/roadmap-project.test.cpp",
+      "sha256": "816270cd02786a3581842f4ad8f6c1f35cec46d1d40bb7f0748d093715a23691"
+    }
+  ]
+}

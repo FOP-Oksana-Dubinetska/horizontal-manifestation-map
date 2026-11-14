@@ -1,0 +1,19 @@
+{
+  "status": "candidate-measured",
+  "language": "C++20",
+  "nativeAuthorPlatform": "Windows + MinGW-w64 GCC; earlier Stage 00\u201302 local observations retained in TRACE",
+  "verificationPlatform": "Linux x86_64, GCC 14.2.0",
+  "cmake": "4.2.1",
+  "ninja": "1.13.0",
+  "clangFormat": "21.1.8",
+  "node": "24.22.1 host; emsdk ships 24.19.0",
+  "npm": "11.9.0",
+  "emscripten": "6.0.9",
+  "emsdkCommit": "5eb0bde7585670252e8ba05e9d361627bffd08b5",
+  "typescript": "5.9.3",
+  "vite": "7.3.1",
+  "playwright": "1.58.2",
+  "prettier": "3.6.2",
+  "browsers": "Exact launched versions are captured in build/check-reports/browser-versions.json",
+  "windowsAdapterGate": "pending owner observation"
+}

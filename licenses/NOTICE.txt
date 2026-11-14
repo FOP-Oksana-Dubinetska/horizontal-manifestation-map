@@ -1,0 +1,21 @@
+HMAP / Horizontal Manifestation Map
+Candidate implementation, program 0.0.0; schema 2; RoadmapText 1; API 1.
+
+Own source code, scripts, tests, reusable schemas and templates: MIT.
+Own explanatory prose: CC BY-SA 4.0. See the project licensing map and
+https://creativecommons.org/licenses/by-sa/4.0/legalcode.en
+Brand names and marks retain their separate rights.
+The editor assigns no license to the contents of user maps.
+
+Runtime dependencies and generated runtime code retain upstream terms:
+- nlohmann/json 3.12.0, MIT, Niels Lohmann (third-party/nlohmann-json.txt).
+- Emscripten 6.0.9 and compiled C/C++ support libraries, upstream notices
+  (third-party/emscripten.txt and accompanying support-library licenses).
+- Vite 7.3.1 generated browser helpers, MIT and listed upstream component terms
+  (third-party/vite.txt).
+Catch2, TypeScript and Playwright are development-only dependencies and are
+not bundled as application runtime libraries.
+
+Full policy, constitutional and methodology repositories are source references
+and are not part of the browser distribution. The root licensing map remains
+a proposed publication map until accepted by the repository owner.

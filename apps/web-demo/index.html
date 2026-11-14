@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<meta
+			name="description"
+			content="A local roadmap workspace: intentions, reusable elements and one horizontal route."
+		/>
+		<title>HMAP — Horizontal Manifestation Map</title>
+	</head>
+	<body>
+		<div class="demo-shell">
+			<header>
+				<a class="demo-brand" href="./">HMAP <span>/ LOCAL WORKSPACE</span></a
+				><span class="demo-build">SCHEMA 2 · WASM</span>
+			</header>
+			<main>
+				<div class="demo-heading">
+					<div>
+						<p class="demo-eyebrow">HORIZONTAL MANIFESTATION MAP</p>
+						<h1>From intention to implementation.</h1>
+						<p class="demo-intro">
+							Read the project above. Follow one route below. Keep the source in your hands.
+						</p>
+					</div>
+					<span class="demo-number">01 / WORKSPACE</span>
+				</div>
+				<nav class="demo-actions" aria-label="Project actions">
+					<button id="save" disabled>Save locally</button
+					><button id="save-copy" disabled>Save a copy</button
+					><button id="download-json" disabled>Download JSON</button
+					><button id="download-markdown" disabled>Download Markdown</button
+					><button id="help" disabled>Guide</button><button id="retry">Retry engine</button>
+				</nav>
+				<p id="host-status" role="status" aria-live="polite">Loading the local engine…</p>
+				<p id="storage-status" class="demo-storage" role="status"></p>
+				<div id="editor" class="demo-editor"></div>
+				<section id="guide" class="demo-guide" hidden>
+					<h2>Working with the map</h2>
+					<pre id="guide-text"></pre>
+					<button id="close-guide">Close guide</button>
+				</section>
+			</main>
+			<footer>
+				<span>JSON IS THE SOURCE · MARKDOWN IS A PROJECTION</span
+				><a href="./embedding-example.html">Embedding example ↗</a
+				><a href="./licenses/NOTICE.txt">Licenses</a>
+			</footer>
+		</div>
+		<script type="module" src="./main.ts"></script>
+	</body>
+</html>

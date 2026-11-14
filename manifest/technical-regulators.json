@@ -1,0 +1,141 @@
+{
+  "status": "candidate-completion",
+  "regulators": [
+    {
+      "id": "TR-CXX-STD",
+      "value": "C++20",
+      "blocking": true,
+      "source": "\u00a74; \u00a717.4",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    },
+    {
+      "id": "TR-INPUT-BYTES",
+      "value": 8388608,
+      "blocking": true,
+      "source": "\u00a716",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    },
+    {
+      "id": "TR-REQUEST-BYTES",
+      "value": 33554432,
+      "blocking": true,
+      "source": "API JSON-escaping transport envelope; map limit stays 8 MiB",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    },
+    {
+      "id": "TR-JSON-DEPTH",
+      "value": 64,
+      "blocking": true,
+      "source": "\u00a716",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    },
+    {
+      "id": "TR-ENTITY-COUNT",
+      "value": 10000,
+      "blocking": true,
+      "source": "\u00a716",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    },
+    {
+      "id": "TR-ROUTE-STEPS",
+      "value": 2000,
+      "blocking": true,
+      "source": "\u00a716",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    },
+    {
+      "id": "TR-TITLE-BYTES",
+      "value": 1024,
+      "blocking": true,
+      "source": "\u00a716",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    },
+    {
+      "id": "TR-EXPLANATION-BYTES",
+      "value": 16384,
+      "blocking": true,
+      "source": "\u00a716",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    },
+    {
+      "id": "TR-CHUNK-BYTES",
+      "value": 262144,
+      "blocking": true,
+      "source": "\u00a716",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    },
+    {
+      "id": "TR-REFERENCE-COUNT",
+      "value": 100000,
+      "blocking": true,
+      "source": "\u00a716",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    },
+    {
+      "id": "TR-DIAGNOSTIC-COUNT",
+      "value": 200,
+      "blocking": true,
+      "source": "\u00a716",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    },
+    {
+      "id": "TR-WASM-MEMORY",
+      "value": 268435456,
+      "blocking": true,
+      "source": "\u00a712.4; \u00a716",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    },
+    {
+      "id": "TR-WORKER-TIMEOUT",
+      "value": 10000,
+      "blocking": true,
+      "source": "\u00a712.5",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    },
+    {
+      "id": "TR-LEGACY-ORDER",
+      "value": "unique nonnegative integer within each ordered collection",
+      "blocking": true,
+      "source": "\u00a719; explicit ordinal interpretation",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    },
+    {
+      "id": "TR-WASM-DYNAMIC-EXECUTION",
+      "value": false,
+      "blocking": true,
+      "source": "\u00a714.6; static CSP browser evidence",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    },
+    {
+      "id": "TR-BUILD-SEPARATION",
+      "value": "distinct native/Wasm CMake caches",
+      "blocking": true,
+      "source": "\u00a712.4; \u00a718",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    },
+    {
+      "id": "TR-SOURCE-PRESERVATION",
+      "value": "unchanged author model/test bytes",
+      "blocking": true,
+      "source": "completion request; retained-author-files.json",
+      "owner": "project owner",
+      "changeProcedure": "bounded owner decision, revised fixture, manifest and TRACE"
+    }
+  ]
+}

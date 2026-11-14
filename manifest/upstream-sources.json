@@ -1,0 +1,17 @@
+{
+  "promptLiterateWorkflow": {
+    "repository": "https://github.com/IRONCREED/prompt-literate-workflow",
+    "commit": "3f75890a1b211eb81fc51697692a73a8ce895599",
+    "mode": "starter-derived"
+  },
+  "codeConstitution": {
+    "repository": "https://github.com/FOP-Oksana-Dubinetska/code-constitution",
+    "commit": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+    "mode": "reference-proposed"
+  },
+  "repositoryLicensingPolicy": {
+    "repository": "https://github.com/FOP-Oksana-Dubinetska/repository-licensing-policy",
+    "commit": "6e4c2627717c079827ed4aa9044a5346b3ea3ddb",
+    "mode": "reference"
+  }
+}

@@ -1,0 +1,512 @@
+{
+  "schemaVersion": 2,
+  "id": "p-hmap-development",
+  "title": "Horizontal Manifestation Map — development map",
+  "terminologyProfile": "engineering",
+  "selectedIntentId": "i-deliver-editor",
+  "selectedRouteId": "r-mvp",
+  "metadata": {
+    "formatVersion": "2.0.0",
+    "createdAt": null,
+    "updatedAt": null
+  },
+  "intents": [
+    {
+      "id": "i-deliver-editor",
+      "title": "Deliver a portable local roadmap editor",
+      "summary": "The accepted specification governs native CLI, shared C++ engine, reversible transport and an embeddable web projection.",
+      "status": "draft",
+      "kind": "finite",
+      "parentIntentIds": [],
+      "acceptanceCriteria": [
+        "The AC-01–AC-35 evidence matrix is reviewed; public release remains an explicit author decision."
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "id": "r-mvp",
+      "intentId": "i-deliver-editor",
+      "title": "CLI → Wasm → web acceptance",
+      "steps": [
+        {
+          "id": "s-workspace-foundation",
+          "title": "Reproducible workspace",
+          "stereotype": "module",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-cli"
+          ],
+          "linkedChunkIds": [
+            "c-workspace-foundation"
+          ]
+        },
+        {
+          "id": "s-core-domain-model",
+          "title": "Typed domain model",
+          "stereotype": "module",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-core"
+          ],
+          "linkedChunkIds": [
+            "c-core-domain-model"
+          ]
+        },
+        {
+          "id": "s-native-cli-shell",
+          "title": "CLI command contracts",
+          "stereotype": "module",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-cli"
+          ],
+          "linkedChunkIds": [
+            "c-native-cli-shell"
+          ]
+        },
+        {
+          "id": "s-wasm-portability-probe",
+          "title": "Wasm portability",
+          "stereotype": "module",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-api"
+          ],
+          "linkedChunkIds": [
+            "c-wasm-portability-probe"
+          ]
+        },
+        {
+          "id": "s-roadmap-json-boundary",
+          "title": "Strict JSON boundary",
+          "stereotype": "module",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-formats"
+          ],
+          "linkedChunkIds": [
+            "c-roadmap-json-boundary"
+          ]
+        },
+        {
+          "id": "s-roadmap-model-validation",
+          "title": "Model validation",
+          "stereotype": "module",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-core"
+          ],
+          "linkedChunkIds": [
+            "c-roadmap-model-validation"
+          ]
+        },
+        {
+          "id": "s-roadmap-text-protocol",
+          "title": "Reversible text transport",
+          "stereotype": "module",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-formats"
+          ],
+          "linkedChunkIds": [
+            "c-roadmap-text-protocol"
+          ]
+        },
+        {
+          "id": "s-roadmap-route-view",
+          "title": "Single route projection",
+          "stereotype": "module",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-formats"
+          ],
+          "linkedChunkIds": [
+            "c-roadmap-route-view"
+          ]
+        },
+        {
+          "id": "s-roadmap-guidance",
+          "title": "Bilingual guidance",
+          "stereotype": "module",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-api"
+          ],
+          "linkedChunkIds": [
+            "c-roadmap-guidance"
+          ]
+        },
+        {
+          "id": "s-roadmap-storage",
+          "title": "Explicit storage",
+          "stereotype": "module",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-storage"
+          ],
+          "linkedChunkIds": [
+            "c-roadmap-storage"
+          ]
+        },
+        {
+          "id": "s-markdown-export",
+          "title": "Deterministic Markdown",
+          "stereotype": "module",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-formats"
+          ],
+          "linkedChunkIds": [
+            "c-markdown-export"
+          ]
+        },
+        {
+          "id": "s-roadmap-format-migration",
+          "title": "Schema migration",
+          "stereotype": "module",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-formats"
+          ],
+          "linkedChunkIds": [
+            "c-roadmap-format-migration"
+          ]
+        },
+        {
+          "id": "s-embeddable-ui-shell",
+          "title": "Embeddable editor",
+          "stereotype": "module",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-ui"
+          ],
+          "linkedChunkIds": [
+            "c-embeddable-ui-shell"
+          ]
+        },
+        {
+          "id": "s-web-demo",
+          "title": "Static host",
+          "stereotype": "module",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-demo"
+          ],
+          "linkedChunkIds": [
+            "c-web-demo"
+          ]
+        },
+        {
+          "id": "s-validation-pass",
+          "title": "Release acceptance",
+          "stereotype": "validation",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-api"
+          ],
+          "linkedChunkIds": [
+            "c-validation-pass"
+          ]
+        }
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "id": "m-core",
+      "title": "Domain and validation",
+      "summary": "Project responsibility; see the code path and accepted contracts.",
+      "kind": "core",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "existence": "existing",
+      "codeRefs": [
+        {
+          "repository": "horizontal-manifestation-map (local project)",
+          "path": "packages/roadmap-core",
+          "revision": null,
+          "symbol": null
+        }
+      ]
+    },
+    {
+      "id": "m-formats",
+      "title": "Formats and projections",
+      "summary": "Project responsibility; see the code path and accepted contracts.",
+      "kind": "export",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "existence": "existing",
+      "codeRefs": [
+        {
+          "repository": "horizontal-manifestation-map (local project)",
+          "path": "packages/roadmap-formats",
+          "revision": null,
+          "symbol": null
+        }
+      ]
+    },
+    {
+      "id": "m-cli",
+      "title": "CLI and file adapter",
+      "summary": "Project responsibility; see the code path and accepted contracts.",
+      "kind": "ui",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "existence": "existing",
+      "codeRefs": [
+        {
+          "repository": "horizontal-manifestation-map (local project)",
+          "path": "apps/roadmap-cli",
+          "revision": null,
+          "symbol": null
+        }
+      ]
+    },
+    {
+      "id": "m-api",
+      "title": "Shared API and guidance",
+      "summary": "Project responsibility; see the code path and accepted contracts.",
+      "kind": "validation",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "existence": "existing",
+      "codeRefs": [
+        {
+          "repository": "horizontal-manifestation-map (local project)",
+          "path": "packages/roadmap-wasm",
+          "revision": null,
+          "symbol": null
+        }
+      ]
+    },
+    {
+      "id": "m-storage",
+      "title": "Storage adapters",
+      "summary": "Project responsibility; see the code path and accepted contracts.",
+      "kind": "storage",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "existence": "existing",
+      "codeRefs": [
+        {
+          "repository": "horizontal-manifestation-map (local project)",
+          "path": "packages/roadmap-storage",
+          "revision": null,
+          "symbol": null
+        }
+      ]
+    },
+    {
+      "id": "m-ui",
+      "title": "Public editor",
+      "summary": "Project responsibility; see the code path and accepted contracts.",
+      "kind": "ui",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "existence": "existing",
+      "codeRefs": [
+        {
+          "repository": "horizontal-manifestation-map (local project)",
+          "path": "packages/roadmap-ui",
+          "revision": null,
+          "symbol": null
+        }
+      ]
+    },
+    {
+      "id": "m-demo",
+      "title": "Static demo",
+      "summary": "Project responsibility; see the code path and accepted contracts.",
+      "kind": "demo",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "existence": "existing",
+      "codeRefs": [
+        {
+          "repository": "horizontal-manifestation-map (local project)",
+          "path": "apps/web-demo",
+          "revision": null,
+          "symbol": null
+        }
+      ]
+    }
+  ],
+  "chunks": [
+    {
+      "id": "c-workspace-foundation",
+      "name": "workspace-foundation",
+      "body": "Stage 00. Reproducible workspace.\nContract: CONTRACTS.md, chunk workspace-foundation.\nScenarios: SCENARIOS.md. Evidence: TRACE.md.\nThis projection links accepted companion documents; it grants no release authority.",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "linkedModuleIds": [
+        "m-cli"
+      ]
+    },
+    {
+      "id": "c-core-domain-model",
+      "name": "core-domain-model",
+      "body": "Stage 01. Typed domain model.\nContract: CONTRACTS.md, chunk core-domain-model.\nScenarios: SCENARIOS.md. Evidence: TRACE.md.\nThis projection links accepted companion documents; it grants no release authority.",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "linkedModuleIds": [
+        "m-core"
+      ]
+    },
+    {
+      "id": "c-native-cli-shell",
+      "name": "native-cli-shell",
+      "body": "Stage 02. CLI command contracts.\nContract: CONTRACTS.md, chunk native-cli-shell.\nScenarios: SCENARIOS.md. Evidence: TRACE.md.\nThis projection links accepted companion documents; it grants no release authority.",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "linkedModuleIds": [
+        "m-cli"
+      ]
+    },
+    {
+      "id": "c-wasm-portability-probe",
+      "name": "wasm-portability-probe",
+      "body": "Stage 03. Wasm portability.\nContract: CONTRACTS.md, chunk wasm-portability-probe.\nScenarios: SCENARIOS.md. Evidence: TRACE.md.\nThis projection links accepted companion documents; it grants no release authority.",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "linkedModuleIds": [
+        "m-api"
+      ]
+    },
+    {
+      "id": "c-roadmap-json-boundary",
+      "name": "roadmap-json-boundary",
+      "body": "Stage 04. Strict JSON boundary.\nContract: CONTRACTS.md, chunk roadmap-json-boundary.\nScenarios: SCENARIOS.md. Evidence: TRACE.md.\nThis projection links accepted companion documents; it grants no release authority.",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "linkedModuleIds": [
+        "m-formats"
+      ]
+    },
+    {
+      "id": "c-roadmap-model-validation",
+      "name": "roadmap-model-validation",
+      "body": "Stage 05. Model validation.\nContract: CONTRACTS.md, chunk roadmap-model-validation.\nScenarios: SCENARIOS.md. Evidence: TRACE.md.\nThis projection links accepted companion documents; it grants no release authority.",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "linkedModuleIds": [
+        "m-core"
+      ]
+    },
+    {
+      "id": "c-roadmap-text-protocol",
+      "name": "roadmap-text-protocol",
+      "body": "Stage 06. Reversible text transport.\nContract: CONTRACTS.md, chunk roadmap-text-protocol.\nScenarios: SCENARIOS.md. Evidence: TRACE.md.\nThis projection links accepted companion documents; it grants no release authority.",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "linkedModuleIds": [
+        "m-formats"
+      ]
+    },
+    {
+      "id": "c-roadmap-route-view",
+      "name": "roadmap-route-view",
+      "body": "Stage 07. Single route projection.\nContract: CONTRACTS.md, chunk roadmap-route-view.\nScenarios: SCENARIOS.md. Evidence: TRACE.md.\nThis projection links accepted companion documents; it grants no release authority.",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "linkedModuleIds": [
+        "m-formats"
+      ]
+    },
+    {
+      "id": "c-roadmap-guidance",
+      "name": "roadmap-guidance",
+      "body": "Stage 08. Bilingual guidance.\nContract: CONTRACTS.md, chunk roadmap-guidance.\nScenarios: SCENARIOS.md. Evidence: TRACE.md.\nThis projection links accepted companion documents; it grants no release authority.",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "linkedModuleIds": [
+        "m-api"
+      ]
+    },
+    {
+      "id": "c-roadmap-storage",
+      "name": "roadmap-storage",
+      "body": "Stage 09. Explicit storage.\nContract: CONTRACTS.md, chunk roadmap-storage.\nScenarios: SCENARIOS.md. Evidence: TRACE.md.\nThis projection links accepted companion documents; it grants no release authority.",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "linkedModuleIds": [
+        "m-storage"
+      ]
+    },
+    {
+      "id": "c-markdown-export",
+      "name": "markdown-export",
+      "body": "Stage 10. Deterministic Markdown.\nContract: CONTRACTS.md, chunk markdown-export.\nScenarios: SCENARIOS.md. Evidence: TRACE.md.\nThis projection links accepted companion documents; it grants no release authority.",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "linkedModuleIds": [
+        "m-formats"
+      ]
+    },
+    {
+      "id": "c-roadmap-format-migration",
+      "name": "roadmap-format-migration",
+      "body": "Stage 11. Schema migration.\nContract: CONTRACTS.md, chunk roadmap-format-migration.\nScenarios: SCENARIOS.md. Evidence: TRACE.md.\nThis projection links accepted companion documents; it grants no release authority.",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "linkedModuleIds": [
+        "m-formats"
+      ]
+    },
+    {
+      "id": "c-embeddable-ui-shell",
+      "name": "embeddable-ui-shell",
+      "body": "Stage 12. Embeddable editor.\nContract: CONTRACTS.md, chunk embeddable-ui-shell.\nScenarios: SCENARIOS.md. Evidence: TRACE.md.\nThis projection links accepted companion documents; it grants no release authority.",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "linkedModuleIds": [
+        "m-ui"
+      ]
+    },
+    {
+      "id": "c-web-demo",
+      "name": "web-demo",
+      "body": "Stage 13. Static host.\nContract: CONTRACTS.md, chunk web-demo.\nScenarios: SCENARIOS.md. Evidence: TRACE.md.\nThis projection links accepted companion documents; it grants no release authority.",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "linkedModuleIds": [
+        "m-demo"
+      ]
+    },
+    {
+      "id": "c-validation-pass",
+      "name": "validation-pass",
+      "body": "Stage 14. Release acceptance.\nContract: CONTRACTS.md, chunk validation-pass.\nScenarios: SCENARIOS.md. Evidence: TRACE.md.\nThis projection links accepted companion documents; it grants no release authority.",
+      "linkedIntentIds": [
+        "i-deliver-editor"
+      ],
+      "linkedModuleIds": [
+        "m-api"
+      ]
+    }
+  ],
+  "intersections": [],
+  "estimates": []
+}

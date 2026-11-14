@@ -1,0 +1,93 @@
+{
+  "id": "p-demo",
+  "schemaVersion": 1,
+  "title": "Проверка карты",
+  "terminologyProfile": "engineering",
+  "selectedIntentId": "i-check",
+  "metadata": {
+    "formatVersion": "1.0.0",
+    "createdAt": "2026-06-21T00:00:00Z",
+    "updatedAt": "2026-06-21T00:00:00Z"
+  },
+  "intents": [
+    {
+      "id": "i-check",
+      "title": "Получить проверенную карту",
+      "summary": "Автор получает понятное объяснение каждой ошибочной ссылки.",
+      "status": "draft",
+      "order": 0
+    }
+  ],
+  "routes": [
+    {
+      "id": "r-check",
+      "intentId": "i-check",
+      "title": "Проверка и получение результата",
+      "steps": [
+        {
+          "id": "s-intent",
+          "title": "Сформулировать критерий",
+          "stereotype": "intent",
+          "linkedModuleIds": [],
+          "linkedChunkIds": [
+            "c-validation"
+          ],
+          "order": 0
+        },
+        {
+          "id": "s-validation",
+          "title": "Проверить связи",
+          "stereotype": "validation",
+          "estimateId": "e-validation",
+          "linkedModuleIds": [
+            "m-validator"
+          ],
+          "linkedChunkIds": [
+            "c-validation"
+          ],
+          "order": 1
+        },
+        {
+          "id": "s-export",
+          "title": "Вывести результат",
+          "stereotype": "export",
+          "linkedModuleIds": [],
+          "linkedChunkIds": [],
+          "order": 2
+        }
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "id": "m-validator",
+      "title": "Валидатор карты",
+      "summary": "Проверяет ID и типы связей.",
+      "kind": "validation",
+      "linkedIntentIds": [
+        "i-check"
+      ]
+    }
+  ],
+  "chunks": [
+    {
+      "id": "c-validation",
+      "name": "Контракт проверки",
+      "body": "Валидатор возвращает диагностику и сохраняет исходный документ.",
+      "linkedIntentIds": [
+        "i-check"
+      ],
+      "linkedModuleIds": [
+        "m-validator"
+      ]
+    }
+  ],
+  "intersections": [],
+  "estimates": [
+    {
+      "id": "e-validation",
+      "label": "2–4 d",
+      "confidence": "low"
+    }
+  ]
+}

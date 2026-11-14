@@ -1,0 +1,29 @@
+{
+  "files": [
+    {
+      "path": "catch2/catch_amalgamated.hpp",
+      "sha256": "d4cc143ea76ae212204363922d8adf376d66a1fda5a33ac73f93a7d1c119f4e0",
+      "url": "https://raw.githubusercontent.com/catchorg/Catch2/317ac1ed4c0bb6e6b91eafc817e05c488feffcb3/extras/catch_amalgamated.hpp"
+    },
+    {
+      "path": "catch2/catch_amalgamated.cpp",
+      "sha256": "1fe7f10334e0ae5494419cfa84c270f15235eada0fc02bdb493d1def537601f3",
+      "url": "https://raw.githubusercontent.com/catchorg/Catch2/317ac1ed4c0bb6e6b91eafc817e05c488feffcb3/extras/catch_amalgamated.cpp"
+    },
+    {
+      "path": "catch2/Catch.cmake",
+      "sha256": "9d0f43ad8acc4bc5324ed8b9b86b6f227533f7298de1622b13bc0b1d31bdf890",
+      "url": "https://raw.githubusercontent.com/catchorg/Catch2/317ac1ed4c0bb6e6b91eafc817e05c488feffcb3/extras/Catch.cmake"
+    },
+    {
+      "path": "catch2/CatchAddTests.cmake",
+      "sha256": "bbfa9e52ed8873f6e964a65b8f69c0536a9e9fc8b7bba428b39d29f93669720f",
+      "url": "https://raw.githubusercontent.com/catchorg/Catch2/317ac1ed4c0bb6e6b91eafc817e05c488feffcb3/extras/CatchAddTests.cmake"
+    },
+    {
+      "path": "nlohmann/json.hpp",
+      "sha256": "aaf127c04cb31c406e5b04a63f1ae89369fccde6d8fa7cdda1ed4f32dfc5de63",
+      "url": "https://raw.githubusercontent.com/nlohmann/json/v3.12.0/single_include/nlohmann/json.hpp"
+    }
+  ]
+}

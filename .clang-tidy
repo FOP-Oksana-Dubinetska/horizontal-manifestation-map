@@ -1,0 +1,4 @@
+Checks: '-*,bugprone-*,performance-*'
+WarningsAsErrors: ''
+HeaderFilterRegex: '^(apps|packages|tests)/'
+FormatStyle: file

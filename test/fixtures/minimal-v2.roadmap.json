@@ -1,0 +1,104 @@
+{
+  "id": "p-demo",
+  "schemaVersion": 2,
+  "title": "Проверка карты",
+  "terminologyProfile": "engineering",
+  "selectedIntentId": "i-check",
+  "selectedRouteId": "r-check",
+  "metadata": {
+    "formatVersion": "2.0.0",
+    "createdAt": null,
+    "updatedAt": null
+  },
+  "intents": [
+    {
+      "id": "i-check",
+      "title": "Получить проверенную карту",
+      "summary": "Автор получает понятное объяснение каждой ошибочной ссылки.",
+      "status": "draft",
+      "kind": "finite",
+      "parentIntentIds": [],
+      "acceptanceCriteria": [
+        "Ссылка на отсутствующий модуль вызывает E_REF_NOT_FOUND."
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "id": "r-check",
+      "intentId": "i-check",
+      "title": "Проверка и получение результата",
+      "steps": [
+        {
+          "id": "s-intent",
+          "title": "Сформулировать критерий",
+          "stereotype": "intent",
+          "estimateId": null,
+          "linkedModuleIds": [],
+          "linkedChunkIds": [
+            "c-validation"
+          ]
+        },
+        {
+          "id": "s-validation",
+          "title": "Проверить связи",
+          "stereotype": "validation",
+          "estimateId": "e-validation",
+          "linkedModuleIds": [
+            "m-validator"
+          ],
+          "linkedChunkIds": [
+            "c-validation"
+          ]
+        },
+        {
+          "id": "s-export",
+          "title": "Вывести результат",
+          "stereotype": "export",
+          "estimateId": null,
+          "linkedModuleIds": [],
+          "linkedChunkIds": []
+        }
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "id": "m-validator",
+      "title": "Валидатор карты",
+      "summary": "Проверяет ID и типы связей.",
+      "kind": "validation",
+      "linkedIntentIds": [
+        "i-check"
+      ],
+      "existence": "planned",
+      "codeRefs": []
+    }
+  ],
+  "chunks": [
+    {
+      "id": "c-validation",
+      "name": "Контракт проверки",
+      "body": "Валидатор возвращает диагностику и сохраняет исходный документ.",
+      "linkedIntentIds": [
+        "i-check"
+      ],
+      "linkedModuleIds": [
+        "m-validator"
+      ]
+    }
+  ],
+  "intersections": [],
+  "estimates": [
+    {
+      "id": "e-validation",
+      "label": "Первичная реализация проверки",
+      "confidence": "low",
+      "basis": "Первое учебное знакомство с индексом ID.",
+      "value": {
+        "type": "unknown",
+        "reason": "Трудоёмкость уточняется после первого теста."
+      }
+    }
+  ]
+}

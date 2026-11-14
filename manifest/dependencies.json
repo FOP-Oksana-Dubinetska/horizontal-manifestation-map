@@ -1,0 +1,65 @@
+{
+  "preparedOn": "2026-11-11",
+  "dependencies": [
+    {
+      "name": "Catch2",
+      "version": "3.16.0",
+      "repository": "https://github.com/catchorg/Catch2",
+      "commit": "317ac1ed4c0bb6e6b91eafc817e05c488feffcb3",
+      "purpose": "C++ tests from stage 00",
+      "license": "BSL-1.0"
+    },
+    {
+      "name": "nlohmann/json",
+      "version": "3.12.0",
+      "repository": "https://github.com/nlohmann/json",
+      "tag": "v3.12.0",
+      "releaseJsonHppSha256": "aaf127c04cb31c406e5b04a63f1ae89369fccde6d8fa7cdda1ed4f32dfc5de63",
+      "purpose": "shared JSON adapter",
+      "license": "MIT"
+    },
+    {
+      "name": "Emscripten",
+      "version": "6.0.9",
+      "repository": "https://github.com/emscripten-core/emscripten",
+      "tag": "6.0.9",
+      "purpose": "Wasm toolchain; shared release engine",
+      "license": "MIT / LLVM-style components as upstream"
+    },
+    {
+      "name": "@playwright/test",
+      "version": "1.58.2",
+      "license": "Apache-2.0",
+      "purpose": "pinned web build and verification",
+      "integritySource": "package-lock.json"
+    },
+    {
+      "name": "@types/node",
+      "version": "24.10.1",
+      "license": "MIT",
+      "purpose": "pinned web build and verification",
+      "integritySource": "package-lock.json"
+    },
+    {
+      "name": "prettier",
+      "version": "3.6.2",
+      "license": "MIT",
+      "purpose": "pinned web build and verification",
+      "integritySource": "package-lock.json"
+    },
+    {
+      "name": "typescript",
+      "version": "5.9.3",
+      "license": "Apache-2.0",
+      "purpose": "pinned web build and verification",
+      "integritySource": "package-lock.json"
+    },
+    {
+      "name": "vite",
+      "version": "7.3.1",
+      "license": "MIT",
+      "purpose": "pinned web build and verification",
+      "integritySource": "package-lock.json"
+    }
+  ]
+}

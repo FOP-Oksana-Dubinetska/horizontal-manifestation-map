@@ -1,0 +1,641 @@
+{
+  "version": "1.0.0",
+  "entries": [
+    {
+      "id": "help-getting-started",
+      "topic": "getting-started",
+      "condition": "always",
+      "en": {
+        "title": "getting-started",
+        "summary": "Start with a template, validate, import and export.",
+        "explanation": "Start with a template, validate, import and export.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "ru": {
+        "title": "getting-started",
+        "summary": "Начните с шаблона, проверьте, импортируйте и экспортируйте карту.",
+        "explanation": "Начните с шаблона, проверьте, импортируйте и экспортируйте карту.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "help-commands",
+      "topic": "commands",
+      "condition": "always",
+      "en": {
+        "title": "commands",
+        "summary": "Commands: help, template, schema, validate, import, normalize, render, inspect, hints, explain, export, migrate. Input may be a file or - for stdin.",
+        "explanation": "Commands: help, template, schema, validate, import, normalize, render, inspect, hints, explain, export, migrate. Input may be a file or - for stdin.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "ru": {
+        "title": "commands",
+        "summary": "Команды: help, template, schema, validate, import, normalize, render, inspect, hints, explain, export, migrate. Вход — файл либо - для stdin.",
+        "explanation": "Команды: help, template, schema, validate, import, normalize, render, inspect, hints, explain, export, migrate. Вход — файл либо - для stdin.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "help-json",
+      "topic": "json",
+      "condition": "always",
+      "en": {
+        "title": "json",
+        "summary": "Canonical data is strict UTF-8 JSON schema 2. IDs are global; unknown fields and duplicate keys are errors.",
+        "explanation": "Canonical data is strict UTF-8 JSON schema 2. IDs are global; unknown fields and duplicate keys are errors.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "ru": {
+        "title": "json",
+        "summary": "Канонические данные — строгий UTF-8 JSON схемы 2. ID глобальны; неизвестные поля и повторные ключи вызывают ошибку.",
+        "explanation": "Канонические данные — строгий UTF-8 JSON схемы 2. ID глобальны; неизвестные поля и повторные ключи вызывают ошибку.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "help-roadmap-text",
+      "topic": "roadmap-text",
+      "condition": "always",
+      "en": {
+        "title": "roadmap-text",
+        "summary": "RoadmapText/1 uses keyword id {JSON fields} records and <<route:id>> [step] -> [step] <<end-route>> blocks. Each step belongs to one block. Use hmap template --format=roadmap-text for all required fields.",
+        "explanation": "RoadmapText/1 uses keyword id {JSON fields} records and <<route:id>> [step] -> [step] <<end-route>> blocks. Each step belongs to one block. Use hmap template --format=roadmap-text for all required fields.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "ru": {
+        "title": "roadmap-text",
+        "summary": "RoadmapText/1 использует записи keyword id {JSON-поля} и блоки <<route:id>> [step] -> [step] <<end-route>>. Каждый шаг входит в один блок. Полный список обязательных полей: hmap template --format=roadmap-text.",
+        "explanation": "RoadmapText/1 использует записи keyword id {JSON-поля} и блоки <<route:id>> [step] -> [step] <<end-route>>. Каждый шаг входит в один блок. Полный список обязательных полей: hmap template --format=roadmap-text.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "help-llm",
+      "topic": "llm",
+      "condition": "always",
+      "en": {
+        "title": "llm",
+        "summary": "Return a complete RoadmapText/1 document, preserve existing IDs, declare every reference and use unknown with a reason. No outer Markdown fence. Run hmap validate candidate.roadmap.txt --format=json. Obtain the complete grammar with help roadmap-text, field definitions with schema, and a self-contained example with template --format=roadmap-text.",
+        "explanation": "Return a complete RoadmapText/1 document, preserve existing IDs, declare every reference and use unknown with a reason. No outer Markdown fence. Run hmap validate candidate.roadmap.txt --format=json. Obtain the complete grammar with help roadmap-text, field definitions with schema, and a self-contained example with template --format=roadmap-text.\n\nRoadmapText/1; JSON schema 2; API 1.\nID: [a-z][a-z0-9]*(?:-[a-z0-9]+)*; 1..64 ASCII bytes.\n\nproject ID {schemaVersion, title, terminologyProfile, selectedIntentId, selectedRouteId, metadata}\nintent ID {title, summary, status, kind, parentIntentIds, acceptanceCriteria}\nroute ID {intentId, title}\nstep ID {title, stereotype, estimateId, linkedModuleIds, linkedChunkIds}\nmodule ID {title, summary, kind, linkedIntentIds, existence, codeRefs}\nchunk ID {name, body, linkedIntentIds, linkedModuleIds}\nintersection ID {title, sourceIds, note}\nestimate ID {label, confidence, basis, value}\n\n!roadmap-text 1\nkeyword id { strict JSON fields }\n<<route:route-id>>\n[step-id] -> [other-step-id]\n<<end-route>>\n\nEach route has one block. Each step occurs exactly once. All references must be declared with the correct type. Unknown estimates require a reason. Preserve author strings. Comments start with # outside JSON and route blocks.\n\nSelf-contained example:\n!roadmap-text 1\nproject p-demo {\n  \"schemaVersion\": 2,\n  \"title\": \"Проверка карты\",\n  \"terminologyProfile\": \"engineering\",\n  \"selectedIntentId\": \"i-check\",\n  \"selectedRouteId\": \"r-check\",\n  \"metadata\": {\"formatVersion\":\"2.0.0\",\"createdAt\":null,\"updatedAt\":null}\n}\nintent i-check {\n  \"title\":\"Получить проверенную карту\",\n  \"summary\":\"Автор получает понятное объяснение каждой ошибочной ссылки.\",\n  \"status\":\"draft\",\n  \"kind\":\"finite\",\n  \"parentIntentIds\":[],\n  \"acceptanceCriteria\":[\"Ссылка на отсутствующий модуль вызывает E_REF_NOT_FOUND.\"]\n}\nmodule m-validator {\n  \"title\":\"Валидатор карты\",\n  \"summary\":\"Проверяет ID и типы связей.\",\n  \"kind\":\"validation\",\n  \"linkedIntentIds\":[\"i-check\"],\n  \"existence\":\"planned\",\n  \"codeRefs\":[]\n}\nchunk c-validation {\n  \"name\":\"Контракт проверки\",\n  \"body\":\"Валидатор возвращает диагностику и сохраняет исходный документ.\",\n  \"linkedIntentIds\":[\"i-check\"],\n  \"linkedModuleIds\":[\"m-validator\"]\n}\nestimate e-validation {\n  \"label\":\"Первичная реализация проверки\",\n  \"confidence\":\"low\",\n  \"basis\":\"Первое учебное знакомство с индексом ID.\",\n  \"value\":{\"type\":\"unknown\",\"reason\":\"Трудоёмкость уточняется после первого теста.\"}\n}\nroute r-check {\"intentId\":\"i-check\",\"title\":\"Проверка и получение результата\"}\nstep s-intent {\n  \"title\":\"Сформулировать критерий\",\n  \"stereotype\":\"intent\",\n  \"estimateId\":null,\n  \"linkedModuleIds\":[],\n  \"linkedChunkIds\":[\"c-validation\"]\n}\nstep s-validation {\n  \"title\":\"Проверить связи\",\n  \"stereotype\":\"validation\",\n  \"estimateId\":\"e-validation\",\n  \"linkedModuleIds\":[\"m-validator\"],\n  \"linkedChunkIds\":[\"c-validation\"]\n}\nstep s-export {\n  \"title\":\"Вывести результат\",\n  \"stereotype\":\"export\",\n  \"estimateId\":null,\n  \"linkedModuleIds\":[],\n  \"linkedChunkIds\":[]\n}\n<<route:r-check>>\n[s-intent] -> [s-validation] -> [s-export]\n<<end-route>>\n\nhmap validate candidate.roadmap.txt --format=json\n",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "ru": {
+        "title": "llm",
+        "summary": "Возвращайте полный RoadmapText/1, сохраняйте ID, объявляйте цели ссылок, используйте unknown с причиной. Внешнее Markdown-ограждение отсутствует. Проверка: hmap validate candidate.roadmap.txt --format=json. Грамматика: help roadmap-text; поля: schema; самодостаточный пример: template --format=roadmap-text.",
+        "explanation": "Возвращайте полный RoadmapText/1, сохраняйте ID, объявляйте цели ссылок, используйте unknown с причиной. Внешнее Markdown-ограждение отсутствует. Проверка: hmap validate candidate.roadmap.txt --format=json. Грамматика: help roadmap-text; поля: schema; самодостаточный пример: template --format=roadmap-text.\n\nRoadmapText/1; JSON schema 2; API 1.\nID: [a-z][a-z0-9]*(?:-[a-z0-9]+)*; 1..64 ASCII bytes.\n\nproject ID {schemaVersion, title, terminologyProfile, selectedIntentId, selectedRouteId, metadata}\nintent ID {title, summary, status, kind, parentIntentIds, acceptanceCriteria}\nroute ID {intentId, title}\nstep ID {title, stereotype, estimateId, linkedModuleIds, linkedChunkIds}\nmodule ID {title, summary, kind, linkedIntentIds, existence, codeRefs}\nchunk ID {name, body, linkedIntentIds, linkedModuleIds}\nintersection ID {title, sourceIds, note}\nestimate ID {label, confidence, basis, value}\n\n!roadmap-text 1\nkeyword id { strict JSON fields }\n<<route:route-id>>\n[step-id] -> [other-step-id]\n<<end-route>>\n\nУ каждого маршрута один блок; каждый шаг встречается ровно один раз. Все ссылки объявляются с правильным типом. Unknown требует причину. Сохраняйте авторские строки. Комментарии # разрешены вне JSON и блоков маршрута.\n\nСамодостаточный пример:\n!roadmap-text 1\nproject p-demo {\n  \"schemaVersion\": 2,\n  \"title\": \"Проверка карты\",\n  \"terminologyProfile\": \"engineering\",\n  \"selectedIntentId\": \"i-check\",\n  \"selectedRouteId\": \"r-check\",\n  \"metadata\": {\"formatVersion\":\"2.0.0\",\"createdAt\":null,\"updatedAt\":null}\n}\nintent i-check {\n  \"title\":\"Получить проверенную карту\",\n  \"summary\":\"Автор получает понятное объяснение каждой ошибочной ссылки.\",\n  \"status\":\"draft\",\n  \"kind\":\"finite\",\n  \"parentIntentIds\":[],\n  \"acceptanceCriteria\":[\"Ссылка на отсутствующий модуль вызывает E_REF_NOT_FOUND.\"]\n}\nmodule m-validator {\n  \"title\":\"Валидатор карты\",\n  \"summary\":\"Проверяет ID и типы связей.\",\n  \"kind\":\"validation\",\n  \"linkedIntentIds\":[\"i-check\"],\n  \"existence\":\"planned\",\n  \"codeRefs\":[]\n}\nchunk c-validation {\n  \"name\":\"Контракт проверки\",\n  \"body\":\"Валидатор возвращает диагностику и сохраняет исходный документ.\",\n  \"linkedIntentIds\":[\"i-check\"],\n  \"linkedModuleIds\":[\"m-validator\"]\n}\nestimate e-validation {\n  \"label\":\"Первичная реализация проверки\",\n  \"confidence\":\"low\",\n  \"basis\":\"Первое учебное знакомство с индексом ID.\",\n  \"value\":{\"type\":\"unknown\",\"reason\":\"Трудоёмкость уточняется после первого теста.\"}\n}\nroute r-check {\"intentId\":\"i-check\",\"title\":\"Проверка и получение результата\"}\nstep s-intent {\n  \"title\":\"Сформулировать критерий\",\n  \"stereotype\":\"intent\",\n  \"estimateId\":null,\n  \"linkedModuleIds\":[],\n  \"linkedChunkIds\":[\"c-validation\"]\n}\nstep s-validation {\n  \"title\":\"Проверить связи\",\n  \"stereotype\":\"validation\",\n  \"estimateId\":\"e-validation\",\n  \"linkedModuleIds\":[\"m-validator\"],\n  \"linkedChunkIds\":[\"c-validation\"]\n}\nstep s-export {\n  \"title\":\"Вывести результат\",\n  \"stereotype\":\"export\",\n  \"estimateId\":null,\n  \"linkedModuleIds\":[],\n  \"linkedChunkIds\":[]\n}\n<<route:r-check>>\n[s-intent] -> [s-validation] -> [s-export]\n<<end-route>>\n\nhmap validate candidate.roadmap.txt --format=json\n",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "help-intents",
+      "topic": "intents",
+      "condition": "always",
+      "en": {
+        "title": "intents",
+        "summary": "An intention states an observable desired result. Its parents describe origin; acceptanceCriteria describe acceptance.",
+        "explanation": "An intention states an observable desired result. Its parents describe origin; acceptanceCriteria describe acceptance.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "ru": {
+        "title": "intents",
+        "summary": "Намерение задаёт наблюдаемый желаемый результат. Родители описывают происхождение; acceptanceCriteria — приёмку.",
+        "explanation": "Намерение задаёт наблюдаемый желаемый результат. Родители описывают происхождение; acceptanceCriteria — приёмку.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "help-routes",
+      "topic": "routes",
+      "condition": "always",
+      "en": {
+        "title": "routes",
+        "summary": "A route is an ordered scenario for one intention. Selecting a route changes the view; it establishes no scheduling dependency.",
+        "explanation": "A route is an ordered scenario for one intention. Selecting a route changes the view; it establishes no scheduling dependency.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "ru": {
+        "title": "routes",
+        "summary": "Маршрут — упорядоченный сценарий одного намерения. Выбор меняет представление; календарные зависимости задаются отдельно.",
+        "explanation": "Маршрут — упорядоченный сценарий одного намерения. Выбор меняет представление; календарные зависимости задаются отдельно.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "help-reuse",
+      "topic": "reuse",
+      "condition": "always",
+      "en": {
+        "title": "reuse",
+        "summary": "Reuse is established by multiple steps referencing the same module ID. Each occurrence keeps its own step ID.",
+        "explanation": "Reuse is established by multiple steps referencing the same module ID. Each occurrence keeps its own step ID.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "ru": {
+        "title": "reuse",
+        "summary": "Переиспользование определяется ссылками разных шагов на один ID модуля. Каждое вхождение имеет собственный ID шага.",
+        "explanation": "Переиспользование определяется ссылками разных шагов на один ID модуля. Каждое вхождение имеет собственный ID шага.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "help-estimates",
+      "topic": "estimates",
+      "condition": "always",
+      "en": {
+        "title": "estimates",
+        "summary": "range effort means person-minutes; elapsed means calendar minutes. Unknown ?, not-applicable n/a, text and missing - are distinct. Totals are outside schema 2.",
+        "explanation": "range effort means person-minutes; elapsed means calendar minutes. Unknown ?, not-applicable n/a, text and missing - are distinct. Totals are outside schema 2.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "ru": {
+        "title": "estimates",
+        "summary": "range effort — человеко-минуты; elapsed — календарные минуты. Unknown ?, not-applicable n/a, text и отсутствие - различаются. Итоги выходят за схему 2.",
+        "explanation": "range effort — человеко-минуты; elapsed — календарные минуты. Unknown ?, not-applicable n/a, text и отсутствие - различаются. Итоги выходят за схему 2.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "help-continuous-intents",
+      "topic": "continuous-intents",
+      "condition": "always",
+      "en": {
+        "title": "continuous-intents",
+        "summary": "A continuous intention stays active while maintained or deferred while suspended. Describe initial implementation and recurring review separately.",
+        "explanation": "A continuous intention stays active while maintained or deferred while suspended. Describe initial implementation and recurring review separately.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "ru": {
+        "title": "continuous-intents",
+        "summary": "Постоянное намерение сохраняет active при сопровождении либо deferred при приостановке. Первоначальную реализацию и периодическую проверку опишите отдельно.",
+        "explanation": "Постоянное намерение сохраняет active при сопровождении либо deferred при приостановке. Первоначальную реализацию и периодическую проверку опишите отдельно.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "help-references",
+      "topic": "references",
+      "condition": "always",
+      "en": {
+        "title": "references",
+        "summary": "IDs use [a-z][a-z0-9]*(?:-[a-z0-9]+)*, 1..64 ASCII bytes. Update references in one complete candidate. Intersections accept intentions, modules, chunks and steps.",
+        "explanation": "IDs use [a-z][a-z0-9]*(?:-[a-z0-9]+)*, 1..64 ASCII bytes. Update references in one complete candidate. Intersections accept intentions, modules, chunks and steps.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "ru": {
+        "title": "references",
+        "summary": "ID: [a-z][a-z0-9]*(?:-[a-z0-9]+)*, 1–64 ASCII-байта. Обновляйте ссылки в одном полном кандидате. Пересечения принимают намерения, модули, фрагменты и шаги.",
+        "explanation": "ID: [a-z][a-z0-9]*(?:-[a-z0-9]+)*, 1–64 ASCII-байта. Обновляйте ссылки в одном полном кандидате. Пересечения принимают намерения, модули, фрагменты и шаги.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "help-storage",
+      "topic": "storage",
+      "condition": "always",
+      "en": {
+        "title": "storage",
+        "summary": "Save explicitly. LocalStorage belongs to one origin and one active writer; download JSON as a backup. A temporary session is held only in memory.",
+        "explanation": "Save explicitly. LocalStorage belongs to one origin and one active writer; download JSON as a backup. A temporary session is held only in memory.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "ru": {
+        "title": "storage",
+        "summary": "Сохраняйте явно. LocalStorage принадлежит одному origin и допускает одного активного писателя; скачивайте JSON как резервную копию. Временная сессия хранится в памяти.",
+        "explanation": "Сохраняйте явно. LocalStorage принадлежит одному origin и допускает одного активного писателя; скачивайте JSON как резервную копию. Временная сессия хранится в памяти.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "help-export",
+      "topic": "export",
+      "condition": "always",
+      "en": {
+        "title": "export",
+        "summary": "JSON is the accepted source. RoadmapText is reversible transport. Markdown is a deterministic projection; --route creates a labelled slice.",
+        "explanation": "JSON is the accepted source. RoadmapText is reversible transport. Markdown is a deterministic projection; --route creates a labelled slice.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "ru": {
+        "title": "export",
+        "summary": "JSON — принятый источник. RoadmapText — обратимый транспорт. Markdown — детерминированная проекция; --route создаёт обозначенный срез.",
+        "explanation": "JSON — принятый источник. RoadmapText — обратимый транспорт. Markdown — детерминированная проекция; --route создаёт обозначенный срез.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "help-wasm",
+      "topic": "wasm",
+      "condition": "always",
+      "en": {
+        "title": "wasm",
+        "summary": "The same C++ engine runs in one Worker. Await readiness, serve JS/Wasm from one build, and dispose owned workers. No project data is sent to a server.",
+        "explanation": "The same C++ engine runs in one Worker. Await readiness, serve JS/Wasm from one build, and dispose owned workers. No project data is sent to a server.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "ru": {
+        "title": "wasm",
+        "summary": "Тот же C++-движок выполняется в одном Worker. Дождитесь готовности, поставляйте JS/Wasm одной сборки, освобождайте принадлежащие вам Worker. Данные проекта обрабатываются локально.",
+        "explanation": "Тот же C++-движок выполняется в одном Worker. Дождитесь готовности, поставляйте JS/Wasm одной сборки, освобождайте принадлежащие вам Worker. Данные проекта обрабатываются локально.",
+        "positiveExample": "hmap template | hmap validate -",
+        "problemExample": "hmap --unknown"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "hint-acceptance",
+      "topic": "intents",
+      "condition": "acceptance",
+      "en": {
+        "title": "acceptance",
+        "summary": "What observable result will establish acceptance?",
+        "explanation": "What observable result will establish acceptance?",
+        "positiveExample": "Explicit author-supplied evidence",
+        "problemExample": "Unexplained assertion"
+      },
+      "ru": {
+        "title": "acceptance",
+        "summary": "Какой наблюдаемый результат подтвердит приёмку?",
+        "explanation": "Какой наблюдаемый результат подтвердит приёмку?",
+        "positiveExample": "Явно указанное автором основание",
+        "problemExample": "Утверждение без объяснения"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "hint-acceptance-evidence",
+      "topic": "intents",
+      "condition": "acceptance-evidence",
+      "en": {
+        "title": "acceptance-evidence",
+        "summary": "Where is the explanation of acceptance recorded?",
+        "explanation": "Where is the explanation of acceptance recorded?",
+        "positiveExample": "Explicit author-supplied evidence",
+        "problemExample": "Unexplained assertion"
+      },
+      "ru": {
+        "title": "acceptance-evidence",
+        "summary": "Где зафиксировано объяснение приёмки?",
+        "explanation": "Где зафиксировано объяснение приёмки?",
+        "positiveExample": "Явно указанное автором основание",
+        "problemExample": "Утверждение без объяснения"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "hint-reuse",
+      "topic": "reuse",
+      "condition": "reuse",
+      "en": {
+        "title": "reuse",
+        "summary": "Does the module contract remain valid in every occurrence?",
+        "explanation": "Does the module contract remain valid in every occurrence?",
+        "positiveExample": "Explicit author-supplied evidence",
+        "problemExample": "Unexplained assertion"
+      },
+      "ru": {
+        "title": "reuse",
+        "summary": "Сохраняется ли контракт модуля во всех местах применения?",
+        "explanation": "Сохраняется ли контракт модуля во всех местах применения?",
+        "positiveExample": "Явно указанное автором основание",
+        "problemExample": "Утверждение без объяснения"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "hint-unknown",
+      "topic": "estimates",
+      "condition": "unknown",
+      "en": {
+        "title": "unknown",
+        "summary": "What must be learned to refine this estimate?",
+        "explanation": "What must be learned to refine this estimate?",
+        "positiveExample": "Explicit author-supplied evidence",
+        "problemExample": "Unexplained assertion"
+      },
+      "ru": {
+        "title": "unknown",
+        "summary": "Что нужно узнать для уточнения этой оценки?",
+        "explanation": "Что нужно узнать для уточнения этой оценки?",
+        "positiveExample": "Явно указанное автором основание",
+        "problemExample": "Утверждение без объяснения"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "hint-days",
+      "topic": "estimates",
+      "condition": "days",
+      "en": {
+        "title": "days",
+        "summary": "Does this mean calendar duration or working effort?",
+        "explanation": "Does this mean calendar duration or working effort?",
+        "positiveExample": "Explicit author-supplied evidence",
+        "problemExample": "Unexplained assertion"
+      },
+      "ru": {
+        "title": "days",
+        "summary": "Здесь указаны календарная длительность или рабочая трудоёмкость?",
+        "explanation": "Здесь указаны календарная длительность или рабочая трудоёмкость?",
+        "positiveExample": "Явно указанное автором основание",
+        "problemExample": "Утверждение без объяснения"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "hint-continuous",
+      "topic": "continuous-intents",
+      "condition": "continuous",
+      "en": {
+        "title": "continuous",
+        "summary": "Where are initial implementation, recurring review and maintenance described?",
+        "explanation": "Where are initial implementation, recurring review and maintenance described?",
+        "positiveExample": "Explicit author-supplied evidence",
+        "problemExample": "Unexplained assertion"
+      },
+      "ru": {
+        "title": "continuous",
+        "summary": "Где описаны первоначальная реализация, периодическая проверка и сопровождение?",
+        "explanation": "Где описаны первоначальная реализация, периодическая проверка и сопровождение?",
+        "positiveExample": "Явно указанное автором основание",
+        "problemExample": "Утверждение без объяснения"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "hint-code",
+      "topic": "references",
+      "condition": "code",
+      "en": {
+        "title": "code",
+        "summary": "Which code or artifact represents this existing module?",
+        "explanation": "Which code or artifact represents this existing module?",
+        "positiveExample": "Explicit author-supplied evidence",
+        "problemExample": "Unexplained assertion"
+      },
+      "ru": {
+        "title": "code",
+        "summary": "Каким кодом или артефактом представлен существующий модуль?",
+        "explanation": "Каким кодом или артефактом представлен существующий модуль?",
+        "positiveExample": "Явно указанное автором основание",
+        "problemExample": "Утверждение без объяснения"
+      },
+      "relatedCodes": []
+    },
+    {
+      "id": "hint-chunk",
+      "topic": "references",
+      "condition": "chunk",
+      "en": {
+        "title": "chunk",
+        "summary": "What role does this unlinked fragment have in the project?",
+        "explanation": "What role does this unlinked fragment have in the project?",
+        "positiveExample": "Explicit author-supplied evidence",
+        "problemExample": "Unexplained assertion"
+      },
+      "ru": {
+        "title": "chunk",
+        "summary": "Какую роль этот несвязанный фрагмент выполняет в проекте?",
+        "explanation": "Какую роль этот несвязанный фрагмент выполняет в проекте?",
+        "positiveExample": "Явно указанное автором основание",
+        "problemExample": "Утверждение без объяснения"
+      },
+      "relatedCodes": []
+    }
+  ],
+  "codes": {
+    "E_INPUT_ENCODING": {
+      "en": "Input must be UTF-8.",
+      "ru": "Вход должен быть в кодировке UTF-8."
+    },
+    "E_INPUT_LIMIT": {
+      "en": "A declared resource limit was exceeded. Reduce input or review the limit manifest.",
+      "ru": "Превышен заявленный лимит ресурса. Уменьшите вход либо пересмотрите реестр лимитов."
+    },
+    "E_PARSE_JSON": {
+      "en": "Correct JSON syntax at the reported byte location.",
+      "ru": "Исправьте синтаксис JSON в указанной байтовой позиции."
+    },
+    "E_PARSE_TEXT": {
+      "en": "Correct the RoadmapText record or route grammar.",
+      "ru": "Исправьте запись RoadmapText или грамматику маршрута."
+    },
+    "E_DUPLICATE_KEY": {
+      "en": "Each object key must occur once.",
+      "ru": "Ключ объекта должен встречаться один раз."
+    },
+    "E_SCHEMA_VERSION": {
+      "en": "Use schema 2 or explicitly migrate schema 1.",
+      "ru": "Используйте схему 2 либо явно мигрируйте схему 1."
+    },
+    "E_FIELD_UNKNOWN": {
+      "en": "Use only fields declared for this record.",
+      "ru": "Используйте поля, объявленные для этой записи."
+    },
+    "E_FIELD_TYPE": {
+      "en": "Supply the required field with its declared type and allowed value.",
+      "ru": "Укажите обязательное поле с предусмотренным типом и допустимым значением."
+    },
+    "E_ID_INVALID": {
+      "en": "Use a stable lowercase ASCII ID, 1..64 bytes.",
+      "ru": "Используйте стабильный строчный ASCII-ID длиной 1–64 байта."
+    },
+    "E_ID_DUPLICATE": {
+      "en": "Each entity needs a globally unique ID.",
+      "ru": "Каждой сущности нужен глобально уникальный ID."
+    },
+    "E_REF_NOT_FOUND": {
+      "en": "Declare the missing target or correct the reference.",
+      "ru": "Объявите отсутствующую цель либо исправьте ссылку."
+    },
+    "E_REF_TYPE": {
+      "en": "Reference an entity of the required type.",
+      "ru": "Укажите сущность требуемого типа."
+    },
+    "E_REF_DUPLICATE": {
+      "en": "Keep one occurrence of each reference in this array.",
+      "ru": "Оставьте одно вхождение каждой ссылки в массиве."
+    },
+    "E_ROUTE_MEMBERSHIP": {
+      "en": "Declare one block per route and place each step in exactly one block.",
+      "ru": "Объявите один блок на маршрут и поместите каждый шаг ровно в один блок."
+    },
+    "E_SELECTION": {
+      "en": "Select a route belonging to the selected intention.",
+      "ru": "Выберите маршрут выбранного намерения."
+    },
+    "E_INTENT_CYCLE": {
+      "en": "Remove the reported cycle in intention lineage.",
+      "ru": "Устраните указанный цикл происхождения намерений."
+    },
+    "E_INTENT_CONTINUOUS_STATUS": {
+      "en": "A continuous intention remains active or deferred.",
+      "ru": "Постоянное намерение сохраняет active либо deferred."
+    },
+    "E_ESTIMATE_RANGE": {
+      "en": "Use integer minutes 0..1000000000 with minimum <= maximum.",
+      "ru": "Укажите целые минуты 0–1000000000; минимум должен быть не больше максимума."
+    },
+    "E_ESTIMATE_REASON": {
+      "en": "Explain why the estimate is unknown or not applicable.",
+      "ru": "Объясните неизвестность либо неприменимость оценки."
+    },
+    "W_ROUTE_EMPTY": {
+      "en": "The empty route remains a valid draft.",
+      "ru": "Пустой маршрут остаётся корректным черновиком."
+    },
+    "W_ACCEPTANCE_MISSING": {
+      "en": "Describe observable acceptance criteria.",
+      "ru": "Опишите наблюдаемые критерии приёмки."
+    },
+    "W_ESTIMATE_BASIS_MISSING": {
+      "en": "Describe the observation or assumption behind the estimate.",
+      "ru": "Опишите наблюдение либо допущение в основании оценки."
+    },
+    "W_UNREFERENCED_OBJECT": {
+      "en": "Review the unused object; it is preserved.",
+      "ru": "Проверьте неиспользуемый объект; он сохранён."
+    },
+    "E_COMMAND": {
+      "en": "Review the command and supported options.",
+      "ru": "Проверьте команду и поддерживаемые параметры."
+    },
+    "E_IO_READ": {
+      "en": "The input file could not be read.",
+      "ru": "Не удалось прочитать входной файл."
+    },
+    "E_IO_WRITE": {
+      "en": "The output could not be installed; inspect permissions and free space.",
+      "ru": "Не удалось установить выходной файл; проверьте права и свободное место."
+    },
+    "E_OUTPUT_EXISTS": {
+      "en": "Choose another output or explicitly use --overwrite.",
+      "ru": "Выберите другой выходной файл либо явно укажите --overwrite."
+    },
+    "E_STORAGE_UNAVAILABLE": {
+      "en": "Storage access is unavailable. Download JSON to preserve the project.",
+      "ru": "Хранилище недоступно. Скачайте JSON для сохранения проекта."
+    },
+    "E_STORAGE_QUOTA": {
+      "en": "Storage quota is exhausted. Download JSON.",
+      "ru": "Квота хранилища исчерпана. Скачайте JSON."
+    },
+    "E_STORAGE_CORRUPT": {
+      "en": "Stored data is invalid and has been preserved for recovery.",
+      "ru": "Сохранённые данные повреждены и оставлены для восстановления."
+    },
+    "E_STORAGE_CONFLICT": {
+      "en": "Another writer changed this project. Reload or save a copy.",
+      "ru": "Другой писатель изменил проект. Перезагрузите его либо сохраните копию."
+    },
+    "E_INTERNAL": {
+      "en": "An unexpected engine error occurred; the last accepted project is retained.",
+      "ru": "Возникла неожиданная ошибка движка; последний принятый проект сохранён."
+    },
+    "W_MIGRATION_DEFAULT": {
+      "en": "Review all migration defaults before accepting this candidate.",
+      "ru": "Проверьте все значения по умолчанию перед принятием кандидата миграции."
+    }
+  },
+  "labels": {
+    "en": {
+      "engineering": {
+        "intent": "Intention",
+        "route": "Implementation route",
+        "module": "System element",
+        "chunk": "Literate fragment",
+        "intersection": "Intersection"
+      },
+      "simple": {
+        "intent": "Goal",
+        "route": "Path",
+        "module": "Part",
+        "chunk": "Explanation",
+        "intersection": "Common point"
+      },
+      "product": {
+        "intent": "Product goal",
+        "route": "Path to outcome",
+        "module": "Component",
+        "chunk": "Description fragment",
+        "intersection": "Common basis"
+      },
+      "literary": {
+        "intent": "Premise",
+        "route": "Premise line",
+        "module": "Work element",
+        "chunk": "Fragment",
+        "intersection": "Echo"
+      }
+    },
+    "ru": {
+      "engineering": {
+        "intent": "Намерение",
+        "route": "Маршрут реализации",
+        "module": "Элемент системы",
+        "chunk": "Литературный фрагмент",
+        "intersection": "Пересечение"
+      },
+      "simple": {
+        "intent": "Цель",
+        "route": "Путь",
+        "module": "Составная часть",
+        "chunk": "Пояснение",
+        "intersection": "Общая точка"
+      },
+      "product": {
+        "intent": "Цель продукта",
+        "route": "Путь к результату",
+        "module": "Компонент",
+        "chunk": "Фрагмент описания",
+        "intersection": "Общее основание"
+      },
+      "literary": {
+        "intent": "Замысел",
+        "route": "Линия замысла",
+        "module": "Элемент произведения",
+        "chunk": "Фрагмент",
+        "intersection": "Перекличка"
+      }
+    }
+  }
+}

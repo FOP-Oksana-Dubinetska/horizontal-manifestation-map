@@ -1,0 +1,94 @@
+{
+  "rules": [
+    {
+      "ruleId": "TR-CXX-STD",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "TR-INPUT-BYTES",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "TR-REQUEST-BYTES",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "TR-JSON-DEPTH",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "TR-ENTITY-COUNT",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "TR-ROUTE-STEPS",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "TR-TITLE-BYTES",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "TR-EXPLANATION-BYTES",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "TR-CHUNK-BYTES",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "TR-REFERENCE-COUNT",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "TR-DIAGNOSTIC-COUNT",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "TR-WASM-MEMORY",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "TR-WORKER-TIMEOUT",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "TR-LEGACY-ORDER",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "TR-WASM-DYNAMIC-EXECUTION",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "TR-BUILD-SEPARATION",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "TR-SOURCE-PRESERVATION",
+      "check": "tools/check-project.py --profile all; see docs/acceptance-matrix.ru.md",
+      "kind": "automated"
+    },
+    {
+      "ruleId": "HUMAN-ACCEPTANCE",
+      "check": "\u00a721.2 independent author pass; Windows and public CF observations",
+      "kind": "human-observation"
+    }
+  ]
+}

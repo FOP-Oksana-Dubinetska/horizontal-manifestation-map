@@ -1,0 +1,315 @@
+{
+  "repository": "https://github.com/IRONCREED/prompt-literate-workflow",
+  "commit": "3f75890a1b211eb81fc51697692a73a8ce895599",
+  "prefix": "methodology/upstream/prompt-literate-workflow",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "6313b56c57848efce05faa7aa7e901ccfc2886ea",
+      "sha256": "d60f352d0db1404c70afb4bb8b2ca3fd1c610572aa40720e8a0b7baa7885418c"
+    },
+    {
+      "path": ".gitmodules",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "c10bcf8325c70f1ed54d09d02b317c4c95046fd9",
+      "sha256": "6ddeb048b667ed05e3eaf07e01d1d6a7c587dc4986d4cacb68d9e00deb156d18"
+    },
+    {
+      "path": ".licensing-policy",
+      "mode": "160000",
+      "type": "commit",
+      "commit": "6e4c2627717c079827ed4aa9044a5346b3ea3ddb",
+      "mappedTo": ".licensing-policy"
+    },
+    {
+      "path": ".zenodo.json",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "c5b0c49314318eb6a8037dd4c02b165a23541f1f",
+      "sha256": "b9e9a4cb00f304be9d20f747236c1bc5f41d0be1b95e20c7b8cd43f2e8b85848"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "822f517b36e22b23391c3b7ca26933f36caec16e",
+      "sha256": "e4204aae9a646051e75d721680a674ea7b3ea292647d4c64351a7113a1b5f046"
+    },
+    {
+      "path": "CITATION.cff",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "b8938185a15f276c1d9e60e710cc28674741348b",
+      "sha256": "4f4d99969c9830e2333d3c0148284aaea6dd24873bc75529a3b40bba305e659b"
+    },
+    {
+      "path": "LICENSE.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "8fa31b5cc6691fd283908fa0c0865ab1c64682be",
+      "sha256": "f7addf3e855a6ee344909d018c838fbad371b34bc28e34e3b96988842aae4c84"
+    },
+    {
+      "path": "LICENSING-OVERRIDES.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "05e8005c1101d148bd5aaf86d5863f85397ec9f1",
+      "sha256": "1455029d6dfde77dff1844740e45e33f28c5b4d33d0e138e2f21d331c750bed4"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "a10ab52779e5fac49dc4648570eace220d467c58",
+      "sha256": "aaf279e496ef7253fcf21a8b0a1120ca6d65ed690021312253cc645f8f5c1dec"
+    },
+    {
+      "path": "VERSION",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "0d4d1249434dba8d7fcb8949a2e361f70308cc48",
+      "sha256": "c2ef39e09593cca70be98a0fb0ab435b53e2eb3c3d4e812cd7d43794eafa7728"
+    },
+    {
+      "path": "integrations/code-constitution/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "20d616eaf22ede88dad919d0d18a43824fd1219e",
+      "sha256": "3fae8f009d3de9775e128d529f1531c4f7c74764541b23ca9374a0e716c1c50d"
+    },
+    {
+      "path": "integrations/code-constitution/WORKSPACE.schema.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "f0af6cc79c111ebaa2e16c281ff529350330d61f",
+      "sha256": "887ae9610c4dbba7e0888020e0a53e0333f388d2eab6e11d8cf9e617a56bd8a1"
+    },
+    {
+      "path": "integrations/code-constitution/prompts/01-assess.prompt.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "1dd5a4f46694cebc638674eefb2cbf00810a35b2",
+      "sha256": "c956f0dd6cff6f77e87cc7225d11da34b22f7784588375a34f0b188484fffde1"
+    },
+    {
+      "path": "integrations/code-constitution/prompts/02-instantiate.prompt.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "196ef8bcea8652d0d94fca914427d6e81c74da54",
+      "sha256": "50d6b59e5b939c800913cd9c191e5830d6e10dea97b857c0cbe58ce3af1907bc"
+    },
+    {
+      "path": "integrations/code-constitution/prompts/03-execute-change.prompt.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "aaf7f8eb341b5ae900c20ffa25cc5bddd2ef4654",
+      "sha256": "336702869fd8c780069cd3a69d0162e29ab52a4f47652e8bc5fcaa3dfe20f06b"
+    },
+    {
+      "path": "integrations/code-constitution/prompts/04-review-and-accept.prompt.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "1fc6f5966e2a4e87561615f8b223d5c433ec0506",
+      "sha256": "b02fb11a9d7f0b5d002813166e51bd9f11435114dafdb2989ebe991bb8a53cf6"
+    },
+    {
+      "path": "integrations/code-constitution/templates/CODE_CONSTITUTION_EXTENSION.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "50c4f660a5c21019a27d80b504ec0eb53a41cc47",
+      "sha256": "e8e4ce4f5bcb1e4892e4e64d34ba6e0c97a2c1d2919bdf39fbb9c8e5f9a332a5"
+    },
+    {
+      "path": "integrations/code-constitution/templates/GOVERNANCE_SOURCES.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "22ddfeec0c9d55761aeea3f0e64febcd326dfdee",
+      "sha256": "433b996d6b94105619ba8306757a751215e08d72df97edad0fa70ea0537858bb"
+    },
+    {
+      "path": "integrations/code-constitution/templates/NORMATIVE_TRANSLATION.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "f059ace488bae45c82a3442fc4c72875a95aec95",
+      "sha256": "8cab3adb709be6a1200a747cef7a65f510d669b56976bdae720be95a8ced1ba2"
+    },
+    {
+      "path": "methodology/ARTIFACT_POLICY.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "7fcb97fcd33120cececa70b07e56075ce924ed56",
+      "sha256": "79c3545e4bfacd29b8cedf60c0e2250f399f01b0421133d8bb12827e93d808d6"
+    },
+    {
+      "path": "methodology/EXTENSION_GOVERNANCE.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "31353f7aa30669511eae1e2a935879255522c891",
+      "sha256": "6b88d806a25d7f4ff79ec457bad5588928bbddd10a70d3a1072bb58207f96ac5"
+    },
+    {
+      "path": "methodology/METHOD.en.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "ab41dd42cdbcb1fa9fa8b324d267bf576058ecd1",
+      "sha256": "de8ef1e9227af7e6411f34fbb45b57c2515d1d8b4393a13f4720fe46aef17984"
+    },
+    {
+      "path": "methodology/METHOD.ru.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "526b599fb39ef8d0c506434873a1e16445b3ee43",
+      "sha256": "6a932909ffbd8d2ecaa2ee4971741d64100b6435d776ba01684509ec2a1418af"
+    },
+    {
+      "path": "methodology/METHOD.uk.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "b160d0a7a190d557e0cda4cf5e8b89dbd7fc615a",
+      "sha256": "001a8eeda760037c7910f9e7b6621534e69ad933d65899ebb80e3e5e2a927e95"
+    },
+    {
+      "path": "methodology/SOURCE_OF_TRUTH_POLICY.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "93db4709ce2d9f90d9ba91df3c9b6f9444d23401",
+      "sha256": "3c3079ecd175cff8d84b35b6d3e9242a4841b13d4494db1433c36fdd93e7ef21"
+    },
+    {
+      "path": "methodology/TRACE_POLICY.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "7a98cf66de7e0b8540f18c93a726b314c296258f",
+      "sha256": "351db233cc898dc07996589abd1f47d87851dfee0b93f871022ef09c8092e2ef"
+    },
+    {
+      "path": "methodology/VALIDATION_POLICY.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "60df1f03534a4416eebc1d135f439189dc8e6fed",
+      "sha256": "46dd03206e32ff413aad232c6164ca528ba8e3dc5a4f081b3b0a14a11d91d321"
+    },
+    {
+      "path": "schemas/CONTRACTS.schema.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "f4d1cad3cc07d84d53889dae9630140c3241ff9e",
+      "sha256": "1366ab2903f12b42374aacb1a1624c4f4c4ef1bb2880ac5d7c0ab5b5523b17ca"
+    },
+    {
+      "path": "schemas/EXTENSION.schema.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "cfa8b2d406bfa96262e970e397401fe798450c6e",
+      "sha256": "d51d13413c6134bfb3d1ec5331b6b875abfec5c44c19ff0669ef0ccb478d2264"
+    },
+    {
+      "path": "schemas/SCENARIOS.schema.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "6eb711c41385c3c0f1b7c4a3c72f534f698a85f9",
+      "sha256": "bf6ed21dce949faea50e4826d1fc028fa828f7d34188672be5c98b9a3ff56edf"
+    },
+    {
+      "path": "schemas/TRACE.phase-0.schema.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "ccff303e5de32d06580ce7254819393921e21d11",
+      "sha256": "e1eb8b7aa810cb258967bb0f28fdeb840b43c7e8b564d2dea5b334b4a4ff15ca"
+    },
+    {
+      "path": "schemas/TRACE.phase-1.schema.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "f89a03352e57c5e593b2fd533c88f179dce5edd3",
+      "sha256": "05aca231d244a942b721028353f222475608bc279f6305ac74b6151fc7298f13"
+    },
+    {
+      "path": "scripts/validate-project.py",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "add8324093cad509fa31024ca549c61311cc3937",
+      "sha256": "c1ce4d8448a4c762448f58c7e02bc85a7d05f0d0986d36cfe7c7ead757fa76b4"
+    },
+    {
+      "path": "starter/CONTRACTS.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "6e0d57164307bbb512791d0f3675262a42a0ef6d",
+      "sha256": "72a2ef8997d29ac1b87a8a982aab93e68b0d8c956f3ac30645a37045ded7f021"
+    },
+    {
+      "path": "starter/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "29704187b5435918dca86deb5a9d2c9b5dc50798",
+      "sha256": "0a8c7b4a5046bcb6ccc79608ffcd78071bb0b9d884952d909b15dfa5c5763a15"
+    },
+    {
+      "path": "starter/SCENARIOS.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "c91fcebce1ed7258906a26b4870e208238f8b234",
+      "sha256": "f385d825396353a8fca00d65fac70fa02051050244119e9d9c9b24fb19a521fe"
+    },
+    {
+      "path": "starter/TRACE.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "4cfd89ec4b7b18997aec978a35895ac2dc0415bd",
+      "sha256": "0d7538a60904df1b38683f7a3e69d4e68e0d36179ea66f84f17a4b24e9cbe80b"
+    },
+    {
+      "path": "starter/generated/.gitkeep",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "starter/methodology/extensions/EXAMPLE_EXTENSION.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "04bb7da35f7742fbe7fbb62ae1f18bb565bc1045",
+      "sha256": "725b14e0e6b91666c9a2530cfa095639dde4a7c4369ff248023555051cb647a0"
+    },
+    {
+      "path": "starter/methodology/extensions/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "141153acd8f01aceff6cd3f6a7664af6dc028ee4",
+      "sha256": "223d50968afad33a8dd84d8391f27d42fb5dc2791acdba21e3827135b81fea58"
+    },
+    {
+      "path": "starter/project.plan.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "7e32a34650d17b17e51738015cbca7e6a12536b0",
+      "sha256": "351d5936b3d8abbeed4b8f80b7390a4dd0d94369d1fcd7bcdd454bce8840e078"
+    },
+    {
+      "path": "starter/prompts/fill-chunks.prompt.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "935bf2fae1f0f94fdc84b40de90abe98f77fa1bc",
+      "sha256": "689145e51cb4f9095f2a73239053bf170f44edbe16c8fbb68f5cf40d537792b9"
+    },
+    {
+      "path": "starter/prompts/review-generated-code.prompt.md",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "a0bda0230164fff4e2025f7ec648cee57b5fe19c",
+      "sha256": "28ec1d0f03f580ed22aeca9082e52aea01157ec130e3c390166366f775f87df0"
+    },
+    {
+      "path": "starter/tests/smoke-check.example.py",
+      "mode": "100644",
+      "type": "blob",
+      "gitBlob": "3c9edc1cd3583654f3e4d2d60141707685b43c3f",
+      "sha256": "247576f0420c468e14afaa7c39b47da6e5651d50ef0a3e890bb290a5d05d097d"
+    }
+  ]
+}

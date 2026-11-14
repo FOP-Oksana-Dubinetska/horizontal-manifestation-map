@@ -1,0 +1,4 @@
+#pragma once
+namespace roadmap::guidance {
+inline constexpr const char* sourceCatalog=R"hmap_resource(@HMAP_GUIDANCE@)hmap_resource";
+}
