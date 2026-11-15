@@ -119,6 +119,15 @@ add_library(hmap-cli-shell STATIC
   apps/roadmap-cli/composition-root.cpp
   apps/roadmap-cli/file-output.cpp
 )
+file(READ "${CMAKE_SOURCE_DIR}/content/project-introduction.json" HMAP_INTRODUCTION)
+string(JSON HMAP_INTRO_TITLE GET "${HMAP_INTRODUCTION}" en title)
+string(JSON HMAP_INTRO_TEXT GET "${HMAP_INTRODUCTION}" en text)
+string(JSON HMAP_INTRO_REVIEW GET "${HMAP_INTRODUCTION}" reviewUrl)
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+  "${CMAKE_SOURCE_DIR}/content/project-introduction.json")
+configure_file(apps/roadmap-cli/project-introduction.hpp.in
+  "${CMAKE_BINARY_DIR}/generated/project-introduction.hpp" @ONLY)
+target_include_directories(hmap-cli-shell PRIVATE "${CMAKE_BINARY_DIR}/generated")
 target_include_directories(hmap-cli-shell PUBLIC apps/roadmap-cli)
 target_compile_definitions(hmap-cli-shell PRIVATE HMAP_APP_VERSION="${PROJECT_VERSION}")
 target_compile_features(hmap-cli-shell PUBLIC cxx_std_20)

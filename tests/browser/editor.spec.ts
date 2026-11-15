@@ -7,10 +7,10 @@ test('root and nested URLs load one route with correct Wasm MIME', async ({ page
 		page.on('pageerror', (e) => failures.push(e.message));
 		const wasm = page.waitForResponse((r) => r.url().endsWith('.wasm'));
 		await page.goto(path);
-		await expect(page.getByRole('button', { name: 'Save locally', exact: true })).toBeEnabled();
+		await expect(page.getByRole('button', { name: 'Сохранить', exact: true })).toBeEnabled();
 		expect((await wasm).headers()['content-type']).toContain('application/wasm');
 		await expect(page.locator('.hmap-route-row')).toHaveCount(1);
-		await expect(page.locator('.hmap-step')).toHaveCount(3);
+		await expect(page.locator('.hmap-step')).toHaveCount(4);
 		expect(failures).toEqual([]);
 	}
 });
@@ -114,17 +114,18 @@ test('denied local storage is visible and JSON remains downloadable', async ({ p
 		}),
 	);
 	await page.goto('/');
-	await expect(page.locator('#storage-status')).toContainText('Temporary session');
-	await expect(page.getByRole('button', { name: 'Download JSON', exact: true })).toBeEnabled();
+	await expect(page.locator('#storage-status')).toContainText('Временная сессия');
+	await page.locator('#file-menu > summary').click();
+	await expect(page.getByRole('button', { name: 'Скачать JSON', exact: true })).toBeEnabled();
 	const downloaded = page.waitForEvent('download');
-	await page.getByRole('button', { name: 'Download JSON', exact: true }).click();
+	await page.getByRole('button', { name: 'Скачать JSON', exact: true }).click();
 	expect((await downloaded).suggestedFilename()).toMatch(/\.roadmap\.json$/);
 });
 test('explicit local save survives reload; initial display performs no hidden project save', async ({
 	page,
 }) => {
 	await page.goto('/');
-	await expect(page.getByRole('button', { name: 'Save locally', exact: true })).toBeEnabled();
+	await expect(page.getByRole('button', { name: 'Сохранить', exact: true })).toBeEnabled();
 	expect(
 		await page.evaluate(
 			() =>
@@ -132,10 +133,10 @@ test('explicit local save survives reload; initial display performs no hidden pr
 					.length,
 		),
 	).toBe(0);
-	await page.getByRole('button', { name: 'Save locally', exact: true }).click();
-	await expect(page.locator('#host-status')).toHaveText('Saved locally in this browser.');
+	await page.getByRole('button', { name: 'Сохранить', exact: true }).click();
+	await expect(page.locator('#host-status')).toHaveText('Карта сохранена в этом браузере.');
 	await page.reload();
-	await expect(page.locator('#host-status')).toHaveText('Saved project loaded.');
+	await expect(page.locator('#host-status')).toHaveText('Сохранённая карта открыта.');
 });
 test('late validation never replaces a newer accepted project', async ({ page }) => {
 	await page.goto('/embedding-example.html');
@@ -176,42 +177,43 @@ test('late validation never replaces a newer accepted project', async ({ page })
 });
 test('a later storage quota failure preserves a downloadable current project', async ({ page }) => {
 	await page.goto('/');
-	await expect(page.getByRole('button', { name: 'Save locally', exact: true })).toBeEnabled();
+	await expect(page.getByRole('button', { name: 'Сохранить', exact: true })).toBeEnabled();
 	await page.evaluate(() => {
 		Storage.prototype.setItem = function () {
 			throw new DOMException('full', 'QuotaExceededError');
 		};
 	});
-	await page.getByRole('button', { name: 'Save locally', exact: true }).click();
+	await page.getByRole('button', { name: 'Сохранить', exact: true }).click();
 	await expect(page.locator('#host-status')).toHaveText('full');
-	await expect(page.locator('#storage-status')).not.toContainText('Temporary session');
-	await expect(page.getByRole('button', { name: 'Download JSON', exact: true })).toBeEnabled();
+	await expect(page.locator('#storage-status')).not.toContainText('Временная сессия');
+	await page.locator('#file-menu > summary').click();
+	await expect(page.getByRole('button', { name: 'Скачать JSON', exact: true })).toBeEnabled();
 });
 test('a second tab detects an external writer and pauses save', async ({ page, context }) => {
 	await page.goto('/');
-	await expect(page.getByRole('button', { name: 'Save locally', exact: true })).toBeEnabled();
-	await page.getByRole('button', { name: 'Save locally', exact: true }).click();
-	await expect(page.locator('#host-status')).toHaveText('Saved locally in this browser.');
+	await expect(page.getByRole('button', { name: 'Сохранить', exact: true })).toBeEnabled();
+	await page.getByRole('button', { name: 'Сохранить', exact: true }).click();
+	await expect(page.locator('#host-status')).toHaveText('Карта сохранена в этом браузере.');
 	const other = await context.newPage();
 	await other.goto('/');
-	await expect(other.locator('#host-status')).toHaveText('Saved project loaded.');
-	await page.getByRole('button', { name: 'Save locally', exact: true }).click();
-	await expect(page.locator('#host-status')).toHaveText('Saved locally in this browser.');
-	await other.getByRole('button', { name: 'Save locally', exact: true }).click();
+	await expect(other.locator('#host-status')).toHaveText('Сохранённая карта открыта.');
+	await page.getByRole('button', { name: 'Сохранить', exact: true }).click();
+	await expect(page.locator('#host-status')).toHaveText('Карта сохранена в этом браузере.');
+	await other.getByRole('button', { name: 'Сохранить', exact: true }).click();
 	await expect(other.locator('#host-status')).toContainText('changed outside this editor');
 	await other.close();
 });
 test('desktop and narrow layouts retain one horizontal rail', async ({ page }, testInfo) => {
 	await page.setViewportSize({ width: 1366, height: 1000 });
 	await page.goto('/');
-	await expect(page.locator('.hmap-step')).toHaveCount(3);
+	await expect(page.locator('.hmap-step')).toHaveCount(4);
 	const requests: string[] = [];
 	page.on('request', (request) => {
 		if (request.method() !== 'GET' || request.postData()) requests.push(request.url());
 	});
-	await page.getByRole('button', { name: 'Guide', exact: true }).click();
+	await page.getByRole('button', { name: 'Как работать', exact: true }).click();
 	await expect(page.locator('#guide')).toBeVisible();
-	await page.getByRole('button', { name: 'Close guide', exact: true }).click();
+	await page.getByRole('button', { name: 'Закрыть справку', exact: true }).click();
 	await page.screenshot({
 		path: `build/check-reports/ui-${testInfo.project.name}-desktop.png`,
 		fullPage: true,
@@ -225,6 +227,16 @@ test('desktop and narrow layouts retain one horizontal rail', async ({ page }, t
 			),
 		);
 	expect(new Set(geometry).size).toBe(1);
+	const overflowingLinks = await page
+		.locator('.hmap-step-links')
+		.evaluateAll((nodes) =>
+			nodes.some(
+				(node) =>
+					node.getBoundingClientRect().right >
+					node.closest('button')!.getBoundingClientRect().right + 1,
+			),
+		);
+	expect(overflowingLinks).toBe(false);
 	await page.screenshot({
 		path: `build/check-reports/ui-${testInfo.project.name}-narrow.png`,
 		fullPage: true,

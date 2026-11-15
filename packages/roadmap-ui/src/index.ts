@@ -7,9 +7,13 @@ import type {
 import type { RoadmapEngine } from './engine.ts';
 import { EngineError, projectCodec } from './engine.ts';
 import './style.css';
+import { createAuthoringForm } from './authoring-form.ts';
+import { createDraftProject } from './authoring.ts';
+import type { AuthoringTarget, EntityKind } from './authoring.ts';
 export * from './engine.ts';
 export * from '../../roadmap-storage/src/index.ts';
 export interface RoadmapFeatureFlags {
+	editing: boolean;
 	importButton: boolean;
 	markdownExport: boolean;
 	terminologySelector: boolean;
@@ -30,6 +34,7 @@ export interface RoadmapEditorConfig {
 	onError?: (error: Error) => void;
 }
 export interface RoadmapViewState {
+	selectedStepId: string | null;
 	selectedIntentId: string | null;
 	selectedRouteId: string | null;
 	filter: 'all' | ModuleKind;
@@ -37,6 +42,8 @@ export interface RoadmapViewState {
 	splitter: number;
 }
 export interface RoadmapEditorInstance {
+	newProject(): void;
+	hasOpenDraft(): boolean;
 	destroy(): void;
 	getProject(): RoadmapProject;
 	setProject(project: RoadmapProject): Promise<void>;
@@ -49,23 +56,6 @@ function element<K extends keyof HTMLElementTagNameMap>(tag: K, className: strin
 	node.className = className;
 	if (text !== undefined) node.textContent = text;
 	return node;
-}
-function blank(id: string): RoadmapProject {
-	return {
-		schemaVersion: 2,
-		id,
-		title: 'Untitled project',
-		terminologyProfile: 'engineering',
-		selectedIntentId: null,
-		selectedRouteId: null,
-		intents: [],
-		routes: [],
-		modules: [],
-		chunks: [],
-		intersections: [],
-		estimates: [],
-		metadata: { formatVersion: '2.0.0', createdAt: null, updatedAt: null },
-	};
 }
 function diff(before: RoadmapProject, after: RoadmapProject) {
 	const flatten = (project: RoadmapProject) => {
@@ -109,21 +99,28 @@ export async function createRoadmapEditor(
 		if (!stored) throw new Error('Project not found: ' + config.initialProjectId);
 		initial = stored;
 	}
-	let project = await validate(initial ?? blank(config.newProjectId!));
+	let project = await validate(
+		initial ?? createDraftProject(config.newProjectId!, 'Untitled project'),
+	);
 	const language = config.language ?? 'en',
 		ru = language === 'ru';
 	const features = {
 		importButton: true,
 		markdownExport: true,
-		terminologySelector: true,
+		terminologySelector: false,
+		editing: true,
 		linkedAreaFilter: true,
 		...config.features,
 	};
+	const canEdit = !config.readonly && features.editing;
 	const view: RoadmapViewState = {
+		selectedStepId: null,
 		selectedIntentId: project.selectedIntentId,
 		selectedRouteId: project.selectedRouteId,
 		filter: 'all',
-		terminology: config.terminology ?? project.terminologyProfile,
+		terminology:
+			config.terminology ??
+			(features.terminologySelector ? project.terminologyProfile : 'engineering'),
 		splitter: 0,
 	};
 	let dead = false,
@@ -147,7 +144,7 @@ export async function createRoadmapEditor(
 	rail.setAttribute('aria-label', ru ? 'Выбранный маршрут' : 'Selected route');
 	const status = element('p', 'hmap-status');
 	status.setAttribute('role', 'status');
-	const dialog = element('div', 'hmap-import-review');
+	const dialog = element('dialog', 'hmap-import-review');
 	dialog.hidden = true;
 	dialog.setAttribute('role', 'dialog');
 	dialog.setAttribute('aria-modal', 'true');
@@ -185,7 +182,22 @@ export async function createRoadmapEditor(
 		const option = element(
 			'option',
 			'',
-			value === 'all' ? (ru ? 'Все области' : 'All areas') : value,
+			value === 'all'
+				? ru
+					? 'Все области'
+					: 'All areas'
+				: ru
+					? (
+							{
+								core: 'Ядро',
+								ui: 'Интерфейс',
+								storage: 'Хранение',
+								export: 'Экспорт',
+								demo: 'Пример',
+								validation: 'Проверка',
+							} as Record<string, string>
+						)[value]
+					: value,
 		);
 		option.value = value;
 		filter.append(option);
@@ -204,6 +216,121 @@ export async function createRoadmapEditor(
 	const check = () => {
 		if (dead) throw new Error('Editor is destroyed');
 	};
+	const setSelection = (accepted: RoadmapProject, before?: RoadmapProject) => {
+		if (
+			!before ||
+			before.selectedIntentId !== accepted.selectedIntentId ||
+			before.selectedRouteId !== accepted.selectedRouteId ||
+			!accepted.intents.some((i) => i.id === view.selectedIntentId)
+		) {
+			view.selectedIntentId = accepted.selectedIntentId;
+			view.selectedRouteId = accepted.selectedRouteId;
+		}
+		if (
+			!accepted.routes.some(
+				(r) => r.id === view.selectedRouteId && r.intentId === view.selectedIntentId,
+			)
+		)
+			view.selectedRouteId = null;
+		if (
+			!accepted.routes.some(
+				(r) => r.id === view.selectedRouteId && r.steps.some((s) => s.id === view.selectedStepId),
+			)
+		)
+			view.selectedStepId = null;
+	};
+	const authoring = createAuthoringForm({
+		root: container,
+		prefix,
+		ru,
+		getProject: () => clone(project),
+		getSelection: () => ({ intentId: view.selectedIntentId, routeId: view.selectedRouteId }),
+		onError: error,
+		onOpen() {
+			++revision;
+			preview = null;
+			if (dialog.open) dialog.close();
+			dialog.hidden = true;
+		},
+		async apply(candidate, isCurrent) {
+			if (!canEdit || dead) return false;
+			const token = ++revision;
+			const response = await config.engine.request<RoadmapProject>('validate', {
+				input: { format: 'json', text: JSON.stringify(candidate) },
+				options: { language },
+			});
+			if (dead || token !== revision || !isCurrent()) return false;
+			if (!response.ok || !response.result)
+				throw new EngineError(
+					response.diagnostics.map((d) => `${d.code} ${d.pointer}: ${d.message}`).join('\n'),
+					response.diagnostics,
+				);
+			const before = project;
+			project = clone(response.result);
+			setSelection(project, before);
+			render();
+			status.textContent =
+				(ru
+					? 'Изменения применены. Сохраните карту, чтобы оставить их в браузере.'
+					: 'Changes applied. Save the map to keep them in this browser.') +
+				(response.diagnostics.length
+					? (ru ? ' Предупреждений: ' : ' Warnings: ') + response.diagnostics.length
+					: '');
+			config.onChange?.(clone(project));
+			return true;
+		},
+	});
+	if (canEdit) {
+		const add = element('details', 'hmap-add-menu');
+		add.append(element('summary', '', ru ? '+ Добавить' : '+ Add'));
+		const choices = element('div', 'hmap-add-choices');
+		const options: [EntityKind, string][] = [
+			['intent', ru ? 'Намерение' : 'Intention'],
+			['module', ru ? 'Компонент' : 'Component'],
+			['chunk', ru ? 'Контракт / пояснение' : 'Contract / explanation'],
+			['route', ru ? 'Маршрут' : 'Route'],
+			['step', ru ? 'Шаг маршрута' : 'Route step'],
+			['intersection', ru ? 'Пересечение' : 'Intersection'],
+			['estimate', ru ? 'Оценка' : 'Estimate'],
+		];
+		for (const [kind, title] of options) {
+			const button = element('button', '', title);
+			button.dataset.addKind = kind;
+			button.addEventListener(
+				'click',
+				() => {
+					add.open = false;
+					authoring.add(kind);
+				},
+				{ signal },
+			);
+			choices.append(button);
+		}
+		add.append(choices);
+		controls.prepend(add);
+	}
+	const editButton = (target: AuthoringTarget, title: string) => {
+		const button = element('button', 'hmap-edit', ru ? 'Изменить' : 'Edit');
+		button.setAttribute('aria-label', (ru ? 'Изменить: ' : 'Edit: ') + title);
+		button.dataset.editKind = target.kind;
+		button.dataset.editId = target.id;
+		button.addEventListener('click', () => authoring.open(target), { signal: renderAbort.signal });
+		return button;
+	};
+	const estimateText = (entry: RoadmapProject['estimates'][number]) => {
+		const v = entry.value;
+		return v.type === 'range'
+			? `${v.minMinutes}–${v.maxMinutes} ${ru ? 'мин' : 'min'} · ${v.metric === 'effort' ? (ru ? 'трудоёмкость' : 'effort') : ru ? 'календарное время' : 'elapsed'}`
+			: v.type === 'text'
+				? v.text
+				: (v.type === 'unknown'
+						? ru
+							? 'Пока неизвестно: '
+							: 'Unknown: '
+						: ru
+							? 'Неприменимо: '
+							: 'Not applicable: ') + v.reason;
+	};
 	const render = () => {
 		if (dead) return;
 		renderAbort.abort();
@@ -211,7 +338,21 @@ export async function createRoadmapEditor(
 		const contentSignal = renderAbort.signal;
 		upper.replaceChildren();
 		rail.replaceChildren();
-		upper.append(element('h1', 'hmap-project-title', project.title));
+		const projectHeading = element('div', 'hmap-heading-row');
+		projectHeading.append(element('h1', 'hmap-project-title', project.title));
+		if (canEdit)
+			projectHeading.append(editButton({ kind: 'project', id: project.id }, project.title));
+		upper.append(projectHeading);
+		if (!project.intents.length)
+			upper.append(
+				element(
+					'p',
+					'hmap-empty',
+					ru
+						? 'Начните с намерения: какой результат должна обеспечить система? Затем добавьте компоненты, контракты и маршрут.'
+						: 'Start with an intention: what result should the system provide? Then add components, contracts and a route.',
+				),
+			);
 		upper.append(status);
 		status.textContent = '';
 		const moduleMatches = (id: string) =>
@@ -226,6 +367,7 @@ export async function createRoadmapEditor(
 				'click',
 				() => {
 					view.selectedIntentId = intent.id;
+					view.selectedStepId = null;
 					const routes = project.routes.filter((r) => r.intentId === intent.id);
 					view.selectedRouteId = routes.length === 1 ? routes[0].id : null;
 					render();
@@ -233,7 +375,10 @@ export async function createRoadmapEditor(
 				{ signal: contentSignal },
 			);
 			heading.append(button);
-			upper.append(heading, element('p', '', intent.summary));
+			const row = element('div', 'hmap-heading-row');
+			row.append(heading);
+			if (canEdit) row.append(editButton({ kind: 'intent', id: intent.id }, intent.title));
+			upper.append(row, element('p', '', intent.summary));
 			const criteria = element('ul', '');
 			for (const criterion of intent.acceptanceCriteria)
 				criteria.append(element('li', '', criterion));
@@ -248,76 +393,144 @@ export async function createRoadmapEditor(
 					() => {
 						view.selectedIntentId = intent.id;
 						view.selectedRouteId = route.id;
+						view.selectedStepId = null;
 						render();
 					},
 					{ signal: contentSignal },
 				);
-				routes.append(link);
+				const choice = element('span', 'hmap-route-choice');
+				choice.append(link);
+				if (canEdit) choice.append(editButton({ kind: 'route', id: route.id }, route.title));
+				routes.append(choice);
 			}
 			upper.append(routes);
 		}
+		const selectedStep = project.routes
+			.flatMap((r) => r.steps)
+			.find((s) => s.id === view.selectedStepId);
+		if (project.modules.length)
+			upper.append(element('h2', '', ru ? 'Архитектура' : 'Architecture'));
+		for (const module of project.modules) {
+			const section = element('section', 'hmap-module');
+			section.dataset.entityId = module.id;
+			section.tabIndex = -1;
+			const matches = moduleMatches(module.id);
+			section.classList.toggle('hmap-dim', !matches);
+			if (matches) ++matching;
+			section.classList.toggle(
+				'hmap-focused',
+				selectedStep?.linkedModuleIds.includes(module.id) ?? false,
+			);
+			const row = element('div', 'hmap-heading-row');
+			row.append(element('h3', '', labels.module + ': ' + module.title));
+			if (canEdit) row.append(editButton({ kind: 'module', id: module.id }, module.title));
+			const uses = project.routes.filter((r) =>
+				r.steps.some((s) => s.linkedModuleIds.includes(module.id)),
+			);
+			section.append(row, element('p', '', module.summary));
+			section.append(
+				element(
+					'p',
+					'hmap-related',
+					(ru ? 'Используется в маршрутах: ' : 'Used by routes: ') +
+						(uses.map((r) => r.title).join('; ') || (ru ? 'пока не связан' : 'not linked yet')),
+				),
+			);
+			if (module.codeRefs.length)
+				section.append(
+					element(
+						'p',
+						'hmap-code-reference',
+						module.codeRefs
+							.map(
+								(c) =>
+									`${c.repository} / ${c.path} @ ${c.revision ?? (ru ? 'ревизия не указана' : 'unspecified')} ${c.symbol ?? ''}`,
+							)
+							.join('\n'),
+					),
+				);
+			upper.append(section);
+		}
+		if (project.chunks.length)
+			upper.append(element('h2', '', ru ? 'Контракты и пояснения' : 'Contracts and explanations'));
 		for (const chunk of project.chunks) {
 			const section = element('section', 'hmap-chunk');
 			section.id = prefix + '-' + chunk.id;
 			section.tabIndex = -1;
 			section.dataset.chunkId = chunk.id;
+			section.dataset.entityId = chunk.id;
 			const matches = view.filter === 'all' || chunk.linkedModuleIds.some(moduleMatches);
 			section.classList.toggle('hmap-dim', !matches);
 			if (matches) ++matching;
-			section.append(
-				element('h3', 'hmap-chunk-label', '<<' + chunk.name + '>>'),
-				element('div', 'hmap-body', chunk.body),
+			section.classList.toggle(
+				'hmap-focused',
+				selectedStep?.linkedChunkIds.includes(chunk.id) ?? false,
 			);
-			upper.append(section);
-		}
-		for (const module of project.modules) {
-			const section = element('section', 'hmap-module');
-			const matches = moduleMatches(module.id);
-			section.classList.toggle('hmap-dim', !matches);
-			if (matches) ++matching;
-			section.append(
-				element('h3', '', labels.module + ': ' + module.title),
-				element('p', '', module.summary),
-				element(
-					'p',
-					'hmap-code-reference',
-					module.codeRefs
-						.map(
-							(c) =>
-								`${c.repository} / ${c.path} @ ${c.revision ?? 'unspecified'} ${c.symbol ?? ''}`,
-						)
-						.join('\n'),
-				),
-			);
+			const row = element('div', 'hmap-heading-row');
+			row.append(element('h3', 'hmap-chunk-label', '<<' + chunk.name + '>>'));
+			if (canEdit) row.append(editButton({ kind: 'chunk', id: chunk.id }, chunk.name));
+			section.append(row, element('div', 'hmap-body', chunk.body));
+			const modules = project.modules.filter((m) => chunk.linkedModuleIds.includes(m.id));
+			if (modules.length)
+				section.append(
+					element(
+						'p',
+						'hmap-related',
+						(ru ? 'Компоненты: ' : 'Components: ') + modules.map((m) => m.title).join('; '),
+					),
+				);
 			upper.append(section);
 		}
 		for (const intersection of project.intersections) {
-			upper.append(
-				element('h3', '', labels.intersection + ': ' + intersection.title),
-				element('p', '', intersection.note),
-			);
+			const section = element('section', 'hmap-intersection');
+			const row = element('div', 'hmap-heading-row');
+			row.append(element('h3', '', labels.intersection + ': ' + intersection.title));
+			if (canEdit)
+				row.append(editButton({ kind: 'intersection', id: intersection.id }, intersection.title));
+			section.append(row, element('p', '', intersection.note));
+			upper.append(section);
 		}
 		for (const estimate of project.estimates) {
-			upper.append(
-				element('h3', '', estimate.label),
-				element(
-					'p',
-					'hmap-estimate-detail',
-					JSON.stringify(estimate.value) + ' · ' + estimate.confidence + ' · ' + estimate.basis,
-				),
+			const section = element('section', 'hmap-estimate');
+			const row = element('div', 'hmap-heading-row');
+			row.append(element('h3', '', estimate.label));
+			if (canEdit) row.append(editButton({ kind: 'estimate', id: estimate.id }, estimate.label));
+			section.append(
+				row,
+				element('p', 'hmap-estimate-detail', estimateText(estimate)),
+				element('p', '', estimate.basis),
 			);
+			upper.append(section);
 		}
 		const route = project.routes.find(
 			(r) => r.id === view.selectedRouteId && r.intentId === view.selectedIntentId,
 		);
+		if (route) {
+			const heading = element('div', 'hmap-heading-row');
+			heading.append(element('h2', '', route.title));
+			if (canEdit) {
+				const addStep = element('button', '', ru ? '+ Шаг' : '+ Step');
+				addStep.addEventListener('click', () => authoring.add('step'), { signal: contentSignal });
+				heading.append(addStep);
+			}
+			rail.append(heading);
+		}
+		const stepSummary = element(
+			'p',
+			'hmap-step-summary',
+			ru
+				? 'Выберите шаг, чтобы увидеть связанные компоненты и контракты.'
+				: 'Select a step to see its components and contracts.',
+		);
+		rail.append(stepSummary);
 		if (!route || !route.steps.length)
 			rail.append(
 				element(
 					'p',
 					'hmap-empty',
 					ru
-						? 'Выберите маршрут или добавьте шаги в кандидате карты.'
-						: 'Select a route, or add steps to the project candidate.',
+						? 'Выберите маршрут. Добавьте шаги через «+ Добавить».'
+						: 'Select a route. Add steps using “+ Add”.',
 				),
 			);
 		else {
@@ -336,42 +549,65 @@ export async function createRoadmapEditor(
 					view.filter !== 'all' && !step.linkedModuleIds.some(moduleMatches),
 				);
 				const estimate = project.estimates.find((e) => e.id === step.estimateId);
-				let value = '-';
-				if (estimate) {
-					const v = estimate.value;
-					value =
-						v.type === 'range'
-							? `${v.minMinutes}–${v.maxMinutes} min (${v.metric})`
-							: v.type === 'text'
-								? v.text
-								: v.type === 'unknown'
-									? '?'
-									: 'n/a';
-				}
+				const value = estimate ? estimateText(estimate) : ru ? 'Без оценки' : 'No estimate';
+				button.setAttribute('aria-pressed', String(view.selectedStepId === step.id));
+				button.title = ru
+					? 'Показать компоненты и контракты шага'
+					: 'Show the components and contracts for this step';
 				button.append(
-					element('span', 'hmap-stereotype', '<<' + step.stereotype + '>>'),
+					element(
+						'span',
+						'hmap-stereotype',
+						ru
+							? {
+									intent: 'Намерение',
+									module: 'Компонент',
+									shared: 'Повторное использование',
+									validation: 'Проверка',
+									export: 'Передача',
+								}[step.stereotype]
+							: '<<' + step.stereotype + '>>',
+					),
 					element('strong', '', step.title),
 					element('span', 'hmap-step-estimate', value),
 				);
 				button.addEventListener(
 					'click',
 					() => {
-						for (const chunk of Array.from(
-							upper.querySelectorAll<HTMLElement>('[data-chunk-id]'),
-						)) {
-							const linked = step.linkedChunkIds.includes(chunk.dataset.chunkId!);
-							chunk.classList.toggle('hmap-focused', linked);
-						}
-						const first = step.linkedChunkIds[0];
-						if (first) {
-							const target = upper.querySelector<HTMLElement>('[data-chunk-id="' + first + '"]');
-							target?.focus({ preventScroll: true });
-							target?.scrollIntoView({ block: 'nearest' });
-						}
+						view.selectedStepId = step.id;
+						const ids = [...step.linkedChunkIds, ...step.linkedModuleIds];
+						for (const node of Array.from(upper.querySelectorAll<HTMLElement>('[data-entity-id]')))
+							node.classList.toggle('hmap-focused', ids.includes(node.dataset.entityId!));
+						for (const node of Array.from(rail.querySelectorAll<HTMLElement>('[data-step-id]')))
+							node.setAttribute('aria-pressed', String(node.dataset.stepId === step.id));
+						stepSummary.textContent =
+							step.title +
+							(ids.length
+								? ru
+									? ' — связанные элементы выделены выше.'
+									: ' — linked elements are highlighted above.'
+								: ru
+									? ' — добавьте связи через «Изменить».'
+									: ' — add links using Edit.');
+						const target = Array.from(upper.querySelectorAll<HTMLElement>('[data-entity-id]')).find(
+							(n) => n.dataset.entityId === ids[0],
+						);
+						target?.focus({ preventScroll: true });
+						target?.scrollIntoView({ block: 'nearest' });
 					},
 					{ signal: contentSignal },
 				);
-				row.append(button);
+				const group = element('div', 'hmap-step-group');
+				group.append(button);
+				const linkedNames = [
+					...project.modules.filter((m) => step.linkedModuleIds.includes(m.id)).map((m) => m.title),
+					...project.chunks.filter((c) => step.linkedChunkIds.includes(c.id)).map((c) => c.name),
+				];
+				if (linkedNames.length)
+					button.append(element('span', 'hmap-step-links', linkedNames.join(' · ')));
+				if (canEdit)
+					group.append(editButton({ kind: 'step', id: step.id, routeId: route.id }, step.title));
+				row.append(group);
 			}
 			rail.append(row);
 		}
@@ -393,6 +629,15 @@ export async function createRoadmapEditor(
 			});
 			if (!dead && token === labelRevision) {
 				labels = reply.result?.labels ?? labels;
+				if (!features.terminologySelector && ru)
+					labels = {
+						...labels,
+						intent: 'Намерение',
+						route: 'Маршрут',
+						module: 'Компонент',
+						chunk: 'Контракт',
+						intersection: 'Пересечение',
+					};
 				render();
 			}
 		} catch (cause) {
@@ -432,7 +677,9 @@ export async function createRoadmapEditor(
 					options: { language },
 				});
 				if (dead || token !== revision) return;
+				authoring.close();
 				dialog.hidden = false;
+				if (!dialog.open) dialog.showModal();
 				if (!response.ok || !response.result) {
 					preview = null;
 					accept.hidden = true;
@@ -460,10 +707,19 @@ export async function createRoadmapEditor(
 	);
 	const closeReview = () => {
 		preview = null;
+		if (dialog.open) dialog.close();
 		dialog.hidden = true;
 		importButton.focus();
 	};
 	cancel.addEventListener('click', closeReview, { signal });
+	dialog.addEventListener(
+		'cancel',
+		(event) => {
+			event.preventDefault();
+			closeReview();
+		},
+		{ signal },
+	);
 	dialog.addEventListener(
 		'keydown',
 		(event) => {
@@ -490,8 +746,7 @@ export async function createRoadmapEditor(
 			if (!preview || preview.revision !== revision || config.readonly) return;
 			project = clone(preview.project);
 			++revision;
-			view.selectedIntentId = project.selectedIntentId;
-			view.selectedRouteId = project.selectedRouteId;
+			setSelection(project);
 			closeReview();
 			render();
 			config.onChange?.(clone(project));
@@ -500,10 +755,17 @@ export async function createRoadmapEditor(
 	);
 	const resize = (value: number) => {
 		const total = container.clientHeight || 600;
-		view.splitter = Math.max(140, Math.min(total - 160, value));
+		const maximum = Math.max(
+			140,
+			total -
+				controls.getBoundingClientRect().height -
+				divider.getBoundingClientRect().height -
+				120,
+		);
+		view.splitter = Math.max(140, Math.min(maximum, value));
 		container.style.setProperty('--hmap-upper', view.splitter + 'px');
 		divider.setAttribute('aria-valuemin', '140');
-		divider.setAttribute('aria-valuemax', String(Math.max(140, total - 160)));
+		divider.setAttribute('aria-valuemax', String(maximum));
 		divider.setAttribute('aria-valuenow', String(view.splitter));
 	};
 	divider.addEventListener(
@@ -556,6 +818,15 @@ export async function createRoadmapEditor(
 	render();
 	await loadLabels();
 	return {
+		hasOpenDraft() {
+			check();
+			return !!container.querySelector('dialog[open]');
+		},
+		newProject() {
+			check();
+			if (!canEdit) throw new Error('Authoring is disabled');
+			authoring.newProject();
+		},
 		destroy() {
 			if (dead) return;
 			dead = true;
@@ -563,6 +834,8 @@ export async function createRoadmapEditor(
 			++labelRevision;
 			abort.abort();
 			renderAbort.abort();
+			authoring.destroy();
+			if (dialog.open) dialog.close();
 			container.remove();
 		},
 		getProject() {
@@ -578,10 +851,11 @@ export async function createRoadmapEditor(
 			const token = ++revision;
 			const accepted = await validate(clone(candidate));
 			if (dead || token !== revision) return;
+			authoring.close();
 			project = accepted;
-			view.selectedIntentId = project.selectedIntentId;
-			view.selectedRouteId = project.selectedRouteId;
+			setSelection(project);
 			preview = null;
+			if (dialog.open) dialog.close();
 			dialog.hidden = true;
 			render();
 		},

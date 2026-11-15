@@ -1,0 +1,314 @@
+{
+  "schemaVersion": 2,
+  "id": "p-architecture-workspace",
+  "title": "Пример: архитектура редактора карт",
+  "terminologyProfile": "engineering",
+  "selectedIntentId": "i-author",
+  "selectedRouteId": "r-author",
+  "metadata": {
+    "formatVersion": "2.0.0",
+    "createdAt": null,
+    "updatedAt": null
+  },
+  "intents": [
+    {
+      "id": "i-author",
+      "title": "Автор создаёт и изменяет архитектурный план",
+      "summary": "Намерение задаёт желаемый результат. Архитектурные компоненты описывают систему, а маршрут связывает их с последовательностью реализации. Измените этот пример или создайте собственную карту.",
+      "status": "draft",
+      "kind": "finite",
+      "parentIntentIds": [],
+      "acceptanceCriteria": [
+        "Текст, компоненты и связи изменяются через формы.",
+        "Ошибочный кандидат сохраняет последнюю принятую карту.",
+        "После явного сохранения карта открывается с теми же связями."
+      ]
+    },
+    {
+      "id": "i-delivery",
+      "title": "Разработчик получает проверяемый план реализации",
+      "summary": "Второй маршрут использует те же проверку и хранение. Повторное использование ссылается на общий компонент по ID.",
+      "status": "draft",
+      "kind": "finite",
+      "parentIntentIds": [
+        "i-author"
+      ],
+      "acceptanceCriteria": [
+        "Каждый шаг связан с компонентами и объясняющими контрактами.",
+        "Экспорт сохраняет идентичность общих элементов."
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "id": "r-author",
+      "intentId": "i-author",
+      "title": "От намерения к сохранённой карте",
+      "steps": [
+        {
+          "id": "s-describe",
+          "title": "Намерение и критерии",
+          "stereotype": "intent",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-ui",
+            "m-core"
+          ],
+          "linkedChunkIds": [
+            "c-intention"
+          ]
+        },
+        {
+          "id": "s-architecture",
+          "title": "Компоненты и контракты",
+          "stereotype": "module",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-ui",
+            "m-core"
+          ],
+          "linkedChunkIds": [
+            "c-architecture"
+          ]
+        },
+        {
+          "id": "s-check-map",
+          "title": "Проверка изменений",
+          "stereotype": "validation",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-validation"
+          ],
+          "linkedChunkIds": [
+            "c-validation"
+          ]
+        },
+        {
+          "id": "s-save-map",
+          "title": "Локальное сохранение",
+          "stereotype": "shared",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-storage"
+          ],
+          "linkedChunkIds": [
+            "c-storage"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "r-delivery",
+      "intentId": "i-delivery",
+      "title": "От архитектуры к передаче разработчику",
+      "steps": [
+        {
+          "id": "s-check-delivery",
+          "title": "Проверка плана перед передачей",
+          "stereotype": "shared",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-validation"
+          ],
+          "linkedChunkIds": [
+            "c-validation"
+          ]
+        },
+        {
+          "id": "s-export-plan",
+          "title": "Читаемый план реализации",
+          "stereotype": "export",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-export"
+          ],
+          "linkedChunkIds": [
+            "c-export"
+          ]
+        },
+        {
+          "id": "s-preserve-source",
+          "title": "Сохранение исходной карты",
+          "stereotype": "shared",
+          "estimateId": null,
+          "linkedModuleIds": [
+            "m-storage"
+          ],
+          "linkedChunkIds": [
+            "c-storage"
+          ]
+        }
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "id": "m-core",
+      "title": "Модель карты",
+      "summary": "Хранит намерения, компоненты, маршруты и стабильные ссылки. Отделяет общий компонент от его вхождения в маршрут.",
+      "kind": "core",
+      "linkedIntentIds": [
+        "i-author",
+        "i-delivery"
+      ],
+      "existence": "existing",
+      "codeRefs": [
+        {
+          "repository": "horizontal-manifestation-map",
+          "path": "packages/roadmap-core/src/roadmap/domain/roadmap-project.hpp",
+          "revision": null,
+          "symbol": null
+        }
+      ]
+    },
+    {
+      "id": "m-ui",
+      "title": "Авторский интерфейс",
+      "summary": "Предлагает формы изменения текста и связей; показывает архитектуру сверху и один выбранный маршрут снизу.",
+      "kind": "ui",
+      "linkedIntentIds": [
+        "i-author"
+      ],
+      "existence": "existing",
+      "codeRefs": [
+        {
+          "repository": "horizontal-manifestation-map",
+          "path": "packages/roadmap-ui/src/index.ts",
+          "revision": null,
+          "symbol": null
+        }
+      ]
+    },
+    {
+      "id": "m-validation",
+      "title": "Проверка кандидата",
+      "summary": "Проверяет существование ссылок, происхождение намерений и согласованность состояний перед принятием изменений.",
+      "kind": "validation",
+      "linkedIntentIds": [
+        "i-author",
+        "i-delivery"
+      ],
+      "existence": "existing",
+      "codeRefs": [
+        {
+          "repository": "horizontal-manifestation-map",
+          "path": "packages/roadmap-core/src/roadmap/application/project-validation.cpp",
+          "revision": null,
+          "symbol": null
+        }
+      ]
+    },
+    {
+      "id": "m-storage",
+      "title": "Адаптер хранения",
+      "summary": "Сохраняет принятую карту по явному действию автора. Общий контракт допускает локальное хранилище и временную память.",
+      "kind": "storage",
+      "linkedIntentIds": [
+        "i-author",
+        "i-delivery"
+      ],
+      "existence": "existing",
+      "codeRefs": [
+        {
+          "repository": "horizontal-manifestation-map",
+          "path": "packages/roadmap-storage/src/index.ts",
+          "revision": null,
+          "symbol": null
+        }
+      ]
+    },
+    {
+      "id": "m-export",
+      "title": "Экспорт плана",
+      "summary": "Строит читаемый Markdown из принятого проекта и сохраняет архитектурные связи.",
+      "kind": "export",
+      "linkedIntentIds": [
+        "i-delivery"
+      ],
+      "existence": "existing",
+      "codeRefs": [
+        {
+          "repository": "horizontal-manifestation-map",
+          "path": "packages/roadmap-formats/src/export-project-markdown.cpp",
+          "revision": null,
+          "symbol": null
+        }
+      ]
+    }
+  ],
+  "chunks": [
+    {
+      "id": "c-intention",
+      "name": "Намерение задаёт результат",
+      "body": "Опишите, какое свойство должна обеспечить система и как будет проверен результат. Критерии относятся к намерению; маршрут предлагает последовательность его реализации.",
+      "linkedIntentIds": [
+        "i-author"
+      ],
+      "linkedModuleIds": [
+        "m-core",
+        "m-ui"
+      ]
+    },
+    {
+      "id": "c-architecture",
+      "name": "Архитектурный элемент и шаг",
+      "body": "Компонент существует в карте один раз. Шаг ссылается на этот компонент и на поясняющий контракт. Изменение названия сохраняет ID и все связи. Добавьте второй маршрут, чтобы показать повторное использование.",
+      "linkedIntentIds": [
+        "i-author",
+        "i-delivery"
+      ],
+      "linkedModuleIds": [
+        "m-core",
+        "m-ui"
+      ]
+    },
+    {
+      "id": "c-validation",
+      "name": "Контракт принятия изменений",
+      "body": "Форма создаёт кандидат. Общий движок проверяет карту целиком. Ошибка оставляет принятый проект и текст формы; успешная проверка допускает атомарную замену. Нажатие шага маршрута показывает этот контракт; фактическая проверка доступна кнопкой «Проверить карту».",
+      "linkedIntentIds": [
+        "i-author",
+        "i-delivery"
+      ],
+      "linkedModuleIds": [
+        "m-validation"
+      ]
+    },
+    {
+      "id": "c-storage",
+      "name": "Контракт сохранения",
+      "body": "Изменение и сохранение — отдельные действия. Кнопка «Сохранить» записывает принятую карту в этот браузер. При отказе хранилища JSON остаётся доступен для скачивания. Второй маршрут использует тот же адаптер.",
+      "linkedIntentIds": [
+        "i-author",
+        "i-delivery"
+      ],
+      "linkedModuleIds": [
+        "m-storage"
+      ]
+    },
+    {
+      "id": "c-export",
+      "name": "Контракт передачи плана",
+      "body": "Markdown показывает намерения, архитектурные элементы, контракты и маршруты. JSON сохраняет структурированный источник для дальнейшего изменения и импорта. Ссылки на код являются авторскими указаниями; существование файлов автоматически не подтверждается.",
+      "linkedIntentIds": [
+        "i-delivery"
+      ],
+      "linkedModuleIds": [
+        "m-export"
+      ]
+    }
+  ],
+  "intersections": [
+    {
+      "id": "x-validation",
+      "title": "Общая проверка двух маршрутов",
+      "sourceIds": [
+        "m-validation",
+        "s-check-map",
+        "s-check-delivery"
+      ],
+      "note": "Оба шага используют один валидатор. Компонент описан в архитектуре единожды; в маршрутах показаны разные места его применения."
+    }
+  ],
+  "estimates": []
+}

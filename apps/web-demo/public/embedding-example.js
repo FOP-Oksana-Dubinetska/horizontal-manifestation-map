@@ -17,6 +17,7 @@ try {
 		engine,
 		storage,
 		initialProject: sample.result,
+		features: { terminologySelector: true },
 		onChange: () => ++changes,
 	});
 	const second = await createRoadmapEditor({
@@ -24,6 +25,7 @@ try {
 		engine,
 		storage,
 		initialProject: sample.result,
+		features: { terminologySelector: true },
 		readonly: true,
 	});
 	window.hmapEmbeddingTest = {

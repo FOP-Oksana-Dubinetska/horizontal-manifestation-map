@@ -5,6 +5,30 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const introduction = JSON.parse(
+	await readFile(resolve(root, 'content/project-introduction.json'), 'utf8'),
+);
+const escapeHtml = (value) =>
+	String(value)
+		.replaceAll('&', '&amp;')
+		.replaceAll('<', '&lt;')
+		.replaceAll('>', '&gt;')
+		.replaceAll('"', '&quot;')
+		.replaceAll("'", '&#39;');
+const renderIntroduction = () => {
+	const language = (key, tag, id = '') => {
+		const copy = introduction[key];
+		return `<${tag}${id ? ` id="${id}"` : ''}>${escapeHtml(copy.title)}</${tag}><p data-introduction-text="${key}">${escapeHtml(copy.text)}</p><p><a href="${escapeHtml(introduction.reviewUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(copy.link)}</a></p>`;
+	};
+	return (
+		language('en', 'h2', 'introduction-title') +
+		'<details lang="ru"><summary>Русский</summary>' +
+		language('ru', 'h3') +
+		'</details><details lang="uk"><summary>Українська</summary>' +
+		language('uk', 'h3') +
+		'</details>'
+	);
+};
 const wasmDir = resolve(root, process.env.HMAP_WASM_DIR ?? 'build/wasm-release/engine');
 const js = await readFile(resolve(wasmDir, 'roadmap-engine.mjs')),
 	wasm = await readFile(resolve(wasmDir, 'roadmap-engine.wasm'));
@@ -13,6 +37,10 @@ const publicDir = resolve(root, 'build/web-public');
 await rm(publicDir, { recursive: true, force: true });
 await mkdir(resolve(publicDir, 'engine', hash), { recursive: true });
 await cp(resolve(root, 'apps/web-demo/public'), publicDir, { recursive: true });
+await cp(
+	resolve(root, 'examples/architecture-workspace.roadmap.json'),
+	resolve(publicDir, 'example.roadmap.json'),
+);
 await writeFile(resolve(publicDir, 'engine', hash, 'roadmap-engine.mjs'), js);
 await writeFile(resolve(publicDir, 'engine', hash, 'roadmap-engine.wasm'), wasm);
 let sourceRevision = 'uncommitted',
@@ -67,6 +95,13 @@ await build({
 await build({
 	configFile: false,
 	root: resolve(root, 'apps/web-demo'),
+	plugins: [
+		{
+			name: 'hmap-static-introduction',
+			transformIndexHtml: (html) =>
+				html.replace('<!-- HMAP_INTRODUCTION -->', renderIntroduction()),
+		},
+	],
 	base: './',
 	publicDir,
 	build: { outDir: resolve(root, 'dist/site'), emptyOutDir: true },

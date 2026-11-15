@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.0 — authoring candidate, 2026-11-14
+
+Stage 15–18 add validated forms for map content and structure, stable named links, ordering, reviewed deletion and modal cancellation/revision guards. The workspace now offers new/open/edit/validate/save/export with a meaningful two-route architecture example and visible unsaved-state handling. Explicit persistence retains stored maps and external-writer detection.
+
+The presentation header, technical footer slogan and ordinary terminology selector are removed. Legacy profiles and the explicit embedding opt-in remain compatible with schema 2 and the existing CLI/API. No program/schema/API version is silently bumped. This is a source candidate delivered as ordered diffs; the owner deploys the resulting repository.
+
 ## 0.0.0 — completed MVP candidate, 2026-11-11
 
 The existing Stage 01 model and tests are preserved. Stage 02.3a–14 add the CLI composition root and regression checks, pinned Wasm probe, strict schema-2 JSON, global-reference validation, reversible RoadmapText/1, route/inspect views, bilingual guidance, protected file output, replaceable browser storage, deterministic Markdown and explicit schema-1 migration.

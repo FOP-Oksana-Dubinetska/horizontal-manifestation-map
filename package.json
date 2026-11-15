@@ -1,23 +1,23 @@
 {
-  "name": "horizontal-manifestation-map",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "workspaces": [
-    "packages/roadmap-storage",
-    "packages/roadmap-ui"
-  ],
-  "scripts": {
-    "typecheck": "tsc --noEmit",
-    "build": "node tools/build-web.mjs",
-    "test:storage": "node --experimental-strip-types --test tests/web/storage.test.ts",
-    "test:web": "playwright test"
-  },
-  "devDependencies": {
-    "@playwright/test": "1.58.2",
-    "@types/node": "24.10.1",
-    "prettier": "3.6.2",
-    "typescript": "5.9.3",
-    "vite": "7.3.1"
-  }
+	"name": "horizontal-manifestation-map",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"workspaces": [
+		"packages/roadmap-storage",
+		"packages/roadmap-ui"
+	],
+	"scripts": {
+		"typecheck": "tsc --noEmit",
+		"build": "node tools/build-web.mjs",
+		"test:storage": "node --experimental-strip-types --test tests/web/storage.test.ts tests/web/authoring.test.ts",
+		"test:web": "playwright test"
+	},
+	"devDependencies": {
+		"@playwright/test": "1.58.2",
+		"@types/node": "24.10.1",
+		"prettier": "3.6.2",
+		"typescript": "5.9.3",
+		"vite": "7.3.1"
+	}
 }
