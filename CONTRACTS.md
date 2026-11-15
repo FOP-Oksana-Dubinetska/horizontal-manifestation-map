@@ -177,7 +177,21 @@
 - **Role**: Explain the learning project and its readable-architecture idea across web and terminal.
 - **Status**: implementation
 - **Inputs**: hmap-presentation.plan.md; content/project-introduction.json; human terminal/section navigation.
-- **Outputs**: English README with RU/UK disclosures; static multilingual introduction; terminal-only English banner; deliberate section transitions.
+- **Outputs**: English README with RU/UK disclosures; static multilingual introduction; terminal-only English banner; native section and anchor navigation.
 - **Allowed changes**: presentation adapters, related build/test tools, current explanatory documentation and Stage 19 record.
 - **Forbidden changes**: domain/schema changes, modified machine/artifact output, hidden storage writes, third-party method/policy edits.
 - **Acceptance criteria**: native PTY/banner and existing CLI checks; Chromium/Firefox section navigation and modal isolation; static HTML credit/translation checks; web/native/Wasm profiles; clean single-patch replay.
+
+## Chunk: `<<intention-led-map>>` — Stage 20
+
+Default CLI/API render returns all intention-led lines in source order. Each intention appears even without routes; each route repeats its owning intention as the derived origin. No synthetic step is written to the project. Explicit --route / options.routeId returns a one-route slice. JSON render returns scope, empty, rows[{intent,route|null}], modules, chunks, intersections, estimates and an empty-state message. The earlier selected-route-only render DTO is superseded; renderRoute remains the explicit internal single-route helper. Selection fields retain their schema-2 meaning and no longer hide other lines. CLI, Wasm and web consume the same projection.
+
+Presentation language is en (default), uk or ru. locales/*.json contain the translated map, guidance, labels and diagnostics. docs/guidance/catalog.json retains language-independent topic metadata. IDs, enum values, authored strings and JSON/RoadmapText transport remain unchanged. The terminal ideological header remains English as requested; machine output remains clean.
+
+### Stage 21 — creation prerequisites
+
+The interactive workflow starts with an intention. A route requires a selected intention; a step requires a selected route of that intention. Explicit null view selection stays null. An intersection requires two eligible intention/step/module/chunk sources; its form requires two selections before submit. Existing imported and programmatically supplied schema-2 projects retain their validation contract. Map DTO and accepted project change atomically; late projections, cancelled forms and rejected candidates retain the accepted pair.
+
+### Stage 22 — language and navigation
+
+`language` accepts en/uk/ru and defaults to en. `setLanguage` preserves project/view and emits no onChange; it returns false while a draft/review is open. The host stores this interface preference separately from maps and accepts an explicit ?lang=en|uk|ru override. Native wheel scrolling has no JS threshold or cancellation. Help is a permanent anchor section outside the editor and before the ideological introduction. Locale files own interface strings and guidance; their complete key sets are checked together.

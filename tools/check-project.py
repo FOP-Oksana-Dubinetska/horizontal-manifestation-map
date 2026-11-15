@@ -32,6 +32,7 @@ def main():
             exe=ROOT/'build/native-debug/bin'/('hmap.exe' if os.name=='nt' else 'hmap')
             run([sys.executable,'tools/test-cli-contracts.py',str(exe)],steps)
             run([sys.executable,'tools/test-cli-introduction.py',str(exe)],steps)
+            run([sys.executable,'tools/test-cli-workflow.py',str(exe)],steps)
             run([str(exe),'validate','examples/architecture-workspace.roadmap.json'],steps)
         if args.profile in ['wasm','all']:
             run(['cmake','--preset','wasm-release'],steps)

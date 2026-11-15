@@ -8,9 +8,9 @@ The idea grew out of an earlier [review of Donald Knuth's *Literate Programming*
 
 ## Explore the map
 
-Create a project, add an intention, describe components and contracts, then build a route from linked steps. Names can change while identities and references stay connected. Forms check each change with the shared engine; saving keeps the map in the current browser. JSON carries it to another browser, and Markdown turns it into a readable plan.
+Create a project and add an intention: its line appears immediately. Add a route on that line, describe components and contracts, then connect them through route steps. Several intentions and alternative routes can be developed together. Names can change while identities and references stay connected. Forms check each change with the shared engine; saving keeps the map in the current browser. JSON carries it to another browser, and Markdown turns it into a readable plan.
 
-The browser opens a two-route architecture example. Existing saved maps are also available from the file menu. The workspace and the short introduction before the footer each have a section stop: ordinary scrolling reads the current area, and a stronger gesture moves on. Section links, keyboard and touch offer direct navigation as well.
+The browser opens a two-route architecture example. Existing saved maps are available from the file menu. English is the default interface language, with Ukrainian and Russian available from the language selector. Help has its own linked section before the project introduction. Page scrolling is free; links, keyboard and touch provide direct navigation.
 
 Run `hmap` in a terminal to read the same English introduction above the CLI help. Human-readable terminal commands share that introduction; version information, data files and piped output remain convenient to use in scripts.
 
@@ -53,7 +53,7 @@ ctest --preset native-debug --output-on-failure
 .\build\native-debug\bin\hmap.exe
 ```
 
-On Linux, the executable is `./build/native-debug/bin/hmap`. Useful starting points are `hmap help commands`, `hmap template --output draft.roadmap.json` and `hmap render draft.roadmap.json`. Use `--output` when writing an artifact, especially in Windows PowerShell 5.1, whose redirection may change its encoding.
+On Linux, the executable is `./build/native-debug/bin/hmap`. Useful starting points are `hmap help commands`, `hmap template --output draft.roadmap.json` and `hmap render draft.roadmap.json`. Default `render` shows all intention-led lines; `--route=r-id` selects one route. Try `hmap help workflow --lang=uk` or `hmap help intersections --lang=ru`. Locale text lives in `locales/en.json`, `uk.json` and `ru.json`. Use `--output` when writing an artifact, especially in Windows PowerShell 5.1, whose redirection may change its encoding.
 
 Activate **Emscripten 6.0.9** before building the browser engine. With emsdk installed, run `emsdk install 6.0.9`, `emsdk activate 6.0.9`, then load its `emsdk_env.ps1` in PowerShell or `emsdk_env.sh` in Bash. Back in the project directory:
 
@@ -91,7 +91,7 @@ HMAP — учебный проект на C++, связывающий архит
 
 Создайте проект и намерение, опишите компоненты и контракты, добавьте маршрут со связанными шагами. Изменение названия сохраняет ID и ссылки. Формы проверяют изменения общим движком; кнопка сохранения оставляет карту в этом браузере. JSON позволяет перенести её, Markdown — прочитать как связный план.
 
-Рабочая область и короткий текст перед футером имеют остановки прокрутки: обычное движение читает текущую область, усиленный жест переводит к следующей. Для переходов также доступны ссылки, клавиатура и сенсорная прокрутка. При запуске `hmap` в терминале тот же английский текст появляется перед справкой.
+Каждое намерение сразу начинает линию карты; несколько намерений и маршрутов видны вместе. Интерфейс по умолчанию английский, доступны украинский и русский. Справка вынесена в отдельную якорную секцию. Прокрутка свободная, переходы доступны ссылками и с клавиатуры. При запуске `hmap` в терминале тот же английский текст появляется перед справкой.
 
 ## Технологии и запуск
 
@@ -118,7 +118,7 @@ HMAP — навчальний проєкт на C++, що пов'язує арх
 
 Створіть проєкт і намір, опишіть компоненти та контракти, додайте маршрут зі зв'язаними кроками. Зміна назви зберігає ID і посилання. Форми перевіряють зміни спільним рушієм; кнопка збереження залишає карту в цьому браузері. JSON дає змогу перенести її, Markdown — прочитати як зв'язний план.
 
-Робоча область і короткий текст перед футером мають зупинки прокручування: звичайний рух читає поточну область, посилений жест переводить до наступної. Для переходів також доступні посилання, клавіатура й сенсорне прокручування. Під час запуску `hmap` у терміналі той самий англійський текст з'являється перед довідкою.
+Кожен намір одразу починає лінію карти; кілька намірів і маршрутів видно разом. Інтерфейс за замовчуванням англійський, доступні українська та російська. Довідка має окрему якірну секцію. Прокручування вільне, переходи доступні посиланнями й із клавіатури. Під час запуску `hmap` у терміналі той самий англійський текст з'являється перед довідкою.
 
 ## Технології та запуск
 

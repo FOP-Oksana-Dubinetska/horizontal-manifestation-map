@@ -1552,3 +1552,8 @@ FTXUI — подходящий кандидат: upstream заявляет те�
 Компоновка сохраняет текст сверху и один маршрут снизу. Основная страница использует фиксированные инженерные подписи; selector терминологии выключен по умолчанию. Профили сохраняются в JSON/CLI/API и доступны встраивающему host через явный opt-in. Верхние действия редактора дополнены созданием объектов; формы открываются модально.
 
 Сквозная приёмка и порядок файлов объявлены в hmap-authoring.plan.md, CONTRACTS <<authoring-workspace>>, SCENARIOS SC-15 и карточках Stage 15–18. Новая модель работ, расписания, TUI, cloud sync и произвольный Markdown roundtrip сохраняют отдельные границы будущих работ.
+
+
+## 26. Intention-led map — 2026-11-15
+
+The current request and hmap-map-workflow.plan.md supersede the single visible route restriction above. Every intention begins a visible line, including unrouted intentions; all routes appear under their own intentions. Shared C++/CLI projection precedes web authoring changes. Existing schema-2 documents stay valid. EN/UK/RU locale files define presentation; the default is English. Stage 20–22 contracts and checks are described in the active plan.

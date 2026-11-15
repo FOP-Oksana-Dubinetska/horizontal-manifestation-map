@@ -1,8 +1,9 @@
 #include "composition-root.hpp"
 #include "command-options.hpp"
-#include "project-introduction.hpp"
 #include "file-output.hpp"
 #include "json-project.hpp"
+#include "localization.hpp"
+#include "project-introduction.hpp"
 #include "project-views.hpp"
 #include "roadmap-api.hpp"
 #include <cstdio>
@@ -50,7 +51,10 @@ void writeIntroduction(std::ostream &output, std::size_t width) {
 				output << '\n';
 				column = 0;
 			}
-			if (column) { output << ' '; ++column; }
+			if (column) {
+				output << ' ';
+				++column;
+			}
 			output << word;
 			column += word.size();
 		}
@@ -115,7 +119,8 @@ int exitCode(const json &response) {
 	return code;
 }
 int emit(const json &response, const std::string &op, const std::string &format,
-         std::ostream &output, std::ostream &errors, bool color = false) {
+         std::ostream &output, std::ostream &errors, bool color = false,
+         const std::string &language = "en") {
 	const bool envelope = information(op) && format == "json";
 	if (envelope)
 		output << response.dump(2) << '\n';
@@ -136,7 +141,7 @@ int emit(const json &response, const std::string &op, const std::string &format,
 			output << result["text"].get<std::string>()
 			       << (result["text"].get<std::string>().ends_with('\n') ? "" : "\n");
 		else if (op == "validate")
-			output << "Valid project\n";
+			output << formats::locale(language)["map"]["valid"].get<std::string>() << '\n';
 		else
 			output << result.dump(2) << '\n';
 	}
@@ -162,7 +167,7 @@ int runCli(int argc, char *argv[], std::istream &input, std::ostream &output,
 	                      (o.format.empty() || o.format == "text") && o.outputPath.empty();
 	auto emitCurrent = [&](const json &response, const std::string &op, const std::string &format,
 	                       std::ostream &out, std::ostream &err) {
-		return emit(response, op, format, out, err, useColor);
+		return emit(response, op, format, out, err, useColor, o.language);
 	};
 
 	if (o.kind == CommandKind::version) {
@@ -234,8 +239,8 @@ int runCli(int argc, char *argv[], std::istream &input, std::ostream &output,
 			return emitCurrent(failure(error->code, error->message), op, format, output, errors);
 		return 0;
 	}
-	if (response["ok"] == true && information(op) && format == "text" &&
-	    o.outputPath.empty() && outputTerminal(output))
+	if (response["ok"] == true && information(op) && format == "text" && o.outputPath.empty() &&
+	    outputTerminal(output))
 		writeIntroduction(output, terminalWidth());
 	if (o.kind == CommandKind::help && !o.topic && response["ok"] == true && format == "text")
 		output << "Usage: hmap COMMAND [INPUT] [OPTIONS]\nCommands: help template schema validate "

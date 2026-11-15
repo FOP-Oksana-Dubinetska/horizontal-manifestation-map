@@ -1,4 +1,11 @@
 import {
+	createTranslator,
+	isLocale,
+	localeResources,
+	type Locale,
+	type MessageKey,
+} from '../../packages/roadmap-ui/src/locales.ts';
+import {
 	createRoadmapEngine,
 	createRoadmapEditor,
 	projectCodec,
@@ -14,8 +21,25 @@ import type {
 	RoadmapProjectMeta,
 } from '../../packages/roadmap-ui/src/index.ts';
 import './style.css';
-import { setupSectionScrolling } from './section-scroll.ts';
-const stopSectionScrolling = setupSectionScrolling();
+const localeKey = 'hmap:workspace:locale';
+const requestedLocale = new URL(location.href).searchParams.get('lang');
+let language: Locale = 'en';
+try {
+	const preference = localStorage.getItem(localeKey);
+	if (isLocale(preference)) language = preference;
+} catch {}
+if (isLocale(requestedLocale)) language = requestedLocale;
+const t = createTranslator(() => language);
+const languageSelect = document.querySelector<HTMLSelectElement>('#language')!;
+function localizeHost() {
+	document.documentElement.lang = language;
+	document.querySelector('#workspace')!.setAttribute('aria-label', t('Workspace'));
+	document.querySelector('.demo-actions')!.setAttribute('aria-label', t('Map actions'));
+	for (const node of document.querySelectorAll<HTMLElement>('[data-i18n]'))
+		node.textContent = t(node.dataset.i18n as MessageKey);
+	languageSelect.value = language;
+}
+localizeHost();
 const status = document.querySelector<HTMLElement>('#host-status')!;
 const storageStatus = document.querySelector<HTMLElement>('#storage-status')!;
 const root = document.querySelector<HTMLElement>('#editor')!;
@@ -39,7 +63,13 @@ let dirty = false,
 	busy = false,
 	validationRevision = 0;
 const showError = (cause: unknown) => {
-	status.textContent = cause instanceof Error ? cause.message : String(cause);
+	const code = cause && typeof cause === 'object' && 'code' in cause ? String(cause.code) : '';
+	const translated = (localeResources[language].guidance.codes as Record<string, string>)[code];
+	status.textContent = translated
+		? code + ': ' + translated
+		: cause instanceof Error
+			? cause.message
+			: String(cause);
 };
 const same = (a: RoadmapProject, b: RoadmapProject) => JSON.stringify(a) === JSON.stringify(b);
 function enable(enabled: boolean) {
@@ -73,14 +103,15 @@ function remember(id: string) {
 	try {
 		settings?.setItem(activeKey, id);
 	} catch {
-		storageStatus.textContent =
-			'Карта сохранена; предпочтение последней открытой карты записать не удалось.';
+		storageStatus.textContent = t(
+			'The map was saved; the last-opened preference could not be recorded.',
+		);
 	}
 }
 function canDiscard() {
 	return (
 		!(dirty || editor?.hasOpenDraft()) ||
-		window.confirm('Есть несохранённые изменения. Продолжить без их сохранения?')
+		window.confirm(t('There are unsaved changes. Continue without saving them?'))
 	);
 }
 function download(name: string, text: string, type: string) {
@@ -95,7 +126,7 @@ async function loadExample() {
 	const response = await fetch(new URL('./example.roadmap.json', document.baseURI), {
 		cache: 'no-store',
 	});
-	if (!response.ok) throw new Error('Пример архитектуры загрузить не удалось.');
+	if (!response.ok) throw new Error(t('The architecture example could not be loaded.'));
 	return projectCodec(engine)(await response.json());
 }
 async function start() {
@@ -108,13 +139,13 @@ async function start() {
 	editor = undefined;
 	engine?.dispose();
 	clearReport();
-	status.textContent = 'Загрузка карты…';
+	status.textContent = t('Loading the map\u2026');
 	let succeeded = false;
 	try {
 		const version = await fetch(new URL('./version.json', document.baseURI), {
 			cache: 'no-store',
 		}).then((response) => {
-			if (!response.ok) throw new Error('Манифест сборки загрузить не удалось.');
+			if (!response.ok) throw new Error(t('The build manifest could not be loaded.'));
 			return response.json();
 		});
 		engine = await createRoadmapEngine({
@@ -131,7 +162,11 @@ async function start() {
 					settings,
 					codec,
 					(error) => {
-						storageStatus.textContent = error.code + ': ' + error.message;
+						storageStatus.textContent =
+							error.code +
+							': ' +
+							((localeResources[language].guidance.codes as Record<string, string>)[error.code] ??
+								error.message);
 					},
 					window,
 				);
@@ -139,8 +174,9 @@ async function start() {
 			} catch {
 				settings = undefined;
 				storage = new MemoryStorageAdapter(codec);
-				storageStatus.textContent =
-					'Временная сессия. Скачайте JSON, чтобы сохранить работу за пределами этой страницы.';
+				storageStatus.textContent = t(
+					'Temporary session. Download JSON to keep your work beyond this page.',
+				);
 			}
 		}
 		let initial = previous;
@@ -159,26 +195,27 @@ async function start() {
 			engine,
 			storage,
 			initialProject: initial,
-			language: 'ru',
+			language,
 			terminology: 'engineering',
 			features: { terminologySelector: false },
 			onChange: (accepted) => {
 				currentSnapshot = structuredClone(accepted);
 				dirty = !lastSaved || !same(accepted, lastSaved);
 				clearReport();
-				status.textContent = 'Есть несохранённые изменения.';
+				status.textContent = t('There are unsaved changes.');
 			},
 			onError: showError,
 		});
+		editor.setLanguage(language);
 		currentSnapshot = editor.getProject();
 		savedChoices(currentSnapshot.id);
 		status.textContent = previous
 			? dirty
-				? 'Карта восстановлена. Есть несохранённые изменения.'
-				: 'Текущая карта восстановлена.'
+				? t('The map was restored with unsaved changes.')
+				: t('The current map was restored.')
 			: lastSaved
-				? 'Сохранённая карта открыта.'
-				: 'Открыт пример архитектуры. Измените его или создайте новую карту.';
+				? t('The saved map is open.')
+				: t('The architecture example is open. Edit it or create a new map.');
 		succeeded = true;
 	} catch (cause) {
 		showError(cause);
@@ -191,7 +228,7 @@ async function save(asCopy = false) {
 	if (!editor || !storage || busy || starting) return;
 	busy = true;
 	enable(false);
-	status.textContent = 'Сохранение карты…';
+	status.textContent = t('Saving the map\u2026');
 	try {
 		const before = editor.getProject();
 		const candidate = prepareProjectSave(before, () => new Date().toISOString());
@@ -215,10 +252,10 @@ async function save(asCopy = false) {
 		savedChoices(currentSnapshot.id);
 		if (!dirty) remember(candidate.id);
 		status.textContent = dirty
-			? 'Версия сохранена. В текущей карте есть более новые несохранённые изменения.'
+			? t('This version was saved. The current map has newer unsaved changes.')
 			: storage instanceof MemoryStorageAdapter
-				? 'Карта сохранена на время этой сессии. Скачайте JSON для переноса.'
-				: 'Карта сохранена в этом браузере.';
+				? t('The map is saved for this session. Download JSON to transfer it.')
+				: t('The map is saved in this browser.');
 	} catch (cause) {
 		showError(cause);
 	} finally {
@@ -233,14 +270,16 @@ async function openProject(example = false) {
 	fileMenu.open = false;
 	try {
 		const candidate = example ? await loadExample() : await storage.loadProject(savedSelect.value);
-		if (!candidate) throw new Error('Сохранённая карта не найдена.');
+		if (!candidate) throw new Error(t('The saved map was not found.'));
 		await editor.setProject(candidate);
 		currentSnapshot = editor.getProject();
 		lastSaved = example ? null : structuredClone(candidate);
 		dirty = false;
 		clearReport();
 		if (!example) remember(candidate.id);
-		status.textContent = example ? 'Открыт пример архитектуры.' : 'Сохранённая карта открыта.';
+		status.textContent = example
+			? t('The architecture example is open.')
+			: t('The saved map is open.');
 	} catch (cause) {
 		showError(cause);
 	} finally {
@@ -277,7 +316,7 @@ document.querySelector('#download-markdown')!.addEventListener('click', async ()
 		const project = editor.getProject();
 		const reply = await engine.request<{ text: string }>('export', {
 			input: { format: 'json', text: JSON.stringify(project) },
-			options: { format: 'markdown', language: 'ru' },
+			options: { format: 'markdown', language },
 		});
 		if (!reply.ok || !reply.result)
 			throw new Error(reply.diagnostics.map((d) => d.message).join('\n'));
@@ -292,26 +331,39 @@ document.querySelector('#validate')!.addEventListener('click', async () => {
 	try {
 		const reply = await engine.request<RoadmapProject>('validate', {
 			input: { format: 'json', text: JSON.stringify(editor.getProject()) },
-			options: { language: 'ru' },
+			options: { language },
 		});
 		if (token !== validationRevision) return;
 		report.textContent = reply.diagnostics.length
 			? reply.diagnostics.map((d) => `${d.code} ${d.pointer}: ${d.message}`).join('\n')
-			: 'Карта прошла проверку. Ошибок и предупреждений нет.';
+			: t('The map passed validation with no errors or warnings.');
 		report.hidden = false;
 	} catch (cause) {
 		if (token === validationRevision) showError(cause);
 	}
 });
-document.querySelector('#help')!.addEventListener('click', () => {
-	const guide = document.querySelector<HTMLElement>('#guide')!;
-	guide.hidden = false;
-	guide.scrollIntoView({ block: 'start' });
-	document.querySelector<HTMLButtonElement>('#close-guide')!.focus();
-});
-document.querySelector('#close-guide')!.addEventListener('click', () => {
-	document.querySelector<HTMLElement>('#guide')!.hidden = true;
-	document.querySelector<HTMLButtonElement>('#help')!.focus();
+languageSelect.addEventListener('change', () => {
+	const next = languageSelect.value;
+	if (!isLocale(next) || (editor && !editor.setLanguage(next))) {
+		languageSelect.value = language;
+		return;
+	}
+	language = next;
+	localizeHost();
+	if (storage instanceof MemoryStorageAdapter)
+		storageStatus.textContent = t(
+			'Temporary session. Download JSON to keep your work beyond this page.',
+		);
+	else {
+		const code = storageStatus.textContent?.split(':', 1)[0] ?? '';
+		const message = (localeResources[language].guidance.codes as Record<string, string>)[code];
+		if (message) storageStatus.textContent = code + ': ' + message;
+	}
+	clearReport();
+	status.textContent = dirty ? t('There are unsaved changes.') : t('The current map was restored.');
+	try {
+		localStorage.setItem(localeKey, language);
+	} catch {}
 });
 retry.addEventListener('click', () => {
 	fileMenu.open = false;
@@ -324,7 +376,6 @@ window.addEventListener('beforeunload', (event) => {
 	}
 });
 window.addEventListener('pagehide', () => {
-	stopSectionScrolling();
 	editor?.destroy();
 	editor = undefined;
 	engine?.dispose();

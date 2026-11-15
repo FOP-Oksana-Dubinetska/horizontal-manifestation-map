@@ -2,6 +2,7 @@
 #include "export-project-markdown.hpp"
 #include "guidance.hpp"
 #include "json-project.hpp"
+#include "localization.hpp"
 #include "migrate-project-v1.hpp"
 #include "project-views.hpp"
 #include "roadmap-text.hpp"
@@ -19,14 +20,17 @@ json optionalNumber(const std::optional<std::size_t> &value) {
 }
 json diagnosticJson(const Diagnostic &d, const std::string &language) {
 	std::string message = d.message;
-	if (language == "ru") {
+	if (language != "en") {
 		const auto catalog = guidance::catalog();
 		if (catalog["codes"].contains(d.code)) {
-			message = catalog["codes"][d.code]["ru"].get<std::string>();
+			message = catalog["codes"][d.code][language].get<std::string>();
 			for (const auto &id : d.relatedIds)
 				message += " " + id;
 		}
 	}
+	if (d.code == "E_FIELD_TYPE" && d.pointer.starts_with("/intersections/") &&
+	    d.pointer.ends_with("/sourceIds"))
+		message = formats::locale(language)["map"]["intersectionSources"].get<std::string>();
 	return {{"code", d.code},
 	        {"severity", d.severity},
 	        {"entityId", optionalString(d.entityId)},
@@ -134,8 +138,8 @@ std::string processRoadmapRequest(const std::string &requestJson) {
 				return fail("E_COMMAND", key + " must be string");
 		}
 		language = options.value("language", "en");
-		if (language != "en" && language != "ru")
-			return fail("E_COMMAND", "Supported languages: en, ru");
+		if (language != "en" && language != "ru" && language != "uk")
+			return fail("E_COMMAND", "Supported languages: en, uk, ru");
 		const std::string profile = options.value("terminologyProfile", "engineering");
 		if (!std::set<std::string>{"engineering", "simple", "product", "literary"}.contains(profile))
 			return fail("E_COMMAND", "Unknown terminology profile");
@@ -167,6 +171,7 @@ std::string processRoadmapRequest(const std::string &requestJson) {
 		if (op == "explain" && !options.contains("code"))
 			return fail("E_COMMAND", "explain requires code");
 		formats::RenderOptions render;
+		render.language = language;
 		if (options.contains("routeId"))
 			render.routeId = options["routeId"].get<std::string>();
 		render.width = options.value("width", std::size_t{120});
@@ -185,7 +190,7 @@ std::string processRoadmapRequest(const std::string &requestJson) {
 			          {"schema", 2},
 			          {"RoadmapText", 1},
 			          {"api", 1},
-			          {"guidance", "1.0.0"}};
+			          {"guidance", "1.1.0"}};
 		else if (op == "schema")
 			result = json::parse(formats::projectSchema());
 		else if (op == "template") {
@@ -232,7 +237,7 @@ std::string processRoadmapRequest(const std::string &requestJson) {
 			if (op == "validate" || op == "import")
 				result = json::parse(formats::writeJsonProject(project));
 			else if (op == "render")
-				result = format == "json" ? formats::renderRoute(project, render)
+				result = format == "json" ? formats::renderMap(project, render)
 				                          : json{{"text", formats::renderTerminal(project, render)},
 				                                 {"contentType", "text/plain"}};
 			else if (op == "inspect")

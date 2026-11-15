@@ -1,16 +1,16 @@
 import { test, expect } from '@playwright/test';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 const fixture = JSON.parse(readFileSync('test/fixtures/minimal-v2.roadmap.json', 'utf8'));
-test('root and nested URLs load one route with correct Wasm MIME', async ({ page }) => {
-	for (const path of ['/', '/tools/roadmap/']) {
+test('root and nested URLs load every map line with correct Wasm MIME', async ({ page }) => {
+	for (const path of ['/?lang=ru', '/tools/roadmap/?lang=ru']) {
 		const failures: string[] = [];
 		page.on('pageerror', (e) => failures.push(e.message));
 		const wasm = page.waitForResponse((r) => r.url().endsWith('.wasm'));
 		await page.goto(path);
 		await expect(page.getByRole('button', { name: 'Сохранить', exact: true })).toBeEnabled();
 		expect((await wasm).headers()['content-type']).toContain('application/wasm');
-		await expect(page.locator('.hmap-route-row')).toHaveCount(1);
-		await expect(page.locator('.hmap-step')).toHaveCount(4);
+		await expect(page.locator('.hmap-route-row')).toHaveCount(2);
+		await expect(page.locator('.hmap-intent-origin')).toHaveCount(2);
 		expect(failures).toEqual([]);
 	}
 });
@@ -113,7 +113,7 @@ test('denied local storage is visible and JSON remains downloadable', async ({ p
 			},
 		}),
 	);
-	await page.goto('/');
+	await page.goto('/?lang=ru');
 	await expect(page.locator('#storage-status')).toContainText('Временная сессия');
 	await page.locator('#file-menu > summary').click();
 	await expect(page.getByRole('button', { name: 'Скачать JSON', exact: true })).toBeEnabled();
@@ -124,7 +124,7 @@ test('denied local storage is visible and JSON remains downloadable', async ({ p
 test('explicit local save survives reload; initial display performs no hidden project save', async ({
 	page,
 }) => {
-	await page.goto('/');
+	await page.goto('/?lang=ru');
 	await expect(page.getByRole('button', { name: 'Сохранить', exact: true })).toBeEnabled();
 	expect(
 		await page.evaluate(
@@ -176,7 +176,7 @@ test('late validation never replaces a newer accepted project', async ({ page })
 	expect(result).toEqual({ result: 'fast', removed: true });
 });
 test('a later storage quota failure preserves a downloadable current project', async ({ page }) => {
-	await page.goto('/');
+	await page.goto('/?lang=ru');
 	await expect(page.getByRole('button', { name: 'Сохранить', exact: true })).toBeEnabled();
 	await page.evaluate(() => {
 		Storage.prototype.setItem = function () {
@@ -184,49 +184,70 @@ test('a later storage quota failure preserves a downloadable current project', a
 		};
 	});
 	await page.getByRole('button', { name: 'Сохранить', exact: true }).click();
-	await expect(page.locator('#host-status')).toHaveText('full');
+	await expect(page.locator('#host-status')).toContainText('E_STORAGE_QUOTA');
 	await expect(page.locator('#storage-status')).not.toContainText('Временная сессия');
 	await page.locator('#file-menu > summary').click();
 	await expect(page.getByRole('button', { name: 'Скачать JSON', exact: true })).toBeEnabled();
 });
 test('a second tab detects an external writer and pauses save', async ({ page, context }) => {
-	await page.goto('/');
+	await page.goto('/?lang=ru');
 	await expect(page.getByRole('button', { name: 'Сохранить', exact: true })).toBeEnabled();
 	await page.getByRole('button', { name: 'Сохранить', exact: true }).click();
 	await expect(page.locator('#host-status')).toHaveText('Карта сохранена в этом браузере.');
 	const other = await context.newPage();
-	await other.goto('/');
+	await other.goto('/?lang=ru');
 	await expect(other.locator('#host-status')).toHaveText('Сохранённая карта открыта.');
 	await page.getByRole('button', { name: 'Сохранить', exact: true }).click();
 	await expect(page.locator('#host-status')).toHaveText('Карта сохранена в этом браузере.');
 	await other.getByRole('button', { name: 'Сохранить', exact: true }).click();
-	await expect(other.locator('#host-status')).toContainText('changed outside this editor');
+	await expect(other.locator('#host-status')).toContainText('E_STORAGE_CONFLICT');
 	await other.close();
 });
-test('desktop and narrow layouts retain one horizontal rail', async ({ page }, testInfo) => {
+test('desktop and narrow layouts retain a horizontal row for each route', async ({
+	page,
+}, testInfo) => {
 	await page.setViewportSize({ width: 1366, height: 1000 });
-	await page.goto('/');
-	await expect(page.locator('.hmap-step')).toHaveCount(4);
+	await page.goto('/?lang=ru');
+	await expect(page.locator('.hmap-step')).toHaveCount(7);
 	const requests: string[] = [];
 	page.on('request', (request) => {
 		if (request.method() !== 'GET' || request.postData()) requests.push(request.url());
 	});
-	await page.getByRole('button', { name: 'Как работать', exact: true }).click();
+	await page.getByRole('link', { name: 'Как работать', exact: true }).click();
 	await expect(page.locator('#guide')).toBeVisible();
-	await page.getByRole('button', { name: 'Закрыть справку', exact: true }).click();
+	await page
+		.locator('#guide')
+		.getByRole('link', { name: 'К рабочей области ↑', exact: true })
+		.click();
 	await page.screenshot({
 		path: `build/check-reports/ui-${testInfo.project.name}-desktop.png`,
 		fullPage: true,
 	});
 	await page.setViewportSize({ width: 390, height: 844 });
 	const geometry = await page
-		.locator('.hmap-step')
-		.evaluateAll((nodes) =>
-			nodes.map((n) =>
-				Math.round(n.getBoundingClientRect().top + n.getBoundingClientRect().height / 2),
+		.locator('.hmap-route-row')
+		.evaluateAll((rows) =>
+			rows.map(
+				(row) =>
+					new Set(
+						Array.from(row.querySelectorAll('.hmap-step')).map((n) =>
+							Math.round(n.getBoundingClientRect().top + n.getBoundingClientRect().height / 2),
+						),
+					).size,
 			),
 		);
-	expect(new Set(geometry).size).toBe(1);
+	expect(geometry).toEqual([1, 1]);
+	expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+	const originFits = await page
+		.locator('.hmap-intent-origin')
+		.first()
+		.evaluate((node) => {
+			const origin = node.getBoundingClientRect(),
+				rail = node.closest('.hmap-rail')!.getBoundingClientRect();
+			return origin.top >= rail.top && origin.bottom <= rail.bottom;
+		});
+	expect(originFits).toBe(true);
+
 	const overflowingLinks = await page
 		.locator('.hmap-step-links')
 		.evaluateAll((nodes) =>

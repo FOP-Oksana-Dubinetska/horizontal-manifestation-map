@@ -1,12 +1,24 @@
 #include "guidance.hpp"
 #include "guidance-resources.hpp"
+#include "localization.hpp"
 #include <algorithm>
 #include <map>
 #include <stdexcept>
 namespace roadmap::guidance {
 using nlohmann::json;
 json catalog() {
-	static const auto data = json::parse(sourceCatalog);
+	static const auto data = [] {
+		auto result = json::parse(sourceCatalog);
+		for (const auto *language : {"en", "uk", "ru"}) {
+			const auto copy = formats::locale(language).at("guidance");
+			for (auto &entry : result["entries"])
+				entry[language] = copy["entries"].at(entry["id"].get<std::string>());
+			for (auto it = copy["codes"].begin(); it != copy["codes"].end(); ++it)
+				result["codes"][it.key()][language] = it.value();
+			result["labels"][language] = copy["labels"];
+		}
+		return result;
+	}();
 	return data;
 }
 json help(const std::string &topic, const std::string &language, const std::string &profile) {
