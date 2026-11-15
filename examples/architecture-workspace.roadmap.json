@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "id": "p-architecture-workspace",
-  "title": "Пример: архитектура редактора карт",
+  "title": "Example: architecture of a map editor",
   "terminologyProfile": "engineering",
   "selectedIntentId": "i-author",
   "selectedRouteId": "r-author",
@@ -13,29 +13,29 @@
   "intents": [
     {
       "id": "i-author",
-      "title": "Автор создаёт и изменяет архитектурный план",
-      "summary": "Намерение задаёт желаемый результат. Архитектурные компоненты описывают систему, а маршрут связывает их с последовательностью реализации. Измените этот пример или создайте собственную карту.",
+      "title": "The author creates and revises an architectural plan",
+      "summary": "An intention defines the desired result. Architectural components describe the system, and a route connects them through implementation steps. Edit this example or create your own map.",
       "status": "draft",
       "kind": "finite",
       "parentIntentIds": [],
       "acceptanceCriteria": [
-        "Текст, компоненты и связи изменяются через формы.",
-        "Ошибочный кандидат сохраняет последнюю принятую карту.",
-        "После явного сохранения карта открывается с теми же связями."
+        "Text, components and links can be edited through forms.",
+        "A rejected candidate preserves the last accepted map.",
+        "After an explicit save, the map reopens with the same links."
       ]
     },
     {
       "id": "i-delivery",
-      "title": "Разработчик получает проверяемый план реализации",
-      "summary": "Второй маршрут использует те же проверку и хранение. Повторное использование ссылается на общий компонент по ID.",
+      "title": "The developer receives a verifiable implementation plan",
+      "summary": "The second route shares the same validation and storage. Reuse references a common component by its ID.",
       "status": "draft",
       "kind": "finite",
       "parentIntentIds": [
         "i-author"
       ],
       "acceptanceCriteria": [
-        "Каждый шаг связан с компонентами и объясняющими контрактами.",
-        "Экспорт сохраняет идентичность общих элементов."
+        "Each step links to components and explanatory contracts.",
+        "Export preserves the identity of shared elements."
       ]
     }
   ],
@@ -43,11 +43,11 @@
     {
       "id": "r-author",
       "intentId": "i-author",
-      "title": "От намерения к сохранённой карте",
+      "title": "From intention to a saved map",
       "steps": [
         {
           "id": "s-describe",
-          "title": "Намерение и критерии",
+          "title": "Intention and criteria",
           "stereotype": "intent",
           "estimateId": null,
           "linkedModuleIds": [
@@ -60,7 +60,7 @@
         },
         {
           "id": "s-architecture",
-          "title": "Компоненты и контракты",
+          "title": "Components and contracts",
           "stereotype": "module",
           "estimateId": null,
           "linkedModuleIds": [
@@ -73,7 +73,7 @@
         },
         {
           "id": "s-check-map",
-          "title": "Проверка изменений",
+          "title": "Validate changes",
           "stereotype": "validation",
           "estimateId": null,
           "linkedModuleIds": [
@@ -85,7 +85,7 @@
         },
         {
           "id": "s-save-map",
-          "title": "Локальное сохранение",
+          "title": "Save locally",
           "stereotype": "shared",
           "estimateId": null,
           "linkedModuleIds": [
@@ -100,11 +100,11 @@
     {
       "id": "r-delivery",
       "intentId": "i-delivery",
-      "title": "От архитектуры к передаче разработчику",
+      "title": "From architecture to developer handoff",
       "steps": [
         {
           "id": "s-check-delivery",
-          "title": "Проверка плана перед передачей",
+          "title": "Validate the plan before handoff",
           "stereotype": "shared",
           "estimateId": null,
           "linkedModuleIds": [
@@ -116,7 +116,7 @@
         },
         {
           "id": "s-export-plan",
-          "title": "Читаемый план реализации",
+          "title": "Readable implementation plan",
           "stereotype": "export",
           "estimateId": null,
           "linkedModuleIds": [
@@ -128,7 +128,7 @@
         },
         {
           "id": "s-preserve-source",
-          "title": "Сохранение исходной карты",
+          "title": "Preserve the source map",
           "stereotype": "shared",
           "estimateId": null,
           "linkedModuleIds": [
@@ -144,8 +144,8 @@
   "modules": [
     {
       "id": "m-core",
-      "title": "Модель карты",
-      "summary": "Хранит намерения, компоненты, маршруты и стабильные ссылки. Отделяет общий компонент от его вхождения в маршрут.",
+      "title": "Map model",
+      "summary": "Stores intentions, components, routes and stable references. Distinguishes a shared component from its occurrence in a route.",
       "kind": "core",
       "linkedIntentIds": [
         "i-author",
@@ -163,8 +163,8 @@
     },
     {
       "id": "m-ui",
-      "title": "Авторский интерфейс",
-      "summary": "Предлагает формы изменения текста и связей; показывает архитектуру сверху и один выбранный маршрут снизу.",
+      "title": "Authoring interface",
+      "summary": "Provides forms for editing text and links. Shows architectural explanations above and all intention-led route lines below.",
       "kind": "ui",
       "linkedIntentIds": [
         "i-author"
@@ -181,8 +181,8 @@
     },
     {
       "id": "m-validation",
-      "title": "Проверка кандидата",
-      "summary": "Проверяет существование ссылок, происхождение намерений и согласованность состояний перед принятием изменений.",
+      "title": "Candidate validation",
+      "summary": "Checks references, intention lineage and consistent states before accepting changes.",
       "kind": "validation",
       "linkedIntentIds": [
         "i-author",
@@ -200,8 +200,8 @@
     },
     {
       "id": "m-storage",
-      "title": "Адаптер хранения",
-      "summary": "Сохраняет принятую карту по явному действию автора. Общий контракт допускает локальное хранилище и временную память.",
+      "title": "Storage adapter",
+      "summary": "Saves the accepted map through an explicit author action. The shared contract supports browser storage and temporary memory.",
       "kind": "storage",
       "linkedIntentIds": [
         "i-author",
@@ -219,8 +219,8 @@
     },
     {
       "id": "m-export",
-      "title": "Экспорт плана",
-      "summary": "Строит читаемый Markdown из принятого проекта и сохраняет архитектурные связи.",
+      "title": "Plan export",
+      "summary": "Builds readable Markdown from the accepted project while preserving architectural links.",
       "kind": "export",
       "linkedIntentIds": [
         "i-delivery"
@@ -239,8 +239,8 @@
   "chunks": [
     {
       "id": "c-intention",
-      "name": "Намерение задаёт результат",
-      "body": "Опишите, какое свойство должна обеспечить система и как будет проверен результат. Критерии относятся к намерению; маршрут предлагает последовательность его реализации.",
+      "name": "An intention defines the result",
+      "body": "Describe the property the system should provide and how the result will be checked. Criteria belong to the intention; a route offers a sequence for realising it.",
       "linkedIntentIds": [
         "i-author"
       ],
@@ -251,8 +251,8 @@
     },
     {
       "id": "c-architecture",
-      "name": "Архитектурный элемент и шаг",
-      "body": "Компонент существует в карте один раз. Шаг ссылается на этот компонент и на поясняющий контракт. Изменение названия сохраняет ID и все связи. Добавьте второй маршрут, чтобы показать повторное использование.",
+      "name": "Architectural element and route step",
+      "body": "A component exists once in the map. A step references that component and an explanatory contract. Renaming preserves its ID and every link. Compare the two routes to see reuse.",
       "linkedIntentIds": [
         "i-author",
         "i-delivery"
@@ -264,8 +264,8 @@
     },
     {
       "id": "c-validation",
-      "name": "Контракт принятия изменений",
-      "body": "Форма создаёт кандидат. Общий движок проверяет карту целиком. Ошибка оставляет принятый проект и текст формы; успешная проверка допускает атомарную замену. Нажатие шага маршрута показывает этот контракт; фактическая проверка доступна кнопкой «Проверить карту».",
+      "name": "Change acceptance contract",
+      "body": "A form prepares a candidate. The shared engine validates the whole map. An error preserves the accepted project and the draft; successful validation permits an atomic replacement. Selecting a route step reveals this contract. Validate map performs the actual document check.",
       "linkedIntentIds": [
         "i-author",
         "i-delivery"
@@ -276,8 +276,8 @@
     },
     {
       "id": "c-storage",
-      "name": "Контракт сохранения",
-      "body": "Изменение и сохранение — отдельные действия. Кнопка «Сохранить» записывает принятую карту в этот браузер. При отказе хранилища JSON остаётся доступен для скачивания. Второй маршрут использует тот же адаптер.",
+      "name": "Storage contract",
+      "body": "Applying changes and saving are separate actions. Save records the accepted map in this browser. If storage fails, JSON remains available for download. The second route uses the same adapter.",
       "linkedIntentIds": [
         "i-author",
         "i-delivery"
@@ -288,8 +288,8 @@
     },
     {
       "id": "c-export",
-      "name": "Контракт передачи плана",
-      "body": "Markdown показывает намерения, архитектурные элементы, контракты и маршруты. JSON сохраняет структурированный источник для дальнейшего изменения и импорта. Ссылки на код являются авторскими указаниями; существование файлов автоматически не подтверждается.",
+      "name": "Plan handoff contract",
+      "body": "Markdown presents intentions, architectural elements, contracts and routes. JSON preserves the structured source for further editing and import. Code references are supplied by the author; file existence is not checked automatically.",
       "linkedIntentIds": [
         "i-delivery"
       ],
@@ -301,13 +301,13 @@
   "intersections": [
     {
       "id": "x-validation",
-      "title": "Общая проверка двух маршрутов",
+      "title": "Shared validation across two routes",
       "sourceIds": [
         "m-validation",
         "s-check-map",
         "s-check-delivery"
       ],
-      "note": "Оба шага используют один валидатор. Компонент описан в архитектуре единожды; в маршрутах показаны разные места его применения."
+      "note": "Both steps use one validator. The architecture defines the component once; the routes show its different occurrences."
     }
   ],
   "estimates": []

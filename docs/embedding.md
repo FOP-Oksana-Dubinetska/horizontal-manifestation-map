@@ -43,6 +43,8 @@ Language is independent of project terminology and authored text. Pass `language
 
 The shared engine's default `render` JSON DTO now contains `rows[{intent,route|null}]` and `scope: "map"`. An explicit `routeId` yields one row with `scope: "route"`. The earlier selected-route DTO has been superseded; direct render consumers should read rows. Project schema 2 and API envelope version 1 remain current.
 
+For presentation-only replacement of the same document, `setProject(candidate, {preserveView: true, isCurrent: () => stillCurrent})` retains compatible view context and checks the caller's guard immediately before accepting the validated project/projection pair. Omitting these options retains the existing replacement contract. The host uses this path only for a pristine bundled example; accepted user edits and saved/imported maps stay literal.
+
 <details><summary><strong>Русский</strong></summary>
 
 Публичный пакет позволяет встроить карту в другую страницу. Host создаёт движок и адаптер хранения, передаёт их редактору и сохраняет данные по явному действию. Формы проверяют изменения общим движком; readonly оставляет просмотр и навигацию. Пример встраивания показывает два независимых экземпляра с одним движком.

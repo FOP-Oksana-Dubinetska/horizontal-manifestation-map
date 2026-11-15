@@ -32,7 +32,7 @@ test('the static introduction precedes the footer with English text and native R
 					),
 			),
 	).toBe(true);
-	await page.getByRole('link', { name: 'About this project ↓' }).click();
+	await page.getByRole('link', { name: 'About this project' }).click();
 	await aligned(page, '#about-hmap');
 	await page.locator('#about-hmap details[lang=ru] > summary').click();
 	await expect(page.locator('[data-introduction-text=ru]')).toHaveText(introduction.ru.text);
@@ -58,7 +58,7 @@ test('ordinary wheel exits sections freely and remains available inside the work
 	await page.mouse.move(80, 70);
 	await page.mouse.wheel(0, 160);
 	await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(0);
-	await page.getByRole('link', { name: 'About this project ↓' }).click();
+	await page.getByRole('link', { name: 'About this project' }).click();
 	await aligned(page, '#about-hmap');
 	const before = await page.evaluate(() => scrollY);
 	await page.mouse.move(80, 100);
@@ -130,7 +130,7 @@ test('keyboard links, horizontal route scrolling and zoom events keep native nav
 		return event.defaultPrevented;
 	});
 	expect(cancelled).toBe(false);
-	await page.getByRole('link', { name: 'About this project ↓' }).focus();
+	await page.getByRole('link', { name: 'About this project' }).focus();
 	await page.keyboard.press('Enter');
 	await aligned(page, '#about-hmap');
 	await page.locator('#about-hmap').getByRole('link', { name: 'Back to the workspace ↑' }).focus();
@@ -148,7 +148,7 @@ test('a small touch viewport can read expanded translations and return through s
 	});
 	const page = await context.newPage();
 	await ready(page);
-	await page.getByRole('link', { name: 'About this project ↓' }).tap();
+	await page.getByRole('link', { name: 'About this project' }).tap();
 	await aligned(page, '#about-hmap');
 	expect(
 		await page.locator('#about-hmap').evaluate((n) => n.getBoundingClientRect().height),
