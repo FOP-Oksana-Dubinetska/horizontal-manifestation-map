@@ -1,0 +1,19 @@
+{
+	"reviewUrl": "https://github.com/Zhovten-Games/literate-programming",
+	"reviewRevision": "a02d337c40a8cab56af28cf0ade1611087f9bd52",
+	"en": {
+		"title": "HMAP: architecture with a readable trail",
+		"text": "HMAP connects software architecture with a development roadmap. Inspired by an earlier review of Donald Knuth's Literate Programming, it brings intentions, reusable components and explanatory contracts into one readable map. Its C++ core and WebAssembly workspace keep the design and its implementation route together, so the reasoning remains part of the work.",
+		"link": "Explore the review"
+	},
+	"ru": {
+		"title": "HMAP: архитектура с понятным маршрутом",
+		"text": "HMAP связывает архитектуру программы с дорожной картой разработки. Проект вдохновлён ранним обзором статьи Дональда Кнута «Литературное программирование»: намерения, переиспользуемые компоненты и поясняющие контракты образуют единую читаемую карту. Ядро на C++ и рабочая область на WebAssembly соединяют устройство системы с маршрутом реализации, сохраняя ход рассуждений частью работы.",
+		"link": "Перейти к обзору"
+	},
+	"uk": {
+		"title": "HMAP: архітектура зі зрозумілим маршрутом",
+		"text": "HMAP пов'язує архітектуру програми з дорожньою картою розроблення. Проєкт натхнений раннім оглядом статті Дональда Кнута «Літературне програмування»: наміри, повторно використовувані компоненти та пояснювальні контракти утворюють єдину читабельну карту. Ядро на C++ і робоча область на WebAssembly поєднують будову системи з маршрутом реалізації, зберігаючи хід міркувань частиною роботи.",
+		"link": "Перейти до огляду"
+	}
+}

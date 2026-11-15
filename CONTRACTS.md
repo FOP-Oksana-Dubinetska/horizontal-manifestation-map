@@ -161,3 +161,23 @@
 - **Allowed changes**: Stage 02.3a–14 в названном каталоге и их документированные проверки.
 - **Forbidden changes**: автоматическое принятие/ратификация, DNS, внешняя публикация и изменение внешних методов.
 - **Acceptance criteria**: all profile завершён с наблюдаемым результатом; патчи применены на чистую базу и дали ожидаемое дерево; ручные пункты явно перечислены.
+
+## Chunk: `<<authoring-workspace>>`
+
+- **Role**: Авторское изменение schema-2 карты и простой архитектурный workspace.
+- **Status**: implementation candidate, authorised 2026-11-14; author acceptance pending.
+- **Inputs**: hmap-authoring.plan.md, принятый RoadmapProject, пользовательские формы, единый engine.
+- **Outputs**: проверенная атомарная замена, ровно один onChange; наглядные связи компонентов, контрактов и шагов.
+- **Allowed changes**: Stage 15–18 в ограниченной программе, web UI, примеры, проверки и документы.
+- **Forbidden changes**: изменение schema/core semantics, обход validator, скрытая запись storage, ослабление CSP для неизвестного script, внешняя публикация.
+- **Acceptance criteria**: tests/web/authoring.test.ts; tests/browser/authoring.spec.ts; python tools/check-project.py --profile all; ошибочный/отменённый/устаревший кандидат сохраняет последнюю принятую карту; последовательные диффы воспроизводят дерево.
+
+## Chunk: `<<project-introduction>>`
+
+- **Role**: Explain the learning project and its readable-architecture idea across web and terminal.
+- **Status**: implementation
+- **Inputs**: hmap-presentation.plan.md; content/project-introduction.json; human terminal/section navigation.
+- **Outputs**: English README with RU/UK disclosures; static multilingual introduction; terminal-only English banner; deliberate section transitions.
+- **Allowed changes**: presentation adapters, related build/test tools, current explanatory documentation and Stage 19 record.
+- **Forbidden changes**: domain/schema changes, modified machine/artifact output, hidden storage writes, third-party method/policy edits.
+- **Acceptance criteria**: native PTY/banner and existing CLI checks; Chromium/Firefox section navigation and modal isolation; static HTML credit/translation checks; web/native/Wasm profiles; clean single-patch replay.

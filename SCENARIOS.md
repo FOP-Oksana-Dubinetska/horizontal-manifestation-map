@@ -160,3 +160,22 @@
 - **Validation method**: docs/acceptance-matrix.ru.md; docs/cloudflare-site-passport.ru.md.
 - **Test-backing status**: manual-review-only
 - **Evidence path or command**: отдельная будущая запись TRACE с фактическим SHA и адресом.
+
+## Scenario: `SC-15 authoring-workspace`
+
+- **Purpose**: Создать архитектурную карту через формы и сохранить проверяемую связь с маршрутом.
+- **Input**: пустой проект, редактирование текста и связей, удаление и перестановка, readonly и запоздалая проверка.
+- **Expected result**: контракт hmap-authoring.plan.md выполнен; отмена и ошибка сохраняют прежний проект; принятые изменения сохраняются явно и переживают reload.
+- **Validation method**: tests/web/authoring.test.ts; tests/browser/authoring.spec.ts; регрессионный web/all profile.
+- **Test-backing status**: integration-test-backed
+- **Evidence path or command**: build/check-reports/check-project.json; TRACE.md; docs/lessons/stage-15.ru.md–stage-18.ru.md.
+- **Notes**: содержательная приёмка и опубликованная CF-версия проверяются владельцем после применения диффов.
+
+## Scenario: `SC-19 project-introduction`
+
+- **Purpose**: Share a concise ideological introduction across the website and terminal while keeping the editor comfortable to navigate.
+- **Input**: ordinary/strong wheel gestures, keyboard links, an open form, English terminal output, machine-readable CLI commands.
+- **Expected result**: two fitted sections hold ordinary scrolling; stronger gestures move between sections; inner content, zoom and forms behave normally. Website and terminal share the English introduction; machine/artifact output retains its established bytes.
+- **Validation method**: tools/test-cli-introduction.py; existing CLI contracts; tests/browser/sections.spec.ts; tools/check-distribution.py.
+- **Test-backing status**: integration-test-backed
+- **Evidence path or command**: build/check-reports/check-project.json; cli-introduction.json; TRACE.md.

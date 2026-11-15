@@ -1,53 +1,92 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="hmap-sections">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
 		<meta
 			name="description"
-			content="A local roadmap workspace: intentions, reusable elements and one horizontal route."
+			content="HMAP connects software architecture and development roadmaps through readable intentions, shared components and contracts, powered by C++ and WebAssembly."
 		/>
-		<title>HMAP — Horizontal Manifestation Map</title>
+		<title>HMAP — Readable Architecture and Development Roadmaps</title>
 	</head>
 	<body>
-		<div class="demo-shell">
-			<header>
-				<a class="demo-brand" href="./">HMAP <span>/ LOCAL WORKSPACE</span></a
-				><span class="demo-build">SCHEMA 2 · WASM</span>
-			</header>
-			<main>
-				<div class="demo-heading">
-					<div>
-						<p class="demo-eyebrow">HORIZONTAL MANIFESTATION MAP</p>
-						<h1>From intention to implementation.</h1>
-						<p class="demo-intro">
-							Read the project above. Follow one route below. Keep the source in your hands.
-						</p>
-					</div>
-					<span class="demo-number">01 / WORKSPACE</span>
-				</div>
-				<nav class="demo-actions" aria-label="Project actions">
-					<button id="save" disabled>Save locally</button
-					><button id="save-copy" disabled>Save a copy</button
-					><button id="download-json" disabled>Download JSON</button
-					><button id="download-markdown" disabled>Download Markdown</button
-					><button id="help" disabled>Guide</button><button id="retry">Retry engine</button>
+		<main class="demo-shell">
+			<section
+				id="workspace"
+				class="workspace-section"
+				data-scroll-section
+				lang="ru"
+				aria-label="Рабочая область"
+			>
+				<nav class="demo-actions" aria-label="Действия с картой">
+					<button id="new" disabled>Новая карта</button>
+					<button id="save" disabled>Сохранить</button>
+					<button id="validate" disabled>Проверить карту</button>
+					<details id="file-menu" class="demo-file-menu">
+						<summary>Файл</summary>
+						<div class="demo-file-actions">
+							<label for="saved-projects">Сохранённые карты</label>
+							<select id="saved-projects" disabled></select>
+							<button id="open" disabled>Открыть карту</button>
+							<button id="example" disabled>Пример архитектуры</button>
+							<button id="save-copy" disabled>Сохранить копию</button>
+							<button id="download-json" disabled>Скачать JSON</button>
+							<button id="download-markdown" disabled>Скачать Markdown</button>
+							<button id="retry">Перезапустить движок</button>
+						</div>
+					</details>
+					<button id="help" disabled>Как работать</button>
 				</nav>
-				<p id="host-status" role="status" aria-live="polite">Loading the local engine…</p>
+				<p id="host-status" role="status" aria-live="polite">Загрузка карты…</p>
 				<p id="storage-status" class="demo-storage" role="status"></p>
+				<pre id="validation-report" class="demo-validation" role="status" hidden></pre>
 				<div id="editor" class="demo-editor"></div>
-				<section id="guide" class="demo-guide" hidden>
-					<h2>Working with the map</h2>
-					<pre id="guide-text"></pre>
-					<button id="close-guide">Close guide</button>
+				<section id="guide" class="demo-guide" aria-label="Работа с картой" hidden>
+					<h2>Архитектура и маршрут</h2>
+					<p>
+						Намерение задаёт результат и критерии. Компоненты описывают архитектуру. Контракты
+						объясняют решения. Маршрут связывает шаги реализации с этими компонентами и контрактами.
+					</p>
+					<ol>
+						<li>Создайте карту или измените пример кнопками «Изменить».</li>
+						<li>Через «+ Добавить» создайте намерение, компоненты, контракты и маршрут.</li>
+						<li>Добавьте шаги. В их формах выберите связанные компоненты и контракты.</li>
+						<li>
+							Нажмите шаг, чтобы выделить связанные элементы выше. Для изменения шага используйте
+							отдельную кнопку «Изменить».
+						</li>
+						<li>
+							Примените форму и сохраните карту. Файл → Скачать JSON позволяет перенести её в другой
+							браузер через «Импорт».
+						</li>
+					</ol>
+					<p>
+						Один компонент может использоваться в нескольких маршрутах. Ссылки сохраняются при
+						изменении названия. Сохранённые карты открываются через меню «Файл».
+					</p>
+					<details>
+						<summary>Сведения о формате</summary>
+						<p>
+							Schema 2. Общий C++/WASM-движок проверяет карту перед принятием изменений.
+							Терминологические профили сохранены для совместимости файлов. Сохранение выполняется в
+							этом браузере; Markdown служит читаемым экспортом.
+						</p>
+					</details>
+					<button id="close-guide">Закрыть справку</button>
 				</section>
-			</main>
-			<footer>
-				<span>JSON IS THE SOURCE · MARKDOWN IS A PROJECTION</span
-				><a href="./embedding-example.html">Embedding example ↗</a
-				><a href="./licenses/NOTICE.txt">Licenses</a>
-			</footer>
-		</div>
+				<a class="section-jump" href="#about-hmap" lang="en">About this project ↓</a>
+			</section>
+			<section
+				id="about-hmap"
+				class="introduction-section"
+				data-scroll-section
+				aria-labelledby="introduction-title"
+			>
+				<div class="introduction-copy"><!-- HMAP_INTRODUCTION --></div>
+				<a class="section-jump" href="#workspace">Back to the workspace ↑</a>
+			</section>
+			<footer id="page-footer"><a href="./licenses/NOTICE.txt">Licenses</a></footer>
+		</main>
 		<script type="module" src="./main.ts"></script>
 	</body>
 </html>

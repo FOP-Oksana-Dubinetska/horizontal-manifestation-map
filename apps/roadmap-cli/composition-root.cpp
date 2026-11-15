@@ -1,5 +1,6 @@
 #include "composition-root.hpp"
 #include "command-options.hpp"
+#include "project-introduction.hpp"
 #include "file-output.hpp"
 #include "json-project.hpp"
 #include "project-views.hpp"
@@ -29,6 +30,35 @@ bool errorTerminal() {
 #else
 	return ::isatty(STDERR_FILENO) != 0;
 #endif
+}
+bool outputTerminal(const std::ostream &output) {
+	if (&output != &std::cout)
+		return false;
+#ifdef _WIN32
+	return _isatty(1) != 0;
+#else
+	return ::isatty(STDOUT_FILENO) != 0;
+#endif
+}
+void writeIntroduction(std::ostream &output, std::size_t width) {
+	const auto wrap = [&](std::string_view text) {
+		std::istringstream words{std::string{text}};
+		std::string word;
+		std::size_t column = 0;
+		while (words >> word) {
+			if (column && column + 1 + word.size() > width) {
+				output << '\n';
+				column = 0;
+			}
+			if (column) { output << ' '; ++column; }
+			output << word;
+			column += word.size();
+		}
+		output << '\n';
+	};
+	wrap(introductionTitle);
+	wrap(introductionText);
+	output << introductionReview << "\n\n";
 }
 std::size_t terminalWidth() {
 #ifdef _WIN32
@@ -204,6 +234,9 @@ int runCli(int argc, char *argv[], std::istream &input, std::ostream &output,
 			return emitCurrent(failure(error->code, error->message), op, format, output, errors);
 		return 0;
 	}
+	if (response["ok"] == true && information(op) && format == "text" &&
+	    o.outputPath.empty() && outputTerminal(output))
+		writeIntroduction(output, terminalWidth());
 	if (o.kind == CommandKind::help && !o.topic && response["ok"] == true && format == "text")
 		output << "Usage: hmap COMMAND [INPUT] [OPTIONS]\nCommands: help template schema validate "
 		          "import normalize render inspect hints explain export migrate\n\n";

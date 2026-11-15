@@ -447,3 +447,65 @@ and verify its ID relationships.
 - Near-input-limit workload: 7,506,178 bytes accepted in both browser Workers, with retained warnings and no runtime failure.
 - ASan/UBSan: 33/33 PASS with ASAN_OPTIONS=detect_leaks=0. LeakSanitizer is unavailable under this execution host's tracing; no leak-check PASS is claimed.
 - All-profile source snapshot: unchanged during verification. The final all-profile and clean replay reports accompany the ordered diff archive.
+
+## 2026-11-14 — Stage 15 — Authoring scope and candidate operations
+
+- **Authority:** direct owner request to complete deferred authoring and simplify the interface; roadmap-editor.plan.md and applicable AGENTS.md read before changes.
+- **Inspection:** Stage-14 checkout clean at ade531a; current UI exposes reviewed import but no authoring fields. Original §1.1/§14/§22.6 and legacy plan explain that limitation. Existing CLI, schema, Worker/storage contracts and browser scenarios reviewed.
+- **Bounded plan:** hmap-authoring.plan.md defines Stage 15–18; CONTRACTS/SCENARIOS name authoring-workspace. Profiles are hidden by default with compatible file/API support. Core schema and CSP stay within their established contracts.
+- **Next:** implement pure candidate operations, then run their focused tests before the Stage-15 commit.
+- **Implementation:** schema-2 candidate copies, global ID allocation including nested steps, one-based array reordering, deletion impact with explicit detach/pruned intersections. Shared modules/chunks survive deletion of their using intention/route.
+- **Correction:** Node strip-only rejected a TypeScript parameter property on first test launch; replaced with an explicit field. Test paths are explicit for cross-platform shells.
+- **Verification:** npm run test:storage 9/9 PASS (6 authoring + 3 storage); npm run typecheck PASS. No domain/schema or pinned dependency changes.
+- **Result:** Stage 15 TECHNICAL PASS; next Stage 16 — forms and atomic acceptance.
+
+## 2026-11-14 — Stage 16 — Validated authoring forms
+
+- **Implementation:** native modal forms for project/intention/route/step/component/chunk/intersection/estimate; automatic stable IDs, named link choices, position fields, typed estimates and editable code references. Successful user application passes the C++/Wasm validator and emits onChange once. Creation/deletion/reordering preserve the accepted source until validation succeeds.
+- **Interface:** terminology selector defaults off with explicit legacy opt-in in the technical embedding fixture; step navigation highlights linked architecture and contracts and states its navigation purpose. The viewport keeps one route and independent selection.
+- **Lifecycle:** cancellation checks a form-session guard after validation; a new form invalidates older imports; programmatic replacement/destroy retains the shared-engine ownership contract. Readonly hides forms; editing=false is independent of the existing importButton feature flag.
+- **Corrections from first Chromium pass:** explicit label/for pairs fix select labels; a Tab wrap supplements native inert behaviour at browser-chrome boundaries; cycle test now asserts the actual E_INTENT_CYCLE code. Existing 11 browser regressions passed in that first pass.
+- **Environment:** missing Firefox runtime prepared explicitly using the pinned Playwright version; no dependency version changes. The first CDN returned truncated archives; the vendor download fallback succeeded.
+- **Verification:** production build/typecheck PASS; Chromium 18/18 + Firefox 18/18 = 36/36 browser scenarios PASS, including all previous regressions. Added hasOpenDraft() as a read-only host query for navigation/close protection.
+- **Result:** Stage 16 TECHNICAL PASS; next Stage 17 — simplified author workspace and explicit persistence.
+
+## 2026-11-14 — Stage 17 — Author workspace and persistence
+
+- **Host:** removed presentation header, technical footer slogan and embedding link; Russian fixed terminology, compact actions, file menu, practical guide and actual validate action. Save, copy, open and new map preserve separate accepted/dirty/saved states; close/navigation protects unsaved work and open drafts.
+- **Example:** examples/architecture-workspace.roadmap.json links two intentions/routes to shared validation/storage components and authored contracts. Native CLI validation: Valid project, exit 0. Existing stored maps are loaded and kept; the new example is separately accessible from File.
+- **Persistence:** saved project choices cached without relisting/acknowledging the active adapter's external conflicts; explicit opening reloads its baseline. Save preserves a newer accepted snapshot, temporary-memory status is explicit, local choice of last opened map is separate from project data.
+- **Interface verification:** production build/typecheck PASS; 44/44 browser scenarios PASS in Chromium/Firefox, including text→save→reload→JSON/Markdown, new map→forms→open another saved map, distinct navigation/validation, cancelled replacement and edited-map download after quota failure. Root/nested MIME, readonly, storage conflicts and prior scenarios remain covered.
+- **Visual review:** desktop and 390px views inspected. Mobile heading/step spacing refined; the route remains one horizontal row and the separator clamps against the actual toolbar height.
+- **Final affected checks:** after mobile spacing refinement, typecheck/build PASS; desktop/narrow and edit/save/export smoke repeated in both browsers: 4/4 PASS.
+- **Result:** Stage 17 TECHNICAL PASS; next Stage 18 — full verification and sequential handoff.
+
+## 2026-11-14 — Stage 18 — Verification and ordered delivery
+
+- **Authority alignment:** active authoring plan now explicitly qualifies the historical viewer-only scope. README, adaptation, embedding/default features, terminology, acceptance and CF documents describe actual authoring behaviour and separate navigation from validation.
+- **Distribution:** new architecture example checked against its source; static HTML gate rejects inline scripts/handlers and file:/javascript: links, and retains the established CSP. Native profile explicitly validates the example.
+- **Visual correction:** mobile linked-name spans constrained to the card width after screenshot inspection; layout regression now checks that their bounds stay inside the card.
+- **Diagnostics boundary:** source attribution steps documented for content.js/file:///; no unsupported claim that the user's extension/profile messages were fixed.
+- **Next verification:** all profile from a clean code commit, then exact ordered replay and final documentary evidence. No publication, DNS change or external repository write is part of this delivery.
+- **Code review:** switching an intention/route now clears an unrelated selected step; the browser scenario verifies shared-component navigation across both routes without changing canonical data. Copy/reopen coverage checks independent map identities.
+- **Environment preparation:** the first all-profile attempt stopped before compilation because this runtime lacked CMake/Ninja. Prepared isolated CMake 3.31.6 and Ninja 1.11.1.4, refreshed generator caches against the observed executable path and retained GCC 14.2 / emsdk. No project dependency pins or sources were changed by preparation.
+- **First complete functional pass:** native 33/33, CLI 40/40, Wasm probe 1/1, parity 11/11, storage/authoring 9/9, browser 46/46 and distribution 28 files PASS. Governance references PASS.
+- **Document correction:** final PLW gate rejected explanatory prose appended to SC-15's controlled Test-backing status. Restored the exact integration-test-backed token; candidate/evidence commentary remains in Notes/TRACE. Re-run the formal validator and complete clean all-profile before handoff.
+- **Final all-profile:** PASS on clean code revision 213d6a5ec57d02562f7b3265c0453948be176496; trackedFilesUnchanged=true. Native CTest 33/33; CLI 40/40; Wasm probe 1/1; native/Wasm parity 11/11; storage/authoring 9/9; Chromium/Firefox 46/46; TypeScript/build/distribution (28 files), governance references and PLW candidate validator PASS.
+- **Delivery replay:** first four-patch replay reproduced code tree ff164691ae01401cdb57ce0e0d53c44a15adbde3 in both standalone and nested-monorepository layouts. Isolated preflight preserved source; already-applied prefix, idempotent re-run and local README-conflict rejection passed. 38 touched paths are individually hashed.
+- **Documentary completion:** only TRACE and Stage-18 card are supplemented after the full suite with these observed results. The final bundle manifest records tested code revision separately and checks that post-test differences are limited to those two documents; final replay reproduces the final documented tree.
+- **Result:** Stage 15–18 implementation candidate TECHNICAL PASS. Source and ordered delivery prepared; owner content acceptance, fresh Windows observation and public Pages deployment are separate records.
+
+## 2026-11-14 — Stage 19 — Learning context and shared introduction
+
+- **Request:** one additive diff above Stage 18; a warmer English README and compact ideological text with Russian/Ukrainian disclosures, actual learning/toolchain context, deliberate section scrolling, and the same English text at human CLI startup.
+- **Sources:** current project plans and CLI/web adapters reviewed. GitHub supplied the literate-programming README and methodological opening at a02d337c40a8cab56af28cf0ade1611087f9bd52. The separate HMAP repository returned 404 through the connection; the patch therefore uses the exact delivered Stage-18 tree c58f70f and checks its touched-file baseline.
+- **Plan:** hmap-presentation.plan.md; project-introduction contract and SC-19. One content source feeds static HTML and native presentation. Data streams and the shared engine keep their existing contracts.
+- **Implementation:** content/project-introduction.json feeds a native configured header and build-time HTML. The human CLI prints wrapped English text only for successful terminal text commands; artifact, redirected, version and machine-readable output retain their contracts.
+- **Navigation:** native section snapping plus normalized wheel strength; inner scrolling, reverse transitions, modal isolation, horizontal movement, zoom and reduced motion are covered. Direct links and touch remain available, and expanded long content uses natural page scrolling.
+- **Writing:** README records active C++ study since early 2026 and the actual compiler/build/test stack. Catch2's version was read from the pinned header (3.16.0). English leads the current guides and introduction, with RU/UK disclosures; repeated procedural afterwords were shortened without rewriting TRACE history.
+- **Targeted checks:** native compile PASS; real PTY/stream introduction 12/12 and existing CLI 40/40 PASS. Desktop section scenarios 8/8 PASS, then narrow touch/expanded-translation checks 2/2 PASS after correcting the test's starting scroll position. The first test file also had a corrected extra parenthesis; no product change was needed for either test setup correction.
+- **Review:** desktop/narrow screenshots inspected; static distribution checks compare all three rendered paragraphs with the shared source. Formal project/governance checks PASS. Next: clean all-profile and single-patch replay.
+- **Final all-profile:** PASS on clean code revision 653d69b47314cc9caff8fb84af2680ddb3228f6d; trackedFilesUnchanged=true. Native CTest 33/33; existing CLI 40/40; terminal introduction/streams 12/12; native/Wasm parity 11/11; storage/authoring 9/9; Chromium/Firefox 56/56; static build/distribution (28 files) and method/reference checks PASS.
+- **Delivery check:** one patch above c58f70f reproduced tree ffc671f84389def48afe62524b6c08088b6bdb7d in standalone and nested repositories. Preflight, repeated application, applied-prefix recognition and rejection of a local README change all preserved the expected bytes. 41 paths are individually hashed.
+- **Documentary finish:** after that run, only this journal, the Stage-19 result card and a stage-index table separator are updated. The final archive verifies those documentary additions with a fresh exact-tree replay; application code remains the tested code.
+- **Result:** Stage 19 PASS. The archive provides one additive diff, a practical README, the shared introduction source, the stage card and verification reports.

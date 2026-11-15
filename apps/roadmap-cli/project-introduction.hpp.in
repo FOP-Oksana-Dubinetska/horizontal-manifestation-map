@@ -1,0 +1,7 @@
+#pragma once
+#include <string_view>
+namespace roadmap::cli {
+inline constexpr std::string_view introductionTitle = R"hmap(@HMAP_INTRO_TITLE@)hmap";
+inline constexpr std::string_view introductionText = R"hmap(@HMAP_INTRO_TEXT@)hmap";
+inline constexpr std::string_view introductionReview = R"hmap(@HMAP_INTRO_REVIEW@)hmap";
+} // namespace roadmap::cli

@@ -27,3 +27,26 @@ Readonly hides user import and the UI performs no storage writes. Programmatic s
 The top strip contains terminology, linked-area filter and import. The literature occupies the top area and one route occupies the bottom rail. The separator supports pointer and keyboard input. User text is assigned through textContent and pre-wrap. Core rules remain in C++; TypeScript consumes validated results and DTOs.
 
 Asset URLs resolve from the specified assetBaseUrl and the package module. For cross-origin hosting, browser Worker origin/CORS requirements still apply: host the package/Worker on the embedding origin or supply an approved same-origin workerUrl and compatible asset CORS. The supplied root/nested examples use same-origin resources.
+
+## Authoring continuation (Stage 15–18)
+
+The active `hmap-authoring.plan.md` supersedes the original viewer-only top strip. `features.editing` defaults to true and adds named creation actions plus per-object edit buttons. Native modal forms prepare independent candidates, use the shared validator, retain authored input on error and emit one `onChange` per accepted user edit, creation, deletion or import. Cancelling or superseding a validation prevents a late result from committing. Deletion previews explicitly list removed objects and detached references.
+
+`editor.newProject()` opens a user-confirmed empty-map form; it rejects calls when readonly or editing is disabled. `editor.hasOpenDraft()` reports an open form/import review for host navigation protection. A host still owns dirty-state comparison, storage writes, metadata timestamps and unsaved-work prompts. `features.editing=false` suppresses forms while the separate `importButton` flag governs import. Readonly suppresses every user write; host `setProject()` remains supported.
+
+`terminologySelector` now defaults to false. The ordinary workspace passes engineering terminology explicitly; files retain their original terminologyProfile until an explicit authored change. Existing terminology options remain compatible when enabled by the embedding host. `getViewState()` also exposes the selected step; selecting a step highlights its component/chunk links and does not execute the named roadmap activity.
+
+The technical embedding fixture opts into the legacy selector to test compatibility. Its **Host button** has no product action: the browser regression checks that the editor's scoped CSS leaves the external host button's style intact. The example is documented here and is not linked from the ordinary workspace footer.
+
+
+<details><summary><strong>Русский</strong></summary>
+
+Публичный пакет позволяет встроить карту в другую страницу. Host создаёт движок и адаптер хранения, передаёт их редактору и сохраняет данные по явному действию. Формы проверяют изменения общим движком; readonly оставляет просмотр и навигацию. Пример встраивания показывает два независимых экземпляра с одним движком.
+
+</details>
+
+<details><summary><strong>Українська</strong></summary>
+
+Публічний пакет дає змогу вбудувати карту в іншу сторінку. Host створює рушій та адаптер сховища, передає їх редактору й зберігає дані за явною дією. Форми перевіряють зміни спільним рушієм; readonly залишає перегляд і навігацію. Приклад вбудовування показує два незалежні екземпляри зі спільним рушієм.
+
+</details>
