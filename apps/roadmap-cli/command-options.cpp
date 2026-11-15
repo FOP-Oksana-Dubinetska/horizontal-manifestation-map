@@ -139,7 +139,7 @@ ParseResult parseCommandOptions(int argc, char *argv[]) {
 		return fail("invalid color mode");
 	if (!std::set<std::string>{"auto", "json", "roadmap-text"}.contains(o.inputFormat))
 		return fail("invalid input format");
-	if (o.language != "ru" && o.language != "en")
+	if (o.language != "ru" && o.language != "en" && o.language != "uk")
 		return fail("invalid language");
 	std::set<std::string> applicable{"format", "output", "overwrite", "lang", "color", "help"};
 	if (input)

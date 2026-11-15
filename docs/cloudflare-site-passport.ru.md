@@ -53,7 +53,7 @@ python tools/serve-dist.py --port 4173
 
 Open `http://127.0.0.1:4173/`. The local `/tools/roadmap/` alias also checks that the assets work below a path prefix. A short walkthrough covers the useful parts: create or edit a map, save and reload it, download JSON/Markdown, and move to the introduction before the footer.
 
-The introduction is English first, with Russian and Ukrainian disclosure blocks. Its source, `content/project-introduction.json`, also provides the native CLI's English terminal header. Ordinary wheel movement reads the current section; a stronger gesture moves between sections. Keyboard links and touch provide direct navigation.
+The introduction is English first, with Russian and Ukrainian disclosure blocks. Its source, `content/project-introduction.json`, also provides the native CLI's English terminal header. Native page scrolling moves freely through the workspace, anchor-linked help and introduction. English is the default interface language; Ukrainian and Russian can be selected in the workspace. The locale preference is local to this origin.
 
 After deployment, repeat that short walkthrough at the public address. The Network panel can confirm the Wasm MIME and Worker load. Browser messages that mention `content.js` can be traced with the [browser notes](browser-diagnostics.ru.md).
 

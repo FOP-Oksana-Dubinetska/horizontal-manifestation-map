@@ -1,0 +1,6 @@
+#pragma once
+namespace roadmap::formats {
+inline constexpr const char *localeEn = R"hmap_locale(@HMAP_LOCALE_EN@)hmap_locale";
+inline constexpr const char *localeUk = R"hmap_locale(@HMAP_LOCALE_UK@)hmap_locale";
+inline constexpr const char *localeRu = R"hmap_locale(@HMAP_LOCALE_RU@)hmap_locale";
+}

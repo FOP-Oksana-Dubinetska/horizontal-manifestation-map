@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.0 — intention-led maps, 2026-11-15
+
+Stages 20–22 make each intention the visible origin of a line and display several intentions and routes together. Shared C++/CLI render precedes its web projection; --route selects a slice. The render JSON result now uses rows rather than the earlier single-route fields. Schema-2 documents and their authored content remain compatible.
+
+Creation starts with an intention, route and step actions explain their prerequisites, and intersections require two chosen sources. English is the default; complete EN/UK/RU configs serve interface, help and diagnostics. Help has a permanent anchor section and page scrolling is free.
+
 ## 0.0.0 — authoring candidate, 2026-11-14
 
 Stage 15–18 add validated forms for map content and structure, stable named links, ordering, reviewed deletion and modal cancellation/revision guards. The workspace now offers new/open/edit/validate/save/export with a meaningful two-route architecture example and visible unsaved-state handling. Explicit persistence retains stored maps and external-writer detection.

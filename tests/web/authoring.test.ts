@@ -7,6 +7,7 @@ import {
 	prepareDeletion,
 	reorderEntity,
 	nextEntityId,
+	additionUnavailable,
 } from '../../packages/roadmap-ui/src/authoring.ts';
 import type { RoadmapProject } from '../../packages/roadmap-storage/src/index.ts';
 const fixture = (): RoadmapProject =>
@@ -35,6 +36,29 @@ test('routes require intentions and steps require an explicitly selected route',
 	const added = prepareAddition(fixture(), 'route');
 	assert.equal(added.project.routes.at(-1)?.intentId, 'i-check');
 	assert.equal(added.project.selectedRouteId, added.target.id);
+});
+test('interactive additions begin with an intention and explicit empty selection stays empty', () => {
+	const blank = createDraftProject('p-new');
+	for (const kind of ['route', 'step', 'module', 'chunk', 'estimate', 'intersection'] as const) {
+		assert.equal(additionUnavailable(blank, kind), 'intent-required');
+		assert.throws(() => prepareAddition(blank, kind), /intent-required/);
+	}
+	const first = prepareAddition(blank, 'intent').project;
+	assert.equal(additionUnavailable(first, 'step'), 'route-required');
+	assert.equal(additionUnavailable(first, 'intersection'), 'sources-required');
+	const second = prepareAddition(first, 'intent').project;
+	assert.equal(second.selectedIntentId, second.intents[1].id);
+	assert.equal(second.selectedRouteId, null);
+	assert.equal(second.routes.length, 0);
+	assert.equal(additionUnavailable(second, 'intersection'), null);
+	assert.equal(
+		additionUnavailable(fixture(), 'step', { intentId: 'i-check', routeId: null }),
+		'route-required',
+	);
+	assert.throws(
+		() => prepareAddition(fixture(), 'step', { intentId: 'i-check', routeId: null }),
+		/route-required/,
+	);
 });
 test('deleting a shared component detaches declared references and drops underspecified intersections', () => {
 	const source = fixture();

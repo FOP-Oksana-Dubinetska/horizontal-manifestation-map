@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 async function ready(page: Page) {
-	await page.goto('/');
+	await page.goto('/?lang=ru');
 	await expect(page.locator('#save')).toBeEnabled();
 }
 async function files(page: Page) {
@@ -138,7 +138,7 @@ test('an edited map remains downloadable after storage fails and closing a draft
 		};
 	});
 	await page.locator('#save').click();
-	await expect(page.locator('#host-status')).toHaveText('full');
+	await expect(page.locator('#host-status')).toContainText('E_STORAGE_QUOTA');
 	expect((await source(page)).title).toBe('Изменённая архитектура');
 });
 

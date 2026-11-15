@@ -1,5 +1,7 @@
 # Stage 19 — a learning project and a readable introduction
 
+> Stage 22 updates section navigation: native page scrolling and permanent anchor help replace the earlier wheel threshold.
+
 ## 1. What this step adds
 
 A concise explanation connects the architecture map to its literate-programming inspiration. English leads the README and website, with Russian and Ukrainian disclosure blocks. The same English introduction welcomes a human terminal session. Current guides use a lighter tone while the development journal keeps its technical record.

@@ -9,11 +9,9 @@ async function ready(page: any) {
 async function aligned(page: any, selector: string) {
 	await expect
 		.poll(() =>
-			page
-				.locator(selector)
-				.evaluate((n: HTMLElement) => Math.round(n.getBoundingClientRect().top)),
+			page.locator(selector).evaluate((n: HTMLElement) => Math.abs(n.getBoundingClientRect().top)),
 		)
-		.toBe(0);
+		.toBeLessThan(1);
 }
 
 test('the static introduction precedes the footer with English text and native RU/UK disclosures', async ({
@@ -46,53 +44,69 @@ test('the static introduction precedes the footer with English text and native R
 	);
 });
 
-test('ordinary wheel reads the workspace while a strong gesture exits each fitted section', async ({
+test('ordinary wheel exits sections freely and remains available inside the workspace', async ({
 	page,
 }) => {
 	await ready(page);
 	await aligned(page, '#workspace');
+	const cancelled = await page.locator('#host-status').evaluate((node) => {
+		const e = new WheelEvent('wheel', { deltaY: 80, cancelable: true, bubbles: true });
+		node.dispatchEvent(e);
+		return e.defaultPrevented;
+	});
+	expect(cancelled).toBe(false);
 	await page.mouse.move(80, 70);
-	await page.mouse.wheel(0, 80);
+	await page.mouse.wheel(0, 160);
+	await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(0);
+	await page.getByRole('link', { name: 'About this project ↓' }).click();
+	await aligned(page, '#about-hmap');
+	const before = await page.evaluate(() => scrollY);
+	await page.mouse.move(80, 100);
+	await page.mouse.wheel(0, -160);
+	await expect.poll(() => page.evaluate(() => scrollY)).toBeLessThan(before);
+	await page.locator('#about-hmap').getByRole('link', { name: 'Back to the workspace ↑' }).click();
 	await aligned(page, '#workspace');
 	const source = page.locator('.hmap-source');
 	await source.hover();
 	await page.mouse.wheel(0, 100);
 	await expect.poll(() => source.evaluate((n) => n.scrollTop)).toBeGreaterThan(0);
 	await aligned(page, '#workspace');
-	await page.mouse.wheel(0, 1200);
-	await aligned(page, '#about-hmap');
+});
+
+test('help is a permanent anchor section outside the editor and before the introduction', async ({
+	page,
+}) => {
+	await ready(page);
+	await expect(page.locator('#help')).toHaveAttribute('href', '#guide');
+	await expect(page.locator('#workspace #guide')).toHaveCount(0);
+	await expect(page.locator('#guide')).toContainText('Route step requires a selected route');
+	await expect(page.locator('#guide')).toContainText('two different sources');
+	await page.getByRole('link', { name: 'How to work', exact: true }).click();
+	await expect(page).toHaveURL(/#guide$/);
 	expect(
-		await page.locator('#about-hmap').evaluate((n) => n.getBoundingClientRect().height),
-	).toBeLessThanOrEqual(901);
-	await page.mouse.move(80, 100);
-	await page.mouse.wheel(0, 80);
-	await aligned(page, '#about-hmap');
-	await page.mouse.wheel(0, -1200);
+		await page
+			.locator('#guide')
+			.evaluate(
+				(n) =>
+					n.compareDocumentPosition(document.querySelector('#about-hmap')!) &
+					Node.DOCUMENT_POSITION_FOLLOWING,
+			),
+	).toBeTruthy();
+	await page.locator('#guide').getByRole('link', { name: 'Back to the workspace ↑' }).click();
 	await aligned(page, '#workspace');
-	await page.mouse.wheel(0, 1200);
-	await aligned(page, '#about-hmap');
-	await page.mouse.wheel(0, 1200);
-	await expect
-		.poll(() =>
-			page
-				.locator('#page-footer')
-				.evaluate((n) => Math.round(n.getBoundingClientRect().bottom - innerHeight)),
-		)
-		.toBe(0);
-	expect(await page.evaluate(() => scrollY)).toBeGreaterThan(900);
 });
 
 test('an open editing form keeps strong wheel input inside the dialog', async ({ page }) => {
 	await ready(page);
 	await page.locator('[data-edit-kind=chunk]').first().click();
 	const form = page.locator('.hmap-authoring-dialog');
-	const text = form.getByLabel('Текст', { exact: true });
+	const text = form.getByLabel('Text', { exact: true });
 	await text.fill('Draft paragraph\n'.repeat(100));
 	await text.hover();
 	await page.mouse.wheel(0, 1200);
 	await aligned(page, '#workspace');
 	await expect(form).toBeVisible();
-	await form.getByRole('button', { name: 'Отменить', exact: true }).click();
+	await form.getByRole('button', { name: 'Cancel', exact: true }).click();
 	await expect(form).not.toBeVisible();
 	await aligned(page, '#workspace');
 });
@@ -119,7 +133,7 @@ test('keyboard links, horizontal route scrolling and zoom events keep native nav
 	await page.getByRole('link', { name: 'About this project ↓' }).focus();
 	await page.keyboard.press('Enter');
 	await aligned(page, '#about-hmap');
-	await page.getByRole('link', { name: 'Back to the workspace ↑' }).focus();
+	await page.locator('#about-hmap').getByRole('link', { name: 'Back to the workspace ↑' }).focus();
 	await page.keyboard.press('Enter');
 	await aligned(page, '#workspace');
 });
@@ -150,7 +164,7 @@ test('a small touch viewport can read expanded translations and return through s
 	await page.mouse.move(80, 100);
 	await page.mouse.wheel(0, 120);
 	await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before);
-	await page.getByRole('link', { name: 'Back to the workspace ↑' }).tap();
+	await page.locator('#about-hmap').getByRole('link', { name: 'Back to the workspace ↑' }).tap();
 	await aligned(page, '#workspace');
 	await context.close();
 });

@@ -38,7 +38,7 @@ This map connects each feature to an observable check. The runner writes current
 | AC-32 | Clean verification run | source byte snapshots; no install/formatter inside check-project.py |
 | AC-33 | Resource bounds | input/depth/large ID checks, validator regulators and host error handling |
 | AC-34 | Keyboard and focus | browser separator, controls, modal focus/escape and focus-visible CSS |
-| AC-35 | Workspace layout | browser literature/one route/three permitted controls; no side inspector |
+| AC-35 | Workspace layout | browser literature and intention-led route lines; contextual authoring actions |
 
 The map is local-first. Estimates describe the author's assumptions, and code references record where a component belongs. The browser and CLI checks exercise the corresponding data and interaction contracts.
 
@@ -57,14 +57,14 @@ The authoring plan connects the original model checks to complete editing and pe
 | Multiple saved maps and reopening | workspace.spec.ts: new map and saved maps |
 | Distinct navigation/validation and CSP | workspace.spec.ts: route navigation and actual validation |
 | Quota, concurrent tabs and temporary sessions | editor.spec.ts + workspace.spec.ts |
-| Compact layout and one route at 390px | workspace.spec.ts + editor.spec.ts: desktop and narrow |
+| Compact layout and horizontal scrolling per line at 390px | workspace.spec.ts + editor.spec.ts: desktop and narrow |
 
 Commands: `npm run test:storage`, `npm run typecheck`, `npm run build`, `npm run test:web`, `python tools/check-project.py --profile all`. Results are recorded in TRACE and the delivery report. The site setup guide provides a short check of the deployed page.
 
 
 ## Shared introduction and section navigation
 
-The CLI terminal checks compare the English introduction with `content/project-introduction.json`. Browser tests cover the static translations, section stops, strong-wheel transitions, inner scrolling, keyboard links, zoom events and open forms. Existing stream and editor checks continue to exercise the surrounding behaviour.
+The CLI terminal checks compare the English introduction with `content/project-introduction.json`. Browser tests cover the static translations, native section scrolling and anchor help, inner scrolling, keyboard links, zoom events and open forms. Existing stream and editor checks continue to exercise the surrounding behaviour.
 
 <details><summary><strong>Русский</strong></summary>
 

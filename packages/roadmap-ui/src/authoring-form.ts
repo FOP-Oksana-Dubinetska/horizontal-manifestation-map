@@ -1,8 +1,9 @@
+import { createTranslator, type Locale } from './locales.ts';
 import type { RoadmapProject } from '../../roadmap-storage/src/index.ts';
 import {
 	AuthoringError,
 	createDraftProject,
-	entityNames,
+	intersectionSources,
 	entityPosition,
 	prepareAddition,
 	prepareDeletion,
@@ -13,25 +14,25 @@ import type { AuthoringTarget, EntityKind } from './authoring.ts';
 export function createAuthoringForm(config: {
 	root: HTMLElement;
 	prefix: string;
-	ru: boolean;
+	getLanguage(): Locale;
 	getProject(): RoadmapProject;
 	getSelection(): { intentId: string | null; routeId: string | null };
 	apply(project: RoadmapProject, isCurrent: () => boolean): Promise<boolean>;
 	onError(error: Error): void;
 	onOpen(): void;
 }) {
-	const t = (ru: string, en: string) => (config.ru ? ru : en);
-	const names: Record<AuthoringTarget['kind'], string> = {
-		project: t('карты', 'map'),
-		'new-project': t('новой карты', 'new map'),
-		intent: t('намерения', 'intention'),
-		route: t('маршрута', 'route'),
-		step: t('шага', 'step'),
-		module: t('компонента', 'component'),
-		chunk: t('контракта / пояснения', 'contract / explanation'),
-		intersection: t('пересечения', 'intersection'),
-		estimate: t('оценки', 'estimate'),
-	};
+	const t = createTranslator(config.getLanguage);
+	const names = (): Record<AuthoringTarget['kind'], string> => ({
+		project: t('map'),
+		'new-project': t('new map'),
+		intent: t('intention'),
+		route: t('route'),
+		step: t('step'),
+		module: t('component'),
+		chunk: t('contract / explanation'),
+		intersection: t('intersection'),
+		estimate: t('estimate'),
+	});
 	const node = <K extends keyof HTMLElementTagNameMap>(tag: K, text?: string) => {
 		const result = document.createElement(tag);
 		if (text !== undefined) result.textContent = text;
@@ -86,10 +87,7 @@ export function createAuthoringForm(config: {
 		formAbort = new AbortController();
 		const signal = formAbort.signal;
 		dialog.replaceChildren();
-		const heading = node(
-			'h2',
-			(isNew ? t('Создание ', 'Create ') : t('Изменение ', 'Edit ')) + names[target.kind],
-		);
+		const heading = node('h2', (isNew ? t('Create ') : t('Edit ')) + names()[target.kind]);
 		heading.id = config.prefix + '-form-heading';
 		dialog.setAttribute('aria-labelledby', heading.id);
 		const form = node('form');
@@ -101,9 +99,9 @@ export function createAuthoringForm(config: {
 		error.setAttribute('role', 'alert');
 		const actions = node('div');
 		actions.className = 'hmap-form-actions';
-		const submit = node('button', isNew ? t('Создать', 'Create') : t('Применить', 'Apply'));
+		const submit = node('button', isNew ? t('Create') : t('Apply'));
 		submit.type = 'submit';
-		const cancel = node('button', t('Отменить', 'Cancel'));
+		const cancel = node('button', t('Cancel'));
 		cancel.type = 'button';
 		cancel.addEventListener('click', close, { signal });
 		actions.append(submit, cancel);
@@ -149,8 +147,7 @@ export function createAuthoringForm(config: {
 			const group = node('fieldset');
 			group.className = 'hmap-link-choices';
 			group.append(node('legend', title));
-			if (!options.length)
-				group.append(node('p', t('Пока нет объектов для связи.', 'No objects to link yet.')));
+			if (!options.length) group.append(node('p', t('No objects to link yet.')));
 			const controls = options.map((option) => {
 				const wrapper = node('label');
 				const control = node('input');
@@ -172,12 +169,13 @@ export function createAuthoringForm(config: {
 			if (max !== undefined) control.max = String(max);
 			return control;
 		};
-		const titleLabel = t('Название', 'Title');
-		const summaryLabel = t('Описание', 'Description');
+		const titleLabel = t('Title');
+		const summaryLabel = t('Description');
 		const intentOptions = draft.intents.map((v) => ({ id: v.id, title: v.title }));
 		const moduleOptions = draft.modules.map((v) => ({ id: v.id, title: v.title }));
 		const chunkOptions = draft.chunks.map((v) => ({ id: v.id, title: v.name }));
 		let collect: () => void = () => {};
+		let checkSources = () => true;
 		switch (target.kind) {
 			case 'project':
 			case 'new-project': {
@@ -187,13 +185,9 @@ export function createAuthoringForm(config: {
 						'p',
 						target.kind === 'new-project'
 							? t(
-									'После создания текущая карта заменится пустым проектом. Сохранение выполняется отдельной кнопкой.',
 									'Creating replaces the current map with an empty project. Saving is a separate action.',
 								)
-							: t(
-									'Текст и связи изменяются в формах соответствующих объектов.',
-									'Edit text and links in the forms for individual objects.',
-								),
+							: t('Edit text and links in the forms for individual objects.'),
 					),
 				);
 				collect = () => {
@@ -206,21 +200,21 @@ export function createAuthoringForm(config: {
 				const title = input(titleLabel, value.title, true);
 				const summary = text(summaryLabel, value.summary);
 				const criteria = text(
-					t('Критерии результата — по одному на строку', 'Acceptance criteria — one per line'),
+					t('Acceptance criteria — one per line'),
 					value.acceptanceCriteria.join('\n'),
 				);
-				const status = select(t('Состояние', 'Status'), value.status, [
-					['draft', t('Черновик', 'Draft')],
-					['active', t('Активно', 'Active')],
-					['implemented', t('Реализовано', 'Implemented')],
-					['deferred', t('Отложено', 'Deferred')],
+				const status = select(t('Status'), value.status, [
+					['draft', t('Draft')],
+					['active', t('Active')],
+					['implemented', t('Implemented')],
+					['deferred', t('Deferred')],
 				]);
-				const kind = select(t('Характер намерения', 'Intention kind'), value.kind, [
-					['finite', t('Конечный результат', 'Finite result')],
-					['continuous', t('Постоянное намерение', 'Continuous intention')],
+				const kind = select(t('Intention kind'), value.kind, [
+					['finite', t('Finite result')],
+					['continuous', t('Continuous intention')],
 				]);
 				const parents = links(
-					t('Происходит из намерений', 'Originating intentions'),
+					t('Originating intentions'),
 					value.parentIntentIds,
 					intentOptions.filter((v) => v.id !== value.id),
 				);
@@ -241,7 +235,7 @@ export function createAuthoringForm(config: {
 				const value = draft.routes.find((v) => v.id === target.id)!;
 				const title = input(titleLabel, value.title, true);
 				const intent = select(
-					t('Намерение', 'Intention'),
+					t('Intention'),
 					value.intentId,
 					intentOptions.map((v) => [v.id, v.title]),
 				);
@@ -257,25 +251,17 @@ export function createAuthoringForm(config: {
 					.find((v) => v.id === target.routeId)!
 					.steps.find((v) => v.id === target.id)!;
 				const title = input(titleLabel, value.title, true);
-				const kind = select(t('Роль шага', 'Step role'), value.stereotype, [
-					['intent', t('Уточнение намерения', 'Intention')],
-					['module', t('Реализация компонента', 'Component')],
-					['shared', t('Повторное использование', 'Reuse')],
-					['validation', t('Проверка', 'Validation')],
-					['export', t('Передача результата', 'Delivery')],
+				const kind = select(t('Step role'), value.stereotype, [
+					['intent', t('Intention')],
+					['module', t('Component')],
+					['shared', t('Reuse')],
+					['validation', t('Validation')],
+					['export', t('Delivery')],
 				]);
-				const modules = links(
-					t('Компоненты архитектуры', 'Architecture components'),
-					value.linkedModuleIds,
-					moduleOptions,
-				);
-				const chunks = links(
-					t('Контракты и пояснения', 'Contracts and explanations'),
-					value.linkedChunkIds,
-					chunkOptions,
-				);
-				const estimate = select(t('Оценка', 'Estimate'), value.estimateId ?? '', [
-					['', t('Без оценки', 'No estimate')],
+				const modules = links(t('Architecture components'), value.linkedModuleIds, moduleOptions);
+				const chunks = links(t('Contracts and explanations'), value.linkedChunkIds, chunkOptions);
+				const estimate = select(t('Estimate'), value.estimateId ?? '', [
+					['', t('No estimate')],
 					...draft.estimates.map((v) => [v.id, v.label] as [string, string]),
 				]);
 				collect = () => {
@@ -291,27 +277,23 @@ export function createAuthoringForm(config: {
 				const value = draft.modules.find((v) => v.id === target.id)!;
 				const title = input(titleLabel, value.title, true);
 				const summary = text(summaryLabel, value.summary);
-				const kind = select(t('Область', 'Area'), value.kind, [
-					['core', t('Ядро', 'Core')],
-					['ui', t('Интерфейс', 'Interface')],
-					['storage', t('Хранение', 'Storage')],
-					['export', t('Экспорт', 'Export')],
-					['demo', t('Пример', 'Example')],
-					['validation', t('Проверка', 'Validation')],
+				const kind = select(t('Area'), value.kind, [
+					['core', t('Core')],
+					['ui', t('Interface')],
+					['storage', t('Storage')],
+					['export', t('Export')],
+					['demo', t('Example')],
+					['validation', t('Validation')],
 				]);
-				const existence = select(t('Наличие компонента', 'Component existence'), value.existence, [
-					['planned', t('Запланирован', 'Planned')],
-					['existing', t('Существует', 'Existing')],
-					['deprecated', t('Выведен из использования', 'Deprecated')],
+				const existence = select(t('Component existence'), value.existence, [
+					['planned', t('Planned')],
+					['existing', t('Existing')],
+					['deprecated', t('Deprecated')],
 				]);
-				const intents = links(
-					t('Поддерживаемые намерения', 'Supported intentions'),
-					value.linkedIntentIds,
-					intentOptions,
-				);
+				const intents = links(t('Supported intentions'), value.linkedIntentIds, intentOptions);
 				const refs = node('fieldset');
 				refs.className = 'hmap-code-refs';
-				refs.append(node('legend', t('Ссылки на код', 'Code references')));
+				refs.append(node('legend', t('Code references')));
 				fields.append(refs);
 				const rows: {
 					root: HTMLElement;
@@ -326,22 +308,12 @@ export function createAuthoringForm(config: {
 					refs.append(root);
 					const row = {
 						root,
-						repository: input(t('Репозиторий', 'Repository'), ref.repository, true, root),
-						path: input(t('Путь в репозитории', 'Repository path'), ref.path, true, root),
-						revision: input(
-							t('Ревизия (необязательно)', 'Revision (optional)'),
-							ref.revision ?? '',
-							false,
-							root,
-						),
-						symbol: input(
-							t('Символ (необязательно)', 'Symbol (optional)'),
-							ref.symbol ?? '',
-							false,
-							root,
-						),
+						repository: input(t('Repository'), ref.repository, true, root),
+						path: input(t('Repository path'), ref.path, true, root),
+						revision: input(t('Revision (optional)'), ref.revision ?? '', false, root),
+						symbol: input(t('Symbol (optional)'), ref.symbol ?? '', false, root),
 					};
-					const remove = node('button', t('Убрать ссылку', 'Remove reference'));
+					const remove = node('button', t('Remove reference'));
 					remove.type = 'button';
 					root.append(remove);
 					remove.addEventListener(
@@ -355,7 +327,7 @@ export function createAuthoringForm(config: {
 					rows.push(row);
 				};
 				for (const ref of value.codeRefs) addRef(ref);
-				const add = node('button', t('Добавить ссылку на код', 'Add code reference'));
+				const add = node('button', t('Add code reference'));
 				add.type = 'button';
 				refs.append(add);
 				add.addEventListener(
@@ -381,17 +353,9 @@ export function createAuthoringForm(config: {
 			case 'chunk': {
 				const value = draft.chunks.find((v) => v.id === target.id)!;
 				const name = input(titleLabel, value.name, true);
-				const body = text(t('Текст', 'Text'), value.body, 9);
-				const modules = links(
-					t('Компоненты архитектуры', 'Architecture components'),
-					value.linkedModuleIds,
-					moduleOptions,
-				);
-				const intents = links(
-					t('Связанные намерения', 'Linked intentions'),
-					value.linkedIntentIds,
-					intentOptions,
-				);
+				const body = text(t('Text'), value.body, 9);
+				const modules = links(t('Architecture components'), value.linkedModuleIds, moduleOptions);
+				const intents = links(t('Linked intentions'), value.linkedIntentIds, intentOptions);
 				collect = () => {
 					value.name = name.value;
 					value.body = body.value;
@@ -403,12 +367,31 @@ export function createAuthoringForm(config: {
 			case 'intersection': {
 				const value = draft.intersections.find((v) => v.id === target.id)!;
 				const title = input(titleLabel, value.title, true);
-				const note = text(t('Объяснение связи', 'Connection note'), value.note);
+				const note = text(t('Connection note'), value.note);
 				const sources = links(
-					t('Общие объекты — минимум два', 'Shared objects — at least two'),
+					t('Shared objects — at least two'),
 					value.sourceIds,
-					entityNames(draft).filter((v) => ['intent', 'step', 'module', 'chunk'].includes(v.kind)),
+					intersectionSources(draft),
 				);
+				const sourceGroup = fields.lastElementChild!;
+				const guidance = node(
+					'p',
+					t(
+						'An intersection describes a relationship between intentions, steps, components or explanations. Select at least two different sources. Routes and estimates are excluded.',
+					),
+				);
+				const count = node('p');
+				count.className = 'hmap-source-count';
+				count.setAttribute('role', 'status');
+				fields.append(guidance, count);
+				checkSources = () => {
+					const total = sources().length;
+					count.textContent = t('Selected sources: ') + total + t(' (minimum 2)');
+					submit.disabled = total < 2;
+					return total >= 2;
+				};
+				sourceGroup.addEventListener('change', checkSources, { signal });
+				checkSources();
 				collect = () => {
 					value.title = title.value;
 					value.note = note.value;
@@ -419,41 +402,38 @@ export function createAuthoringForm(config: {
 			case 'estimate': {
 				const value = draft.estimates.find((v) => v.id === target.id)!;
 				const title = input(titleLabel, value.label, true);
-				const basis = text(t('Основание оценки', 'Estimate basis'), value.basis);
-				const confidence = select(t('Уверенность', 'Confidence'), value.confidence, [
-					['low', t('Низкая', 'Low')],
-					['medium', t('Средняя', 'Medium')],
-					['high', t('Высокая', 'High')],
+				const basis = text(t('Estimate basis'), value.basis);
+				const confidence = select(t('Confidence'), value.confidence, [
+					['low', t('Low')],
+					['medium', t('Medium')],
+					['high', t('High')],
 				]);
-				const type = select(t('Тип оценки', 'Estimate type'), value.value.type, [
-					['unknown', t('Пока неизвестна', 'Unknown')],
-					['range', t('Числовой диапазон', 'Numeric range')],
-					['text', t('Текстовая оценка', 'Text estimate')],
-					['not-applicable', t('Неприменима', 'Not applicable')],
+				const type = select(t('Estimate type'), value.value.type, [
+					['unknown', t('Unknown')],
+					['range', t('Numeric range')],
+					['text', t('Text estimate')],
+					['not-applicable', t('Not applicable')],
 				]);
-				const reason = input(
-					t('Причина', 'Reason'),
-					'reason' in value.value ? value.value.reason : '',
-				);
+				const reason = input(t('Reason'), 'reason' in value.value ? value.value.reason : '');
 				const description = input(
-					t('Текст оценки', 'Estimate text'),
+					t('Estimate text'),
 					value.value.type === 'text' ? value.value.text : '',
 				);
 				const metric = select(
-					t('Измерение', 'Metric'),
+					t('Metric'),
 					value.value.type === 'range' ? value.value.metric : 'effort',
 					[
-						['effort', t('Трудоёмкость', 'Effort')],
-						['elapsed', t('Календарное время', 'Elapsed time')],
+						['effort', t('Effort')],
+						['elapsed', t('Elapsed time')],
 					],
 				);
 				const min = numeric(
-					t('От, минут', 'Minimum minutes'),
+					t('Minimum minutes'),
 					value.value.type === 'range' ? value.value.minMinutes : 0,
 					0,
 				);
 				const max = numeric(
-					t('До, минут', 'Maximum minutes'),
+					t('Maximum minutes'),
 					value.value.type === 'range' ? value.value.maxMinutes : 0,
 					0,
 				);
@@ -493,18 +473,18 @@ export function createAuthoringForm(config: {
 		let position: HTMLInputElement | undefined;
 		if (target.kind !== 'project' && target.kind !== 'new-project') {
 			const order = entityPosition(draft, target);
-			position = numeric(t('Позиция в списке', 'Position in list'), order.position, 1, order.count);
+			position = numeric(t('Position in list'), order.position, 1, order.count);
 		}
 		const identity = node('details');
 		identity.className = 'hmap-identity';
-		identity.append(node('summary', t('Идентификатор', 'Identity')), node('code', target.id));
+		identity.append(node('summary', t('Identity')), node('code', target.id));
 		fields.append(identity);
 		let proposal = () => {
 			collect();
 			return position ? reorderEntity(draft, target, position.valueAsNumber) : draft;
 		};
 		if (!isNew && target.kind !== 'project') {
-			const remove = node('button', t('Удалить…', 'Delete…'));
+			const remove = node('button', t('Delete…'));
 			remove.type = 'button';
 			remove.className = 'hmap-delete';
 			actions.append(remove);
@@ -512,27 +492,25 @@ export function createAuthoringForm(config: {
 				'click',
 				() => {
 					const deletion = prepareDeletion(original, target);
-					fields.replaceChildren(node('p', t('Будут удалены:', 'Objects to delete:')));
+					fields.replaceChildren(node('p', t('Objects to delete:')));
 					const list = node('ul');
 					for (const item of deletion.removed)
 						list.append(node('li', item.title + ' · ' + item.id));
 					fields.append(
 						list,
-						node(
-							'p',
-							t('Снимаемых ссылок: ', 'References to detach: ') + deletion.detachedReferences,
-						),
+						node('p', t('References to detach: ') + deletion.detachedReferences),
 						node(
 							'p',
 							t(
-								'Общие компоненты и пояснения сохраняются, если они сами не выбраны для удаления.',
 								'Shared components and explanations are retained unless explicitly selected for deletion.',
 							),
 						),
 					);
 					remove.remove();
 					error.textContent = '';
-					submit.textContent = t('Подтвердить удаление', 'Confirm deletion');
+					submit.textContent = t('Confirm deletion');
+					checkSources = () => true;
+					submit.disabled = false;
 					proposal = () => deletion.project;
 					cancel.focus();
 				},
@@ -543,7 +521,7 @@ export function createAuthoringForm(config: {
 			'submit',
 			async (event) => {
 				event.preventDefault();
-				if (submit.disabled) return;
+				if (submit.disabled || !checkSources()) return;
 				let candidate: RoadmapProject;
 				try {
 					candidate = proposal();
@@ -557,7 +535,7 @@ export function createAuthoringForm(config: {
 					>('input,select,textarea,button'),
 				).filter((c) => c !== cancel);
 				controls.forEach((c) => (c.disabled = true));
-				error.textContent = t('Проверка изменений…', 'Validating changes…');
+				error.textContent = t('Validating changes…');
 				try {
 					const accepted = await config.apply(candidate, () => token === session && dialog.open);
 					if (token !== session) return;
@@ -566,7 +544,10 @@ export function createAuthoringForm(config: {
 					if (token === session)
 						error.textContent = cause instanceof Error ? cause.message : String(cause);
 				} finally {
-					if (token === session) controls.forEach((c) => (c.disabled = false));
+					if (token === session) {
+						controls.forEach((c) => (c.disabled = false));
+						checkSources();
+					}
 				}
 			},
 			{ signal },
@@ -587,8 +568,10 @@ export function createAuthoringForm(config: {
 			const message =
 				cause instanceof AuthoringError
 					? cause.code === 'intent-required'
-						? t('Сначала добавьте намерение.', 'Add an intention first.')
-						: t('Сначала создайте и выберите маршрут.', 'Create and select a route first.')
+						? t('Add or select an intention first.')
+						: cause.code === 'sources-required'
+							? t('Create at least two intersection sources.')
+							: t('Create and select a route first.')
 					: String(cause);
 			config.onError(new Error(message));
 		}

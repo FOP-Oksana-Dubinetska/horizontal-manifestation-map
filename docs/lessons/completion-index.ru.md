@@ -30,3 +30,11 @@
 | Stage 17 | [stage-17.ru.md](stage-17.ru.md) | Рабочий host, содержательная архитектурная карта и сохранение. |
 | Stage 18 | [stage-18.ru.md](stage-18.ru.md) | Проверка и последовательная поставка следующего выпуска. |
 | Stage 19 | [stage-19.md](stage-19.md) | Learning context, shared web/terminal introduction and deliberate section scrolling; EN with RU/UK disclosures. |
+
+## Intention-led maps — 2026-11-15
+
+| Stage | Card | Goal |
+| --- | --- | --- |
+| 20 | [stage-20.ru.md](stage-20.ru.md) | Shared C++/CLI map and locale resources. |
+| 21 | [stage-21.ru.md](stage-21.ru.md) | Intention-led lines, contextual additions and intersections. |
+| 22 | [stage-22.md](stage-22.md) | EN/UK/RU interface, anchor help and native scrolling. |

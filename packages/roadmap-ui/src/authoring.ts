@@ -21,6 +21,7 @@ export interface EntityName {
 type AuthoringErrorCode =
 	| 'intent-required'
 	| 'route-required'
+	| 'sources-required'
 	| 'missing-entity'
 	| 'invalid-position';
 export class AuthoringError extends Error {
@@ -70,11 +71,31 @@ export function nextEntityId(project: RoadmapProject, prefix: string): string {
 	while (ids.has(prefix + '-' + n)) ++n;
 	return prefix + '-' + n;
 }
+export function intersectionSources(project: RoadmapProject) {
+	return entityNames(project).filter((v) => ['intent', 'step', 'module', 'chunk'].includes(v.kind));
+}
+export function additionUnavailable(
+	project: RoadmapProject,
+	kind: EntityKind,
+	selection: { intentId?: string | null; routeId?: string | null } = {},
+): AuthoringErrorCode | null {
+	if (kind === 'intent') return null;
+	if (!project.intents.length) return 'intent-required';
+	const intentId = selection.intentId === undefined ? project.selectedIntentId : selection.intentId;
+	const routeId = selection.routeId === undefined ? project.selectedRouteId : selection.routeId;
+	if (kind === 'route' && !project.intents.some((i) => i.id === intentId)) return 'intent-required';
+	if (kind === 'step' && !project.routes.some((r) => r.id === routeId && r.intentId === intentId))
+		return 'route-required';
+	if (kind === 'intersection' && intersectionSources(project).length < 2) return 'sources-required';
+	return null;
+}
 export function prepareAddition(
 	project: RoadmapProject,
 	kind: EntityKind,
 	selection: { intentId?: string | null; routeId?: string | null } = {},
 ): { project: RoadmapProject; target: AuthoringTarget } {
+	const unavailable = additionUnavailable(project, kind, selection);
+	if (unavailable) throw new AuthoringError(unavailable);
 	const draft = structuredClone(project);
 	const prefixes = {
 		intent: 'i',
@@ -86,8 +107,8 @@ export function prepareAddition(
 		estimate: 'e',
 	};
 	const id = nextEntityId(draft, prefixes[kind]);
-	const intentId = selection.intentId ?? draft.selectedIntentId ?? draft.intents[0]?.id;
-	const routeId = selection.routeId ?? draft.selectedRouteId;
+	const intentId = selection.intentId === undefined ? draft.selectedIntentId : selection.intentId;
+	const routeId = selection.routeId === undefined ? draft.selectedRouteId : selection.routeId;
 	const target: AuthoringTarget = { kind, id };
 	switch (kind) {
 		case 'intent':
@@ -100,7 +121,8 @@ export function prepareAddition(
 				parentIntentIds: [],
 				acceptanceCriteria: [],
 			});
-			if (!draft.selectedIntentId) draft.selectedIntentId = id;
+			draft.selectedIntentId = id;
+			draft.selectedRouteId = null;
 			break;
 		case 'route':
 			if (!intentId) throw new AuthoringError('intent-required');

@@ -8,6 +8,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const introduction = JSON.parse(
 	await readFile(resolve(root, 'content/project-introduction.json'), 'utf8'),
 );
+const hostCopy = JSON.parse(await readFile(resolve(root, 'locales/en.json'), 'utf8')).host;
 const escapeHtml = (value) =>
 	String(value)
 		.replaceAll('&', '&amp;')
@@ -15,6 +16,21 @@ const escapeHtml = (value) =>
 		.replaceAll('>', '&gt;')
 		.replaceAll('"', '&quot;')
 		.replaceAll("'", '&#39;');
+// Static English help and controls use the same config as the live interface.
+const renderHostCopy = (html) =>
+	html.replace(
+		/<([a-z][a-z0-9]*)\b([^>]*\bdata-i18n="([^"]+)"[^>]*)>[^<]*<\/\1\s*>/g,
+		(whole, tag, attributes, encodedKey) => {
+			const key = encodedKey
+				.replaceAll('&quot;', '"')
+				.replaceAll('&#39;', "'")
+				.replaceAll('&lt;', '<')
+				.replaceAll('&gt;', '>')
+				.replaceAll('&amp;', '&');
+			if (!(key in hostCopy)) throw new Error('Missing English host message: ' + key);
+			return `<${tag}${attributes}>${escapeHtml(hostCopy[key])}</${tag}>`;
+		},
+	);
 const renderIntroduction = () => {
 	const language = (key, tag, id = '') => {
 		const copy = introduction[key];
@@ -99,7 +115,7 @@ await build({
 		{
 			name: 'hmap-static-introduction',
 			transformIndexHtml: (html) =>
-				html.replace('<!-- HMAP_INTRODUCTION -->', renderIntroduction()),
+				renderHostCopy(html).replace('<!-- HMAP_INTRODUCTION -->', renderIntroduction()),
 		},
 	],
 	base: './',

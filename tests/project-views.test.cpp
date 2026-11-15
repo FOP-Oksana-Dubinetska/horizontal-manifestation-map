@@ -30,3 +30,41 @@ TEST_CASE("Inspect reports module occurrences independently", "[views]") {
 	CHECK_THROWS(inspectObject(p, "m-missing"));
 	CHECK(safeTerminal("text\x1b[2J") == "text\\x1b[2J");
 }
+TEST_CASE("The map begins every intention's line before any route exists", "[views][workflow]") {
+	auto p = *readJsonProject(projectTemplate()).project;
+	const auto original = writeJsonProject(p);
+	auto child = p.intents.front();
+	child.id = "i-second";
+	child.title = "Second intention";
+	child.parentIntentIds = {p.intents.front().id};
+	p.intents.push_back(child);
+	auto alternative = p.routes.front();
+	alternative.id = "r-alternative";
+	alternative.steps.clear();
+	p.routes.push_back(alternative);
+	p.selectedIntentId.reset();
+	p.selectedRouteId.reset();
+	const auto before = writeJsonProject(p);
+	const auto map = renderMap(p, {});
+	REQUIRE(map["rows"].size() == 3);
+	CHECK(map["rows"][0]["route"]["id"] == "r-check");
+	CHECK(map["rows"][1]["route"]["id"] == "r-alternative");
+	CHECK(map["rows"][2]["intent"]["id"] == "i-second");
+	CHECK(map["rows"][2]["route"].is_null());
+	CHECK(renderTerminal(p, {}).find("Second intention") != std::string::npos);
+	CHECK(writeJsonProject(p) == before);
+	CHECK(before != original);
+	RenderOptions slice;
+	slice.routeId = "r-check";
+	CHECK(renderMap(p, slice)["rows"].size() == 1);
+	CHECK(renderMap(p, slice)["scope"] == "route");
+	slice.routeId = "r-missing";
+	CHECK_THROWS(renderMap(p, slice));
+	p.routes.clear();
+	CHECK(renderMap(p, {})["rows"].size() == 2);
+	p.intents.clear();
+	CHECK(renderMap(p, {})["empty"] == true);
+	RenderOptions uk;
+	uk.language = "uk";
+	CHECK(renderTerminal(p, uk).find("Почніть із наміру") != std::string::npos);
+}

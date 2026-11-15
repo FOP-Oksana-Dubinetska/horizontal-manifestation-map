@@ -40,6 +40,19 @@ def main():
     html=(SITE/'index.html').read_text(); introduction=Introduction(); introduction.feed(html)
     for language in ['en','ru','uk']:
         assert introduction.text[language]==source[language]['text'], 'Introduction differs from source: '+language
+    assert html.index('id="guide"') < html.index('id="about-hmap"'), 'Help must precede introduction'
+    assert 'id="help" href="#guide"' in html, 'Expected native help anchor'
+    class HostCopy(HTMLParser):
+        def __init__(self): super().__init__(); self.key=None; self.messages={}
+        def handle_starttag(self,tag,attrs):
+            key=dict(attrs).get('data-i18n')
+            if key is not None: self.key=key; self.messages[key]=''
+        def handle_data(self,data):
+            if self.key is not None:self.messages[self.key]+=data
+        def handle_endtag(self,tag):self.key=None
+    host=HostCopy();host.feed(html)
+    english=json.loads((ROOT/'locales/en.json').read_text())['host']
+    for key,text in host.messages.items():assert text==english[key], 'Static locale mismatch: '+key
     assert html.index('id="about-hmap"') < html.index('id="page-footer"'), 'Introduction must precede footer'
     assert source['reviewUrl'] in html, 'Missing review credit'
 

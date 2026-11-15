@@ -4,7 +4,7 @@
 	--hmap-line: #c5c5ba;
 	box-sizing: border-box;
 	display: grid;
-	grid-template-rows: auto minmax(140px, var(--hmap-upper, 55%)) 8px minmax(120px, 1fr);
+	grid-template-rows: auto minmax(140px, var(--hmap-upper, 35%)) 8px minmax(180px, 1fr);
 	height: 100%;
 	min-height: 420px;
 	position: relative;
@@ -129,7 +129,7 @@
 }
 .hmap-rail {
 	overflow: auto;
-	padding: 25px 24px;
+	padding: 16px 18px;
 	min-height: 0;
 	background: #f1f1e9;
 }
@@ -137,8 +137,64 @@
 	display: flex;
 	align-items: center;
 	flex-wrap: nowrap;
-	width: max-content;
-	min-width: 100%;
+	width: 100%;
+	min-width: 0;
+	overflow-x: auto;
+	padding: 5px 2px 12px;
+}
+.hmap-map-line {
+	min-width: 0;
+	border-top: 1px solid var(--hmap-line);
+	margin-top: 16px;
+	padding: 12px 8px;
+}
+.hmap-active-line {
+	border-left: 3px solid #6c6c58;
+}
+.hmap-editor .hmap-intent-origin {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	flex: 0 0 215px;
+	width: 215px;
+	min-height: 112px;
+	padding: 15px;
+	text-align: left;
+	background: #e5e5d7;
+}
+.hmap-intent-origin strong {
+	font:
+		17px/1.3 Georgia,
+		serif;
+	overflow-wrap: anywhere;
+}
+.hmap-map-title {
+	font-size: 20px;
+	margin: 0;
+}
+.hmap-editor button:disabled {
+	opacity: 0.45;
+	cursor: default;
+}
+.hmap-action-note {
+	display: block;
+	font-size: 11px;
+	color: var(--hmap-muted);
+	max-width: 35ch;
+}
+.hmap-add-choice {
+	display: grid;
+	gap: 4px;
+}
+.hmap-source-count {
+	font:
+		12px/1.5 ui-monospace,
+		monospace;
+}
+.hmap-route-row > .hmap-empty {
+	min-width: 190px;
+	max-width: 35ch;
+	padding-left: 18px;
 }
 .hmap-editor .hmap-step {
 	display: flex;
@@ -464,7 +520,7 @@
 }
 @media (max-width: 600px) {
 	.hmap-editor {
-		--hmap-upper: 50%;
+		--hmap-upper: 35%;
 	}
 	.hmap-source h1 {
 		font-size: 23px;

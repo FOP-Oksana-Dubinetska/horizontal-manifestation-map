@@ -174,8 +174,17 @@
 ## Scenario: `SC-19 project-introduction`
 
 - **Purpose**: Share a concise ideological introduction across the website and terminal while keeping the editor comfortable to navigate.
-- **Input**: ordinary/strong wheel gestures, keyboard links, an open form, English terminal output, machine-readable CLI commands.
-- **Expected result**: two fitted sections hold ordinary scrolling; stronger gestures move between sections; inner content, zoom and forms behave normally. Website and terminal share the English introduction; machine/artifact output retains its established bytes.
+- **Input**: native wheel scrolling, keyboard links, an open form, English terminal output, machine-readable CLI commands.
+- **Expected result**: native page and inner-content scrolling, anchor help, zoom and forms remain available. Website and terminal share the English introduction; machine/artifact output retains its established bytes.
 - **Validation method**: tools/test-cli-introduction.py; existing CLI contracts; tests/browser/sections.spec.ts; tools/check-distribution.py.
 - **Test-backing status**: integration-test-backed
 - **Evidence path or command**: build/check-reports/check-project.json; cli-introduction.json; TRACE.md.
+
+## Scenario: `SC-20 intention-led map and locales`
+
+- **Purpose**: Follow several intentions through architectural routes in CLI and web.
+- **Input**: Empty map, two intentions, several routes, shared component, two-source intersection, locale choices.
+- **Expected result**: Intentions appear immediately; prerequisites guide additions; CLI and web share ordered rows; EN/UK/RU labels preserve authored text and open drafts; help is a permanent anchor section.
+- **Validation method**: tools/test-cli-workflow.py; tests/project-views.test.cpp; tests/web/locales.test.ts; tests/browser/map-workflow.spec.ts, locales.spec.ts and sections.spec.ts; native/Wasm parity.
+- **Test-backing status**: integration-test-backed
+- **Evidence path or command**: build/check-reports/check-project.json; TRACE.md.

@@ -11,81 +11,165 @@
 	</head>
 	<body>
 		<main class="demo-shell">
-			<section
-				id="workspace"
-				class="workspace-section"
-				data-scroll-section
-				lang="ru"
-				aria-label="Рабочая область"
-			>
-				<nav class="demo-actions" aria-label="Действия с картой">
-					<button id="new" disabled>Новая карта</button>
-					<button id="save" disabled>Сохранить</button>
-					<button id="validate" disabled>Проверить карту</button>
+			<section id="workspace" class="workspace-section" data-scroll-section aria-label="Workspace">
+				<nav class="demo-actions" aria-label="Map actions">
+					<button id="new" disabled data-i18n="New map">New map</button>
+					<button id="save" disabled data-i18n="Save">Save</button>
+					<button id="validate" disabled data-i18n="Validate map">Validate map</button>
 					<details id="file-menu" class="demo-file-menu">
-						<summary>Файл</summary>
+						<summary data-i18n="File">File</summary>
 						<div class="demo-file-actions">
-							<label for="saved-projects">Сохранённые карты</label>
+							<label for="saved-projects" data-i18n="Saved maps">Saved maps</label>
 							<select id="saved-projects" disabled></select>
-							<button id="open" disabled>Открыть карту</button>
-							<button id="example" disabled>Пример архитектуры</button>
-							<button id="save-copy" disabled>Сохранить копию</button>
-							<button id="download-json" disabled>Скачать JSON</button>
-							<button id="download-markdown" disabled>Скачать Markdown</button>
-							<button id="retry">Перезапустить движок</button>
+							<button id="open" disabled data-i18n="Open map">Open map</button>
+							<button id="example" disabled data-i18n="Architecture example">
+								Architecture example
+							</button>
+							<button id="save-copy" disabled data-i18n="Save a copy">Save a copy</button>
+							<button id="download-json" disabled data-i18n="Download JSON">Download JSON</button>
+							<button id="download-markdown" disabled data-i18n="Download Markdown">
+								Download Markdown
+							</button>
+							<button id="retry" data-i18n="Restart engine">Restart engine</button>
 						</div>
 					</details>
-					<button id="help" disabled>Как работать</button>
+					<a id="help" href="#guide" data-i18n="How to work">How to work</a>
+					<label class="demo-language"
+						><span data-i18n="Language">Language</span>
+						<select id="language">
+							<option value="en">English</option>
+							<option value="uk">Українська</option>
+							<option value="ru">Русский</option>
+						</select>
+					</label>
 				</nav>
-				<p id="host-status" role="status" aria-live="polite">Загрузка карты…</p>
+				<p id="host-status" role="status" aria-live="polite" data-i18n="Loading the map…">
+					Loading the map…
+				</p>
 				<p id="storage-status" class="demo-storage" role="status"></p>
 				<pre id="validation-report" class="demo-validation" role="status" hidden></pre>
 				<div id="editor" class="demo-editor"></div>
-				<section id="guide" class="demo-guide" aria-label="Работа с картой" hidden>
-					<h2>Архитектура и маршрут</h2>
-					<p>
-						Намерение задаёт результат и критерии. Компоненты описывают архитектуру. Контракты
-						объясняют решения. Маршрут связывает шаги реализации с этими компонентами и контрактами.
-					</p>
-					<ol>
-						<li>Создайте карту или измените пример кнопками «Изменить».</li>
-						<li>Через «+ Добавить» создайте намерение, компоненты, контракты и маршрут.</li>
-						<li>Добавьте шаги. В их формах выберите связанные компоненты и контракты.</li>
-						<li>
-							Нажмите шаг, чтобы выделить связанные элементы выше. Для изменения шага используйте
-							отдельную кнопку «Изменить».
-						</li>
-						<li>
-							Примените форму и сохраните карту. Файл → Скачать JSON позволяет перенести её в другой
-							браузер через «Импорт».
-						</li>
-					</ol>
-					<p>
-						Один компонент может использоваться в нескольких маршрутах. Ссылки сохраняются при
-						изменении названия. Сохранённые карты открываются через меню «Файл».
-					</p>
-					<details>
-						<summary>Сведения о формате</summary>
-						<p>
-							Schema 2. Общий C++/WASM-движок проверяет карту перед принятием изменений.
-							Терминологические профили сохранены для совместимости файлов. Сохранение выполняется в
-							этом браузере; Markdown служит читаемым экспортом.
-						</p>
-					</details>
-					<button id="close-guide">Закрыть справку</button>
-				</section>
-				<a class="section-jump" href="#about-hmap" lang="en">About this project ↓</a>
+				<a class="section-jump" href="#about-hmap" data-i18n="About this project ↓"
+					>About this project ↓</a
+				>
 			</section>
+			<section id="guide" class="demo-guide" aria-labelledby="guide-title">
+				<h2 id="guide-title" data-i18n="Working with the map">Working with the map</h2>
+				<p
+					data-i18n="The map connects a desired result to the architecture and the route that will realise it. Each intention immediately begins a line; several intentions and alternative routes can be developed together."
+				>
+					The map connects a desired result to the architecture and the route that will realise it.
+					Each intention immediately begins a line; several intentions and alternative routes can be
+					developed together.
+				</p>
+				<ol>
+					<li
+						data-i18n="Create an intention: describe the result and its observable criteria. It appears in the horizontal map immediately."
+					>
+						Create an intention: describe the result and its observable criteria. It appears in the
+						horizontal map immediately.
+					</li>
+					<li
+						data-i18n="Select its line and add a route. A route describes one way to realise that intention."
+					>
+						Select its line and add a route. A route describes one way to realise that intention.
+					</li>
+					<li
+						data-i18n="Add architectural components and contracts or explanations. These are reusable records with stable identities."
+					>
+						Add architectural components and contracts or explanations. These are reusable records
+						with stable identities.
+					</li>
+					<li
+						data-i18n="Add steps to the selected route. In each step, choose the existing components and explanations it uses. A step describes an action; a component describes part of the system."
+					>
+						Add steps to the selected route. In each step, choose the existing components and
+						explanations it uses. A step describes an action; a component describes part of the
+						system.
+					</li>
+					<li
+						data-i18n="Select a step to reveal its linked records above. Use Edit to change it and Validate map to check the document."
+					>
+						Select a step to reveal its linked records above. Use Edit to change it and Validate map
+						to check the document.
+					</li>
+					<li
+						data-i18n="Apply a form, then save the map explicitly. File → Download JSON transfers the accepted map to another browser through Import."
+					>
+						Apply a form, then save the map explicitly. File → Download JSON transfers the accepted
+						map to another browser through Import.
+					</li>
+				</ol>
+				<h3 data-i18n="When actions become available">When actions become available</h3>
+				<ul>
+					<li
+						data-i18n="Intention is always available. Other creation actions open after the first intention. Existing imported records remain available for editing."
+					>
+						Intention is always available. Other creation actions open after the first intention.
+						Existing imported records remain available for editing.
+					</li>
+					<li
+						data-i18n="Route requires a selected intention. Route step requires a selected route; use its line to choose the destination."
+					>
+						Route requires a selected intention. Route step requires a selected route; use its line
+						to choose the destination.
+					</li>
+					<li
+						data-i18n="Intersection requires at least two existing intentions, steps, components or explanations. Its form stays inactive until two different sources are selected. Routes and estimates are excluded."
+					>
+						Intersection requires at least two existing intentions, steps, components or
+						explanations. Its form stays inactive until two different sources are selected. Routes
+						and estimates are excluded.
+					</li>
+				</ul>
+				<h3 data-i18n="What an intersection means">What an intersection means</h3>
+				<p
+					data-i18n="An intersection names a relationship worth explaining: for example, two steps depend on the same validation contract. Write the relationship in its note and choose its sources. Actual component reuse is expressed by both steps referencing the same component."
+				>
+					An intersection names a relationship worth explaining: for example, two steps depend on
+					the same validation contract. Write the relationship in its note and choose its sources.
+					Actual component reuse is expressed by both steps referencing the same component.
+				</p>
+				<h3 data-i18n="Several intentions and shared architecture">
+					Several intentions and shared architecture
+				</h3>
+				<p
+					data-i18n="Add another intention to start another line. Add another route to explore an alternative for the same intention. Components and explanations can be shared across lines by identity; their names remain free to change. The arrows describe a route, while scheduling and time totals need a separate model."
+				>
+					Add another intention to start another line. Add another route to explore an alternative
+					for the same intention. Components and explanations can be shared across lines by
+					identity; their names remain free to change. The arrows describe a route, while scheduling
+					and time totals need a separate model.
+				</p>
+				<details>
+					<summary data-i18n="File format and storage">File format and storage</summary>
+					<p
+						data-i18n="Schema 2 is shared by CLI and WebAssembly. Language changes interface labels and help; authored text and machine IDs keep their original values. Maps are saved in this browser. JSON transfers the full map; Markdown provides a readable export."
+					>
+						Schema 2 is shared by CLI and WebAssembly. Language changes interface labels and help;
+						authored text and machine IDs keep their original values. Maps are saved in this
+						browser. JSON transfers the full map; Markdown provides a readable export.
+					</p>
+				</details>
+				<a class="section-jump" href="#workspace" data-i18n="Back to the workspace ↑"
+					>Back to the workspace ↑</a
+				>
+			</section>
+
 			<section
 				id="about-hmap"
 				class="introduction-section"
 				data-scroll-section
 				aria-labelledby="introduction-title"
 			>
-				<div class="introduction-copy"><!-- HMAP_INTRODUCTION --></div>
-				<a class="section-jump" href="#workspace">Back to the workspace ↑</a>
+				<div class="introduction-copy" lang="en"><!-- HMAP_INTRODUCTION --></div>
+				<a class="section-jump" href="#workspace" data-i18n="Back to the workspace ↑"
+					>Back to the workspace ↑</a
+				>
 			</section>
-			<footer id="page-footer"><a href="./licenses/NOTICE.txt">Licenses</a></footer>
+			<footer id="page-footer">
+				<a href="./licenses/NOTICE.txt" data-i18n="Licenses">Licenses</a>
+			</footer>
 		</main>
 		<script type="module" src="./main.ts"></script>
 	</body>

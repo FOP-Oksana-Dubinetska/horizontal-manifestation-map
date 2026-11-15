@@ -26,6 +26,7 @@ add_library(roadmap-application STATIC
   packages/roadmap-core/src/roadmap/application/project-validation.cpp)
 target_link_libraries(roadmap-application PUBLIC hmap::roadmap-core)
 add_library(roadmap-formats STATIC packages/roadmap-formats/src/json-project.cpp
+  packages/roadmap-formats/src/localization.cpp
   packages/roadmap-formats/src/roadmap-text.cpp
   packages/roadmap-formats/src/project-views.cpp
   packages/roadmap-formats/src/export-project-markdown.cpp
@@ -36,6 +37,14 @@ target_include_directories(roadmap-formats SYSTEM PUBLIC "${HMAP_DEPENDENCY_DIR}
 file(READ "${CMAKE_SOURCE_DIR}/schema/roadmap-project-v2.schema.json" HMAP_SCHEMA)
 file(READ "${CMAKE_SOURCE_DIR}/test/fixtures/minimal-v2.roadmap.json" HMAP_EXAMPLE)
 file(READ "${CMAKE_SOURCE_DIR}/schema/roadmap-project-v1.schema.json" HMAP_LEGACY_SCHEMA)
+foreach(lang EN UK RU)
+  string(TOLOWER "${lang}" locale_name)
+  file(READ "${CMAKE_SOURCE_DIR}/locales/${locale_name}.json" HMAP_LOCALE_${lang})
+  set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+    "${CMAKE_SOURCE_DIR}/locales/${locale_name}.json")
+endforeach()
+configure_file(packages/roadmap-formats/src/locale-resources.hpp.in
+  "${CMAKE_BINARY_DIR}/generated/locale-resources.hpp" @ONLY)
 configure_file(packages/roadmap-formats/src/embedded-resources.hpp.in
   "${CMAKE_BINARY_DIR}/generated/embedded-resources.hpp" @ONLY)
 target_include_directories(roadmap-formats PRIVATE "${CMAKE_BINARY_DIR}/generated")
@@ -48,6 +57,8 @@ foreach(target roadmap-application roadmap-formats)
 endforeach()
 
 file(READ "${CMAKE_SOURCE_DIR}/docs/guidance/catalog.json" HMAP_GUIDANCE)
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+  "${CMAKE_SOURCE_DIR}/docs/guidance/catalog.json")
 configure_file(packages/roadmap-guidance/guidance-resources.hpp.in
   "${CMAKE_BINARY_DIR}/generated/guidance-resources.hpp" @ONLY)
 add_library(roadmap-guidance STATIC packages/roadmap-guidance/guidance.cpp)
