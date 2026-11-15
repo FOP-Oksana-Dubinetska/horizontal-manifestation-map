@@ -10,7 +10,7 @@
 	"scripts": {
 		"typecheck": "tsc --noEmit",
 		"build": "node tools/build-web.mjs",
-		"test:storage": "node --experimental-strip-types --test tests/web/storage.test.ts tests/web/authoring.test.ts tests/web/locales.test.ts",
+		"test:storage": "node --experimental-strip-types --test tests/web/storage.test.ts tests/web/authoring.test.ts tests/web/locales.test.ts tests/web/example-locales.test.ts",
 		"test:web": "playwright test"
 	},
 	"devDependencies": {

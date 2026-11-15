@@ -38,3 +38,5 @@
 | 20 | [stage-20.ru.md](stage-20.ru.md) | Shared C++/CLI map and locale resources. |
 | 21 | [stage-21.ru.md](stage-21.ru.md) | Intention-led lines, contextual additions and intersections. |
 | 22 | [stage-22.md](stage-22.md) | EN/UK/RU interface, anchor help and native scrolling. |
+
+| Stage 23 | [stage-23.md](stage-23.md) | Complete localized example, compact named reading and navigation links. |

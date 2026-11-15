@@ -37,6 +37,11 @@ function localizeHost() {
 	document.querySelector('.demo-actions')!.setAttribute('aria-label', t('Map actions'));
 	for (const node of document.querySelectorAll<HTMLElement>('[data-i18n]'))
 		node.textContent = t(node.dataset.i18n as MessageKey);
+	for (const node of document.querySelectorAll<HTMLElement>('[data-i18n-label]')) {
+		const label = t(node.dataset.i18nLabel as MessageKey);
+		node.setAttribute('aria-label', label);
+		node.title = label;
+	}
 	languageSelect.value = language;
 }
 localizeHost();
@@ -57,6 +62,9 @@ let storage: RoadmapStorageAdapter | undefined;
 let settings: Storage | undefined;
 let lastSaved: RoadmapProject | null = null;
 let currentSnapshot: RoadmapProject | undefined;
+let pristineExample: RoadmapProject | undefined;
+let pristineLanguage: Locale | undefined;
+let exampleRevision = 0;
 let savedProjects: RoadmapProjectMeta[] = [];
 let dirty = false,
 	starting = false,
@@ -122,13 +130,78 @@ function download(name: string, text: string, type: string) {
 	a.click();
 	setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-async function loadExample() {
-	const response = await fetch(new URL('./example.roadmap.json', document.baseURI), {
-		cache: 'no-store',
-	});
+async function loadExample(locale: Locale = language) {
+	const response = await fetch(
+		new URL(`./examples/architecture-workspace.${locale}.roadmap.json`, document.baseURI),
+		{
+			cache: 'no-store',
+		},
+	);
 	if (!response.ok) throw new Error(t('The architecture example could not be loaded.'));
 	return projectCodec(engine)(await response.json());
 }
+async function syncExampleLanguage() {
+	const instance = editor,
+		snapshot = instance?.getProject(),
+		locale = language;
+	if (
+		!instance ||
+		!snapshot ||
+		!pristineExample ||
+		pristineLanguage === locale ||
+		dirty ||
+		lastSaved ||
+		busy ||
+		instance.hasOpenDraft() ||
+		!same(snapshot, pristineExample)
+	)
+		return;
+	const token = ++exampleRevision;
+	try {
+		const candidate = await loadExample(locale);
+		if (
+			token !== exampleRevision ||
+			instance !== editor ||
+			language !== locale ||
+			busy ||
+			dirty ||
+			lastSaved ||
+			instance.hasOpenDraft() ||
+			!pristineExample ||
+			!same(instance.getProject(), snapshot)
+		)
+			return;
+		// A locale change replaces only known sample text; stored/view preferences stay stable.
+		candidate.selectedIntentId = snapshot.selectedIntentId;
+		candidate.selectedRouteId = snapshot.selectedRouteId;
+		await instance.setProject(candidate, {
+			preserveView: true,
+			isCurrent: () =>
+				token === exampleRevision &&
+				instance === editor &&
+				language === locale &&
+				!busy &&
+				!dirty &&
+				!lastSaved &&
+				!instance.hasOpenDraft() &&
+				same(instance.getProject(), snapshot),
+		});
+		if (
+			token !== exampleRevision ||
+			instance !== editor ||
+			language !== locale ||
+			!same(instance.getProject(), candidate)
+		)
+			return;
+		currentSnapshot = instance.getProject();
+		pristineExample = structuredClone(currentSnapshot);
+		pristineLanguage = locale;
+		status.textContent = t('The architecture example is open.');
+	} catch (cause) {
+		if (token === exampleRevision && instance === editor && language === locale) showError(cause);
+	}
+}
+
 async function start() {
 	if (starting || busy) return;
 	starting = true;
@@ -189,7 +262,12 @@ async function start() {
 			initial = (await storage.loadProject(savedSelect.value)) ?? undefined;
 			lastSaved = initial ? structuredClone(initial) : null;
 		}
-		if (!initial) initial = await loadExample();
+		if (!initial) {
+			const locale = language;
+			initial = await loadExample(locale);
+			pristineExample = structuredClone(initial);
+			pristineLanguage = locale;
+		}
 		editor = await createRoadmapEditor({
 			root,
 			engine,
@@ -199,6 +277,8 @@ async function start() {
 			terminology: 'engineering',
 			features: { terminologySelector: false },
 			onChange: (accepted) => {
+				pristineExample = undefined;
+				++exampleRevision;
 				currentSnapshot = structuredClone(accepted);
 				dirty = !lastSaved || !same(accepted, lastSaved);
 				clearReport();
@@ -207,6 +287,7 @@ async function start() {
 			onError: showError,
 		});
 		editor.setLanguage(language);
+		await syncExampleLanguage();
 		currentSnapshot = editor.getProject();
 		savedChoices(currentSnapshot.id);
 		status.textContent = previous
@@ -226,6 +307,8 @@ async function start() {
 }
 async function save(asCopy = false) {
 	if (!editor || !storage || busy || starting) return;
+	pristineExample = undefined;
+	++exampleRevision;
 	busy = true;
 	enable(false);
 	status.textContent = t('Saving the map\u2026');
@@ -265,15 +348,22 @@ async function save(asCopy = false) {
 }
 async function openProject(example = false) {
 	if (!editor || !storage || busy || starting || !canDiscard()) return;
+	pristineExample = undefined;
+	++exampleRevision;
+	const locale = language;
 	busy = true;
 	enable(false);
 	fileMenu.open = false;
 	try {
-		const candidate = example ? await loadExample() : await storage.loadProject(savedSelect.value);
+		const candidate = example
+			? await loadExample(locale)
+			: await storage.loadProject(savedSelect.value);
 		if (!candidate) throw new Error(t('The saved map was not found.'));
 		await editor.setProject(candidate);
 		currentSnapshot = editor.getProject();
 		lastSaved = example ? null : structuredClone(candidate);
+		pristineExample = example ? structuredClone(currentSnapshot) : undefined;
+		pristineLanguage = example ? locale : undefined;
 		dirty = false;
 		clearReport();
 		if (!example) remember(candidate.id);
@@ -285,6 +375,7 @@ async function openProject(example = false) {
 	} finally {
 		busy = false;
 		enable(true);
+		void syncExampleLanguage();
 	}
 }
 document.querySelector('#new')!.addEventListener('click', () => {
@@ -364,6 +455,7 @@ languageSelect.addEventListener('change', () => {
 	try {
 		localStorage.setItem(localeKey, language);
 	} catch {}
+	void syncExampleLanguage();
 });
 retry.addEventListener('click', () => {
 	fileMenu.open = false;

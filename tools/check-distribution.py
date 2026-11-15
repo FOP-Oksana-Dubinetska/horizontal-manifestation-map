@@ -10,9 +10,15 @@ def main():
     base=SITE/version['engineBaseUrl']
     for name in ['roadmap-engine.mjs','roadmap-engine.wasm']:
         assert (base/name).is_file(), name
-    for name in ['embed/hmap-editor.js','embed/hmap-editor.css','embedding-example.html','_headers','licenses/NOTICE.txt','licenses/third-party/nlohmann-json.txt']:
+    for name in ['embed/hmap-editor.js','embed/hmap-editor.css','embedding-example.html','_headers','licenses/NOTICE.txt','licenses/third-party/nlohmann-json.txt','licenses/third-party/octicons.txt','github.svg']:
         assert (SITE/name).is_file(),name
     assert (SITE/'example.roadmap.json').read_bytes()==(ROOT/'examples/architecture-workspace.roadmap.json').read_bytes(), 'Example differs from source'
+    for language in ['en','uk','ru']:
+        project=json.loads((SITE/f'examples/architecture-workspace.{language}.roadmap.json').read_text())
+        copies=json.loads((ROOT/f'locales/{language}.json').read_text())['example']
+        entities=[project,*project['intents'],*project['modules'],*project['chunks'],*project['routes'],*[s for route in project['routes'] for s in route['steps']],*project['intersections'],*project['estimates']]
+        for entity in entities:
+            for key,text in copies[entity['id']].items():assert entity[key]==text, f'Example locale mismatch: {language}/{entity["id"]}/{key}'
     class StaticHtml(HTMLParser):
         def handle_starttag(self,tag,attrs):
             attrs=dict(attrs)
@@ -25,6 +31,10 @@ def main():
                 assert src and not src.startswith(('//','http:','https:','data:')), 'Expected external same-origin script'
     for name in ['index.html','embedding-example.html']:
         StaticHtml().feed((SITE/name).read_text())
+    html=(SITE/'index.html').read_text()
+    assert html.index('id="help"') < html.index('id="about"') < html.index('id="language"'), 'Expected help/about/language navigation order'
+    footer=html[html.index('<footer'):]
+    assert footer.index('github.com/FOP-Oksana-Dubinetska/horizontal-manifestation-map') < footer.index('./licenses/NOTICE.txt'), 'Expected repository before licenses'
     class Introduction(HTMLParser):
         def __init__(self):
             super().__init__(); self.language=None; self.text={}

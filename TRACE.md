@@ -545,3 +545,19 @@ The final all-profile passed on code revision 1b4e2d59312faf05231a38063e3977e294
 Delivery contains three ordered project-relative patches over the exact Stage 19 tree. The helper uses command-local LF settings for Windows autocrlf compatibility, with full isolated preflight, applied-prefix recognition and before/after hashes. Replay covers standalone/nested projects, check-only preservation, idempotence, resuming after Stage 20 and a conflicting local README. Verification files in the bundle record the final tree and check results. Following the code pass, only this journal and the Stage 22 card receive the observed verification record.
 
 Stage 20: PASS. Stage 21: PASS. Stage 22: PASS.
+
+## Stage 23 — complete example and compact reading (2026-11-15)
+
+Goal: complete sample translations, move About next to How to work, add the repository link before Licenses and simplify the source reading typography. Reviewed the current plans/specification, the exact applied Stage 22 tree 2afbc2ca50b8e22631ffb7ef5a77554679c75c1c, CWEB's official reference page/manual and the current UI/CLI representation. The standalone repository remained unavailable through the current GitHub connection; work continues against the exact delivered source baseline.
+
+Added the bounded hmap-reading.plan.md. All built-in sample text fields now have EN/UK/RU entries keyed by entity ID; the English source remains a regular schema-2 document. Build produces three full variants plus the English alias and rejects incomplete or structural translation entries. The host follows language only for a pristine unsaved sample; accepted edits, imports, saves and current drafts protect authored data. Presentation-only replacement preserves compatible view context and has a final caller guard against stale results. Native/Wasm parity includes all localized samples.
+
+Source reading uses literal <<…>> names and uniform regular 14px monospace for project, intentions, architecture, routes, explanations, intersections and estimates. Semantic heading levels, focus/navigation and edit controls remain. About is a native top anchor after help. The footer uses primer/octicons mark-github-16.svg (blob 0e55a8ef2db1913cb35f81ae09ffdb58b5422319), with its fetched MIT license (blob aa1fa80ed83cf856fb31c22ba56557c42ca84488) and notice. User data stays literal, and no new runtime dependency is installed.
+
+Targeted checks: TypeScript passed; node 14/14; Chromium/Firefox locale/reading/section tests 30/30; distribution 33 files. Inspected desktop and 390px screenshots before the final control pass. Additional guard coverage and the existing complete regression follow on committed sources.
+
+### Stage 23 final verification
+
+All-profile passed on 59fec9f3bd1b8ee4d8bdff94ea151cfdfd01d31c with trackedFilesUnchanged=true. C++ CTest 35/35; CLI integration 40/40; terminal/streams 12/12; CLI workflow/locales 21/21; Wasm probe 1/1; native/Wasm parity 32/32, including validation/render/export of all localized samples; storage/authoring/locales 14/14; browsers 84/84 (42 Chromium and 42 Firefox). Distribution checks passed for 33 files, all sample text fields, navigation order, repository icon/license, the shared introduction and CSP. Governance and PLW checks passed.
+
+One project-relative patch follows Stage 22. Delivery checks cover standalone/nested replay with global autocrlf=true, check-only preservation, idempotence and a conflicting local README. The bundle records its exact final tree and per-file/patch hashes. After the code control pass, only this journal, the stage card and a punctuation correction in AGENTS receive documentary updates. Stage 23: PASS.

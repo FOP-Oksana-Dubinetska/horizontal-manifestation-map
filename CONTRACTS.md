@@ -195,3 +195,9 @@ The interactive workflow starts with an intention. A route requires a selected i
 ### Stage 22 — language and navigation
 
 `language` accepts en/uk/ru and defaults to en. `setLanguage` preserves project/view and emits no onChange; it returns false while a draft/review is open. The host stores this interface preference separately from maps and accepts an explicit ?lang=en|uk|ru override. Native wheel scrolling has no JS threshold or cancellation. Help is a permanent anchor section outside the editor and before the ideological introduction. Locale files own interface strings and guidance; their complete key sets are checked together.
+
+## Chunk: `<<compact-reading>>` — Stage 23
+
+Input: schema-2 bundled example, ID-keyed locale text and accepted project. Output: complete localized sample variants with identical IDs/references/enums, a compact named reading surface, and native about/repository links. Every sample text field is declared in each locale; build rejects missing or structural translation keys. A pristine unsaved sample may follow language. An accepted edit, import, explicit save or current draft prevents automatic replacement. Deferred replacements validate the source and projection, then check both editor revision and caller isCurrent. preserveView retains compatible context for presentation-only replacements. Existing setProject calls retain their original contract.
+
+Reading headings remain semantic h1/h2/h3 with a uniform regular monospaced size and literal <<…>> names. Source text stays literal through textContent. About follows How to work in navigation; the licensed repository icon precedes Licenses. Schema, RoadmapText, API envelope and horizontal workflow remain current.

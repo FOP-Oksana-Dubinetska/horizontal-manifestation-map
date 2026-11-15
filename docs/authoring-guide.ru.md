@@ -18,9 +18,9 @@ Creation starts with an intention. A route requires a selected intention; a step
 
 An intersection names a relationship between at least two different intentions, steps, components or explanations. For example, two steps may rely on one validation contract. Choose its sources and describe the connection; submission becomes available after two sources are selected. Routes and estimates are excluded. Actual component reuse is expressed by multiple steps referencing the same component ID.
 
-English is the default language; Ukrainian and Russian are available in the workspace. The configs are locales/en.json, uk.json and ru.json. Language changes labels, help and diagnostics while preserving authored text and IDs. Close an editing form before switching language; its unfinished text is protected meanwhile.
+English is the default language; Ukrainian and Russian are available in the workspace. The configs are locales/en.json, uk.json and ru.json. Language changes labels, help and diagnostics while preserving authored text and IDs. The pristine, unsaved bundled example also has a complete translation in each language. An accepted edit or explicit save makes its text author-controlled. File → Architecture example opens a fresh version in the selected language. Close an editing form before switching language; its unfinished text is protected meanwhile.
 
-Help is a permanent anchor section outside the editor. CLI uses the same map: `hmap render map.roadmap.json` shows all lines, and `--route=r-id` selects one route. Try `hmap help workflow --lang=uk` or `hmap help intersections --lang=ru`.
+The vertical source uses regular monospaced `<<…>>` names for all sections. Headings retain their semantic levels and keyboard navigation with the same compact visual size. How to work and About this project are adjacent top links; GitHub appears before Licenses in the footer. Help is a permanent anchor section outside the editor. CLI uses the same map: `hmap render map.roadmap.json` shows all lines, and `--route=r-id` selects one route. Try `hmap help workflow --lang=uk` or `hmap help intersections --lang=ru`.
 
 ## Save, reopen and share
 
@@ -40,7 +40,7 @@ The same English introduction appears when `hmap` starts in a terminal. Its word
 
 Форма проверяет изменение целиком. При ошибке исходная карта и введённый текст остаются доступными. Перед удалением можно просмотреть затронутые объекты и ссылки. «Сохранить» записывает карту в этот браузер; меню «Файл» открывает другие карты, создаёт копию и скачивает JSON или Markdown. Импорт предлагает замену до её применения.
 
-Текст перед футером объясняет идею HMAP и её связь с литературным программированием. Каждое намерение сразу появляется началом линии; несколько линий видны вместе. Шаг требует выбранного маршрута, пересечение — двух выбранных источников. Интерфейс доступен на EN/UK/RU, справка вынесена в якорную секцию, прокрутка свободная. Ссылки перехода доступны клавиатурой и на сенсорном экране. То же английское вступление выводится при запуске `hmap` в терминале.
+Текст перед футером объясняет идею HMAP и её связь с литературным программированием. Каждое намерение сразу появляется началом линии; несколько линий видны вместе. Шаг требует выбранного маршрута, пересечение — двух выбранных источников. Интерфейс и нетронутый стартовый пример доступны на EN/UK/RU. После изменения или сохранения текст карты остаётся авторским. Секции чтения обозначены компактными метками `<<…>>`; справка и описание проекта доступны из шапки, прокрутка свободная. Ссылки перехода доступны клавиатурой и на сенсорном экране. То же английское вступление выводится при запуске `hmap` в терминале.
 
 </details>
 
@@ -50,6 +50,6 @@ The same English introduction appears when `hmap` starts in a terminal. Its word
 
 Форма перевіряє зміну цілком. За помилки вихідна карта та введений текст залишаються доступними. Перед видаленням можна переглянути відповідні об'єкти й посилання. Збереження записує карту в цей браузер; меню файлів відкриває інші карти, створює копію та завантажує JSON або Markdown. Імпорт показує запропоновану заміну до її застосування.
 
-Текст перед футером пояснює ідею HMAP та її зв'язок із літературним програмуванням. Кожен намір одразу починає лінію; кілька ліній видно разом. Крок потребує вибраного маршруту, перетин — двох вибраних джерел. Інтерфейс доступний EN/UK/RU, довідка має якірну секцію, прокручування вільне. Посилання переходу доступні з клавіатури та на сенсорному екрані. Той самий англійський вступ виводиться під час запуску `hmap` у терміналі.
+Текст перед футером пояснює ідею HMAP та її зв'язок із літературним програмуванням. Кожен намір одразу починає лінію; кілька ліній видно разом. Крок потребує вибраного маршруту, перетин — двох вибраних джерел. Інтерфейс і незмінений початковий приклад доступні EN/UK/RU. Після редагування або збереження текст карти залишається авторським. Секції читання позначено компактними мітками `<<…>>`; довідка й опис проєкту доступні з верхньої панелі, прокручування вільне. Посилання переходу доступні з клавіатури та на сенсорному екрані. Той самий англійський вступ виводиться під час запуску `hmap` у терміналі.
 
 </details>

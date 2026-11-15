@@ -1,6 +1,6 @@
 # HMAP project instructions
 
-Work inside this project and read `roadmap-editor.plan.md`, `hmap-authoring.plan.md` and the active `hmap-map-workflow.plan.md` (which updates `hmap-presentation.plan.md`) before changing a module. The accepted product scope is schema 2, native CLI, a shared C++/Wasm engine and a vanilla TypeScript embedding package. The stage plans and TRACE record how the implementation develops.
+Work inside this project and read `roadmap-editor.plan.md`, `hmap-authoring.plan.md`, `hmap-map-workflow.plan.md` and the active `hmap-reading.plan.md` before changing a module. The accepted product scope is schema 2, native CLI, a shared C++/Wasm engine and a vanilla TypeScript embedding package. The stage plans and TRACE record how the implementation develops.
 
 Preserve the development sequence: one stage goal, named files, explicit input/output contract, observable verification and a TRACE entry. Use `docs/lessons/completion-index.ru.md` for the existing stage map. New features require a separate bounded plan and contracts. Keep the domain independent of JSON, DOM, filesystem and Emscripten types. Preserve the retained author model and learning tests recorded in `manifest/retained-author-files.json`.
 
@@ -13,3 +13,5 @@ The 2026-11-14 authoring scope is Stage 15–18: forms produce schema-2 candidat
 Stage 19 shares content/project-introduction.json between static HTML and a human-terminal CLI header. Keep version, redirected, JSON/Markdown and artifact output clean. The later Stage 22 removes wheel interception; native links, keyboard, touch, forms and zoom retain their natural input. Current explanatory text uses English with Russian/Ukrainian disclosures.
 
 Stages 20–22 follow the explicit multi-line request of 2026-11-15. Read hmap-map-workflow.plan.md for the CLI-first projection, creation prerequisites, EN/UK/RU locales and native anchor navigation. Preserve imported schema-2 compatibility and authored strings.
+
+Stage 23 completes built-in example translations and compact named-section reading. User-authored maps remain literal data; automatic sample translation ends after an accepted edit or explicit save. Preserve the existing map workflow, native anchors and semantic/keyboard access.

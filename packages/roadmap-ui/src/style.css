@@ -55,30 +55,42 @@
 }
 .hmap-source {
 	overflow: auto;
-	padding: 26px 32px;
+	padding: 16px 20px;
 	min-height: 0;
 	scroll-behavior: smooth;
 }
-.hmap-source h1 {
-	font-size: 27px;
-	line-height: 1.25;
-	margin: 0 0 24px;
+.hmap-source {
+	font:
+		14px/1.65 ui-monospace,
+		SFMono-Regular,
+		Consolas,
+		monospace;
 }
-.hmap-source h2 {
-	font-size: 20px;
-	margin: 25px 0 12px;
+.hmap-source :is(h1, h2, h3),
+.hmap-source .hmap-section-name {
+	font: inherit;
+	font-weight: 400;
+	margin: 14px 0 6px;
+	overflow-wrap: anywhere;
 }
-.hmap-source h3 {
-	font-size: 16px;
-	margin: 20px 0 6px;
+.hmap-source .hmap-project-heading {
+	margin-top: 0;
+}
+.hmap-source ul {
+	margin: 6px 0 10px;
+	padding-left: 2ch;
+}
+.hmap-source button[aria-pressed='true'] {
+	text-decoration: none;
+	background: #eaeade;
 }
 .hmap-source p {
-	margin: 8px 0 16px;
+	margin: 6px 0 10px;
 	max-width: 85ch;
 }
 .hmap-intent-heading button {
 	font: inherit;
-	font-weight: bold;
+	font-weight: 400;
 	border: 0;
 	padding: 0;
 	text-align: left;
@@ -95,14 +107,7 @@
 	text-align: left;
 }
 .hmap-chunk {
-	padding: 14px 0 21px;
-	border-top: 1px solid var(--hmap-line);
-}
-.hmap-source .hmap-chunk-label {
-	font:
-		12px ui-monospace,
-		monospace;
-	margin: 0 0 11px;
+	padding: 8px 0;
 }
 .hmap-body {
 	white-space: pre-wrap;
@@ -521,14 +526,6 @@
 @media (max-width: 600px) {
 	.hmap-editor {
 		--hmap-upper: 35%;
-	}
-	.hmap-source h1 {
-		font-size: 23px;
-		margin-bottom: 12px;
-	}
-	.hmap-source h2 {
-		font-size: 18px;
-		margin-top: 18px;
 	}
 	.hmap-heading-row > button {
 		flex-shrink: 0;

@@ -188,3 +188,12 @@
 - **Validation method**: tools/test-cli-workflow.py; tests/project-views.test.cpp; tests/web/locales.test.ts; tests/browser/map-workflow.spec.ts, locales.spec.ts and sections.spec.ts; native/Wasm parity.
 - **Test-backing status**: integration-test-backed
 - **Evidence path or command**: build/check-reports/check-project.json; TRACE.md.
+
+## Scenario: `SC-23 compact reading and localized example`
+
+- **Purpose**: Read and edit the complete example in three languages through compact named sections.
+- **Input**: Fresh example, EN/UK/RU changes, saved/edited documents, delayed responses, desktop and narrow viewports.
+- **Expected result**: Sample text is complete; identity/links persist; author edits and drafts survive delayed locale loads; headings stay compact and semantic; native About and repository links have the requested positions.
+- **Validation method**: tests/web/example-locales.test.ts; tests/browser/reading.spec.ts; native/Wasm parity; check-distribution and existing regressions.
+- **Test-backing status**: integration-test-backed
+- **Evidence path or command**: build/check-reports/check-project.json; TRACE.md.

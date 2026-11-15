@@ -1,4 +1,5 @@
 import { build } from 'vite';
+import { localizeExample } from './localize-example.mjs';
 import { readFile, writeFile, mkdir, cp, rm } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { resolve, dirname } from 'node:path';
@@ -53,10 +54,21 @@ const publicDir = resolve(root, 'build/web-public');
 await rm(publicDir, { recursive: true, force: true });
 await mkdir(resolve(publicDir, 'engine', hash), { recursive: true });
 await cp(resolve(root, 'apps/web-demo/public'), publicDir, { recursive: true });
-await cp(
-	resolve(root, 'examples/architecture-workspace.roadmap.json'),
-	resolve(publicDir, 'example.roadmap.json'),
+const exampleSource = JSON.parse(
+	await readFile(resolve(root, 'examples/architecture-workspace.roadmap.json'), 'utf8'),
 );
+await mkdir(resolve(publicDir, 'examples'), { recursive: true });
+for (const language of ['en', 'uk', 'ru']) {
+	const copy = JSON.parse(
+		await readFile(resolve(root, `locales/${language}.json`), 'utf8'),
+	).example;
+	const text = JSON.stringify(localizeExample(exampleSource, copy), null, 2) + '\n';
+	await writeFile(
+		resolve(publicDir, `examples/architecture-workspace.${language}.roadmap.json`),
+		text,
+	);
+	if (language === 'en') await writeFile(resolve(publicDir, 'example.roadmap.json'), text);
+}
 await writeFile(resolve(publicDir, 'engine', hash, 'roadmap-engine.mjs'), js);
 await writeFile(resolve(publicDir, 'engine', hash, 'roadmap-engine.wasm'), wasm);
 let sourceRevision = 'uncommitted',

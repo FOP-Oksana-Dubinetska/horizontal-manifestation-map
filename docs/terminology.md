@@ -4,7 +4,7 @@ English is the default. Ukrainian (uk) and Russian (ru) are available through th
 
 locales/en.json, uk.json and ru.json contain interface, host, map, help, diagnostic and terminology strings. docs/guidance/catalog.json retains language-independent topic metadata. CMake embeds locale resources into the common C++ engine; TypeScript reads the same configs. Complete matching key sets are checked in tests/web/locales.test.ts.
 
-The ordinary workspace uses engineering labels. Legacy engineering/simple/product/literary profiles remain available through explicit embedding opt-in and CLI/API guidance. A profile chooses a vocabulary; language chooses its translation. Authored text, machine keys, enum values and IDs retain their meaning.
+The ordinary workspace uses engineering labels. Legacy engineering/simple/product/literary profiles remain available through explicit embedding opt-in and CLI/API guidance. A profile chooses a vocabulary; language chooses its translation. Authored text, machine keys, enum values and IDs retain their meaning. The example section of each locale config supplies the complete built-in architecture sample; its variants preserve IDs and references. A pristine unsaved sample follows language, while an accepted edit, import or explicit save retains its authored text. The source examples/architecture-workspace.roadmap.json is English and can be rendered directly with CLI.
 
 <details><summary>Русский</summary>
 

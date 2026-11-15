@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.0 — compact reading and complete example, 2026-11-15
+
+Stage 23 completes the architecture example in English, Ukrainian and Russian. A pristine unsaved example follows language; accepted edits and saved/imported documents retain their authored text. Source reading uses compact regular <<…>> names throughout. About joins How to work in the top navigation, and a licensed GitHub icon links the repository from the footer.
+
 ## 0.0.0 — intention-led maps, 2026-11-15
 
 Stages 20–22 make each intention the visible origin of a line and display several intentions and routes together. Shared C++/CLI render precedes its web projection; --route selects a slice. The render JSON result now uses rows rather than the earlier single-route fields. Schema-2 documents and their authored content remain compatible.

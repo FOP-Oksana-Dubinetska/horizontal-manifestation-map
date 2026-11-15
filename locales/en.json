@@ -383,7 +383,8 @@
     "Continue this intention by adding a route.": "Continue this intention by adding a route.",
     "Add the first step to this route.": "Add the first step to this route.",
     "No matches for the selected area.": "No matches for the selected area.",
-    "Contract": "Contract"
+    "Contract": "Contract",
+    "Project": "Project"
   },
   "host": {
     "The map was saved; the last-opened preference could not be recorded.": "The map was saved; the last-opened preference could not be recorded.",
@@ -419,7 +420,6 @@
     "Restart engine": "Restart engine",
     "How to work": "How to work",
     "Language": "Language",
-    "About this project ↓": "About this project ↓",
     "Back to the workspace ↑": "Back to the workspace ↑",
     "Licenses": "Licenses",
     "Working with the map": "Working with the map",
@@ -439,6 +439,101 @@
     "Several intentions and shared architecture": "Several intentions and shared architecture",
     "Add another intention to start another line. Add another route to explore an alternative for the same intention. Components and explanations can be shared across lines by identity; their names remain free to change. The arrows describe a route, while scheduling and time totals need a separate model.": "Add another intention to start another line. Add another route to explore an alternative for the same intention. Components and explanations can be shared across lines by identity; their names remain free to change. The arrows describe a route, while scheduling and time totals need a separate model.",
     "File format and storage": "File format and storage",
-    "Schema 2 is shared by CLI and WebAssembly. Language changes interface labels and help; authored text and machine IDs keep their original values. Maps are saved in this browser. JSON transfers the full map; Markdown provides a readable export.": "Schema 2 is shared by CLI and WebAssembly. Language changes interface labels and help; authored text and machine IDs keep their original values. Maps are saved in this browser. JSON transfers the full map; Markdown provides a readable export."
+    "Schema 2 is shared by CLI and WebAssembly. Language changes interface labels and help; authored text and machine IDs keep their original values. Maps are saved in this browser. JSON transfers the full map; Markdown provides a readable export.": "Schema 2 is shared by CLI and WebAssembly. Language changes interface labels and help; authored text and machine IDs keep their original values. Maps are saved in this browser. JSON transfers the full map; Markdown provides a readable export.",
+    "About this project": "About this project",
+    "GitHub repository": "GitHub repository"
+  },
+  "example": {
+    "p-architecture-workspace": {
+      "title": "Example: architecture of a map editor"
+    },
+    "i-author": {
+      "title": "The author creates and revises an architectural plan",
+      "summary": "An intention defines the desired result. Architectural components describe the system, and a route connects them through implementation steps. Edit this example or create your own map.",
+      "acceptanceCriteria": [
+        "Text, components and links can be edited through forms.",
+        "A rejected candidate preserves the last accepted map.",
+        "After an explicit save, the map reopens with the same links."
+      ]
+    },
+    "i-delivery": {
+      "title": "The developer receives a verifiable implementation plan",
+      "summary": "The second route shares the same validation and storage. Reuse references a common component by its ID.",
+      "acceptanceCriteria": [
+        "Each step links to components and explanatory contracts.",
+        "Export preserves the identity of shared elements."
+      ]
+    },
+    "m-core": {
+      "title": "Map model",
+      "summary": "Stores intentions, components, routes and stable references. Distinguishes a shared component from its occurrence in a route."
+    },
+    "m-ui": {
+      "title": "Authoring interface",
+      "summary": "Provides forms for editing text and links. Shows architectural explanations above and all intention-led route lines below."
+    },
+    "m-validation": {
+      "title": "Candidate validation",
+      "summary": "Checks references, intention lineage and consistent states before accepting changes."
+    },
+    "m-storage": {
+      "title": "Storage adapter",
+      "summary": "Saves the accepted map through an explicit author action. The shared contract supports browser storage and temporary memory."
+    },
+    "m-export": {
+      "title": "Plan export",
+      "summary": "Builds readable Markdown from the accepted project while preserving architectural links."
+    },
+    "c-intention": {
+      "name": "An intention defines the result",
+      "body": "Describe the property the system should provide and how the result will be checked. Criteria belong to the intention; a route offers a sequence for realising it."
+    },
+    "c-architecture": {
+      "name": "Architectural element and route step",
+      "body": "A component exists once in the map. A step references that component and an explanatory contract. Renaming preserves its ID and every link. Compare the two routes to see reuse."
+    },
+    "c-validation": {
+      "name": "Change acceptance contract",
+      "body": "A form prepares a candidate. The shared engine validates the whole map. An error preserves the accepted project and the draft; successful validation permits an atomic replacement. Selecting a route step reveals this contract. Validate map performs the actual document check."
+    },
+    "c-storage": {
+      "name": "Storage contract",
+      "body": "Applying changes and saving are separate actions. Save records the accepted map in this browser. If storage fails, JSON remains available for download. The second route uses the same adapter."
+    },
+    "c-export": {
+      "name": "Plan handoff contract",
+      "body": "Markdown presents intentions, architectural elements, contracts and routes. JSON preserves the structured source for further editing and import. Code references are supplied by the author; file existence is not checked automatically."
+    },
+    "r-author": {
+      "title": "From intention to a saved map"
+    },
+    "r-delivery": {
+      "title": "From architecture to developer handoff"
+    },
+    "x-validation": {
+      "title": "Shared validation across two routes",
+      "note": "Both steps use one validator. The architecture defines the component once; the routes show its different occurrences."
+    },
+    "s-describe": {
+      "title": "Intention and criteria"
+    },
+    "s-architecture": {
+      "title": "Components and contracts"
+    },
+    "s-check-map": {
+      "title": "Validate changes"
+    },
+    "s-save-map": {
+      "title": "Save locally"
+    },
+    "s-check-delivery": {
+      "title": "Validate the plan before handoff"
+    },
+    "s-export-plan": {
+      "title": "Readable implementation plan"
+    },
+    "s-preserve-source": {
+      "title": "Preserve the source map"
+    }
   }
 }

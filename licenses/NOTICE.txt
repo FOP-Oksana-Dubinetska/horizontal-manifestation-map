@@ -13,6 +13,9 @@ Runtime dependencies and generated runtime code retain upstream terms:
   (third-party/emscripten.txt and accompanying support-library licenses).
 - Vite 7.3.1 generated browser helpers, MIT and listed upstream component terms
   (third-party/vite.txt).
+- GitHub mark from primer/octicons, MIT, GitHub Inc.
+  (third-party/octicons.txt; source icons/mark-github-16.svg, blob
+  0e55a8ef2db1913cb35f81ae09ffdb58b5422319).
 Catch2, TypeScript and Playwright are development-only dependencies and are
 not bundled as application runtime libraries.
 

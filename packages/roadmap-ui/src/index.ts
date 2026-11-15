@@ -48,7 +48,10 @@ export interface RoadmapEditorInstance {
 	hasOpenDraft(): boolean;
 	destroy(): void;
 	getProject(): RoadmapProject;
-	setProject(project: RoadmapProject): Promise<void>;
+	setProject(
+		project: RoadmapProject,
+		options?: { preserveView?: boolean; isCurrent?: () => boolean },
+	): Promise<void>;
 	getViewState(): RoadmapViewState;
 }
 interface MapProjection {
@@ -374,7 +377,13 @@ export async function createRoadmapEditor(
 		rail.replaceChildren();
 		updateActionAvailability();
 		const projectHeading = element('div', 'hmap-heading-row');
-		projectHeading.append(element('h1', 'hmap-project-title', project.title));
+		const title = element('h1', 'hmap-section-name hmap-project-heading');
+		title.append(
+			'<<' + t('Project') + ': ',
+			element('span', 'hmap-project-title', project.title),
+			'>>',
+		);
+		projectHeading.append(title);
 		if (canEdit)
 			projectHeading.append(editButton({ kind: 'project', id: project.id }, project.title));
 		upper.append(projectHeading);
@@ -394,8 +403,9 @@ export async function createRoadmapEditor(
 			view.filter === 'all' || project.modules.some((m) => m.id === id && m.kind === view.filter);
 		let matching = 0;
 		for (const intent of project.intents) {
-			const heading = element('h2', 'hmap-intent-heading');
-			const button = element('button', '', labels.intent + ': ' + intent.title);
+			const heading = element('h2', 'hmap-section-name hmap-intent-heading');
+			const button = element('button', '', '<<' + labels.intent + ': ' + intent.title + '>>');
+			button.setAttribute('aria-label', labels.intent + ': ' + intent.title);
 			button.dataset.intentId = intent.id;
 			button.setAttribute('aria-pressed', String(view.selectedIntentId === intent.id));
 			button.addEventListener(
@@ -422,7 +432,8 @@ export async function createRoadmapEditor(
 			upper.append(criteria);
 			const routes = element('p', 'hmap-route-choices');
 			for (const route of project.routes.filter((r) => r.intentId === intent.id)) {
-				const link = element('button', '', labels.route + ': ' + route.title);
+				const link = element('button', '', '<<' + labels.route + ': ' + route.title + '>>');
+				link.setAttribute('aria-label', labels.route + ': ' + route.title);
 				link.dataset.routeId = route.id;
 				link.setAttribute('aria-pressed', String(view.selectedRouteId === route.id));
 				link.addEventListener(
@@ -445,7 +456,8 @@ export async function createRoadmapEditor(
 		const selectedStep = project.routes
 			.flatMap((r) => r.steps)
 			.find((s) => s.id === view.selectedStepId);
-		if (project.modules.length) upper.append(element('h2', '', t('Architecture')));
+		if (project.modules.length)
+			upper.append(element('h2', 'hmap-section-name', '<<' + t('Architecture') + '>>'));
 		for (const module of project.modules) {
 			const section = element('section', 'hmap-module');
 			section.dataset.entityId = module.id;
@@ -458,7 +470,9 @@ export async function createRoadmapEditor(
 				selectedStep?.linkedModuleIds.includes(module.id) ?? false,
 			);
 			const row = element('div', 'hmap-heading-row');
-			row.append(element('h3', '', labels.module + ': ' + module.title));
+			row.append(
+				element('h3', 'hmap-section-name', '<<' + labels.module + ': ' + module.title + '>>'),
+			);
 			if (canEdit) row.append(editButton({ kind: 'module', id: module.id }, module.title));
 			const uses = project.routes.filter((r) =>
 				r.steps.some((s) => s.linkedModuleIds.includes(module.id)),
@@ -486,7 +500,10 @@ export async function createRoadmapEditor(
 				);
 			upper.append(section);
 		}
-		if (project.chunks.length) upper.append(element('h2', '', t('Contracts and explanations')));
+		if (project.chunks.length)
+			upper.append(
+				element('h2', 'hmap-section-name', '<<' + t('Contracts and explanations') + '>>'),
+			);
 		for (const chunk of project.chunks) {
 			const section = element('section', 'hmap-chunk');
 			section.id = prefix + '-' + chunk.id;
@@ -501,7 +518,7 @@ export async function createRoadmapEditor(
 				selectedStep?.linkedChunkIds.includes(chunk.id) ?? false,
 			);
 			const row = element('div', 'hmap-heading-row');
-			row.append(element('h3', 'hmap-chunk-label', '<<' + chunk.name + '>>'));
+			row.append(element('h3', 'hmap-section-name hmap-chunk-label', '<<' + chunk.name + '>>'));
 			if (canEdit) row.append(editButton({ kind: 'chunk', id: chunk.id }, chunk.name));
 			section.append(row, element('div', 'hmap-body', chunk.body));
 			const modules = project.modules.filter((m) => chunk.linkedModuleIds.includes(m.id));
@@ -514,7 +531,13 @@ export async function createRoadmapEditor(
 		for (const intersection of project.intersections) {
 			const section = element('section', 'hmap-intersection');
 			const row = element('div', 'hmap-heading-row');
-			row.append(element('h3', '', labels.intersection + ': ' + intersection.title));
+			row.append(
+				element(
+					'h3',
+					'hmap-section-name',
+					'<<' + labels.intersection + ': ' + intersection.title + '>>',
+				),
+			);
 			if (canEdit)
 				row.append(editButton({ kind: 'intersection', id: intersection.id }, intersection.title));
 			section.append(row, element('p', '', intersection.note));
@@ -523,7 +546,9 @@ export async function createRoadmapEditor(
 		for (const estimate of project.estimates) {
 			const section = element('section', 'hmap-estimate');
 			const row = element('div', 'hmap-heading-row');
-			row.append(element('h3', '', estimate.label));
+			row.append(
+				element('h3', 'hmap-section-name', '<<' + t('Estimate') + ': ' + estimate.label + '>>'),
+			);
 			if (canEdit) row.append(editButton({ kind: 'estimate', id: estimate.id }, estimate.label));
 			section.append(
 				row,
@@ -996,16 +1021,20 @@ export async function createRoadmapEditor(
 			check();
 			return clone(view);
 		},
-		async setProject(candidate: RoadmapProject) {
+		async setProject(
+			candidate: RoadmapProject,
+			options?: { preserveView?: boolean; isCurrent?: () => boolean },
+		) {
 			check();
 			const token = ++revision;
 			const accepted = await validate(clone(candidate));
 			const projected = await loadMap(accepted);
-			if (dead || token !== revision) return;
+			if (dead || token !== revision || options?.isCurrent?.() === false) return;
 			authoring.close();
+			const before = project;
 			project = accepted;
 			map = projected;
-			setSelection(project);
+			setSelection(project, options?.preserveView ? before : undefined);
 			preview = null;
 			if (dialog.open) dialog.close();
 			dialog.hidden = true;

@@ -1557,3 +1557,8 @@ FTXUI — подходящий кандидат: upstream заявляет те�
 ## 26. Intention-led map — 2026-11-15
 
 The current request and hmap-map-workflow.plan.md supersede the single visible route restriction above. Every intention begins a visible line, including unrouted intentions; all routes appear under their own intentions. Shared C++/CLI projection precedes web authoring changes. Existing schema-2 documents stay valid. EN/UK/RU locale files define presentation; the default is English. Stage 20–22 contracts and checks are described in the active plan.
+
+
+## 27. Compact reading and a complete example — 2026-11-15
+
+Stage 23, detailed in hmap-reading.plan.md, completes all text fields of the built-in architecture example in EN/UK/RU and makes the vertical source a compact sequence of named <<…>> sections. Semantic headings, author data, workflow and formats remain compatible. About moves next to help in navigation, and the source repository icon precedes licenses.
