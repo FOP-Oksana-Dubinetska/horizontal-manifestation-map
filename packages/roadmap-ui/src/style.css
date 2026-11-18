@@ -1,14 +1,34 @@
 .hmap-editor {
-	--hmap-ink: #20201e;
-	--hmap-muted: #72726b;
-	--hmap-line: #c5c5ba;
+	color-scheme: light dark;
+	--hmap-bg: #f8f8f6;
+	--hmap-ink: #191919;
+	--hmap-muted: #666;
+	--hmap-line: #c8c8c2;
+	--hmap-soft: #efefeb;
+	--hmap-link: #174a7c;
+	--hmap-danger: #8b2828;
+	--hmap-shadow: #19191922;
+}
+@media (prefers-color-scheme: dark) {
+	.hmap-editor {
+		--hmap-bg: #171717;
+		--hmap-ink: #e8e8e4;
+		--hmap-muted: #aaa;
+		--hmap-line: #444;
+		--hmap-soft: #202020;
+		--hmap-link: #8dbce8;
+		--hmap-danger: #ffaaaa;
+		--hmap-shadow: #0006;
+	}
+}
+.hmap-editor {
 	box-sizing: border-box;
 	display: grid;
 	grid-template-rows: auto minmax(140px, var(--hmap-upper, 35%)) 8px minmax(180px, 1fr);
 	height: 100%;
 	min-height: 420px;
 	position: relative;
-	background: #fafaf5;
+	background: var(--hmap-bg);
 	color: var(--hmap-ink);
 	font:
 		15px/1.6 Georgia,
@@ -35,10 +55,10 @@
 	cursor: pointer;
 }
 .hmap-editor button:hover {
-	background: #eeeee6;
+	background: var(--hmap-soft);
 }
 .hmap-editor :focus-visible {
-	outline: 2px solid #222;
+	outline: 2px solid var(--hmap-ink);
 	outline-offset: 3px;
 }
 .hmap-editor button[aria-pressed='true'] {
@@ -82,7 +102,7 @@
 }
 .hmap-source button[aria-pressed='true'] {
 	text-decoration: none;
-	background: #eaeade;
+	background: var(--hmap-soft);
 }
 .hmap-source p {
 	margin: 6px 0 10px;
@@ -126,8 +146,8 @@
 	border-top: 1px dashed var(--hmap-line);
 }
 .hmap-divider {
-	background: repeating-linear-gradient(90deg, #ccc 0 2px, transparent 2px 5px) center/70px 2px
-		no-repeat;
+	background: repeating-linear-gradient(90deg, var(--hmap-line) 0 2px, transparent 2px 5px)
+		center/70px 2px no-repeat;
 	border-block: 1px solid var(--hmap-line);
 	cursor: row-resize;
 	touch-action: none;
@@ -136,7 +156,7 @@
 	overflow: auto;
 	padding: 16px 18px;
 	min-height: 0;
-	background: #f1f1e9;
+	background: var(--hmap-soft);
 }
 .hmap-route-row {
 	display: flex;
@@ -154,7 +174,7 @@
 	padding: 12px 8px;
 }
 .hmap-active-line {
-	border-left: 3px solid #6c6c58;
+	border-left: 3px solid var(--hmap-muted);
 }
 .hmap-editor .hmap-intent-origin {
 	display: flex;
@@ -165,7 +185,7 @@
 	min-height: 112px;
 	padding: 15px;
 	text-align: left;
-	background: #e5e5d7;
+	background: var(--hmap-soft);
 }
 .hmap-intent-origin strong {
 	font:
@@ -211,7 +231,7 @@
 	min-height: 112px;
 	padding: 15px 16px;
 	text-align: left;
-	background: #fafaf5;
+	background: var(--hmap-bg);
 }
 .hmap-step strong {
 	font:
@@ -233,8 +253,8 @@
 	opacity: 0.32;
 }
 .hmap-focused {
-	background: #e5e5d7;
-	outline: 1px solid #777;
+	background: var(--hmap-soft);
+	outline: 1px solid var(--hmap-muted);
 }
 .hmap-status {
 	font:
@@ -248,14 +268,14 @@
 	width: min(720px, calc(100vw - 24px));
 	max-height: calc(100dvh - 32px);
 	overflow: auto;
-	background: #fafaf5;
+	background: var(--hmap-bg);
 	color: var(--hmap-ink);
 	font: inherit;
-	border: 1px solid #555;
+	border: 1px solid var(--hmap-muted);
 	padding: 24px;
 }
 .hmap-editor dialog::backdrop {
-	background: #20201e66;
+	background: var(--hmap-shadow);
 }
 .hmap-review-text {
 	white-space: pre-wrap;
@@ -308,7 +328,7 @@
 	font-size: 11px;
 	padding: 3px 6px;
 	border-color: transparent;
-	color: #55554d;
+	color: var(--hmap-muted);
 }
 .hmap-route-choice {
 	display: inline-flex;
@@ -319,7 +339,7 @@
 	font:
 		12px/1.5 ui-monospace,
 		monospace;
-	color: #616157;
+	color: var(--hmap-muted);
 }
 .hmap-rail {
 	padding-top: 12px;
@@ -356,7 +376,7 @@
 	font:
 		11px/1.5 ui-monospace,
 		monospace;
-	color: #55554d;
+	color: var(--hmap-muted);
 	overflow-wrap: anywhere;
 }
 .hmap-arrow {
@@ -379,11 +399,11 @@
 	left: 0;
 	width: 245px;
 	display: grid;
-	background: #fafaf5;
-	border: 1px solid #777;
+	background: var(--hmap-bg);
+	border: 1px solid var(--hmap-muted);
 	padding: 6px;
 	z-index: 5;
-	box-shadow: 0 5px 12px #2222;
+	box-shadow: 0 5px 12px var(--hmap-shadow);
 }
 .hmap-add-choices button {
 	text-align: left;
@@ -408,10 +428,10 @@
 .hmap-field :is(input, textarea, select) {
 	width: 100%;
 	min-width: 0;
-	border: 1px solid #aaa99d;
+	border: 1px solid var(--hmap-line);
 	border-radius: 0;
 	padding: 9px;
-	background: #fffef9;
+	background: var(--hmap-bg);
 	color: inherit;
 	font:
 		15px/1.5 Georgia,
@@ -448,7 +468,7 @@
 }
 .hmap-link-choices small {
 	margin-left: auto;
-	color: #72726b;
+	color: var(--hmap-muted);
 	font:
 		10px ui-monospace,
 		monospace;
@@ -460,7 +480,7 @@
 .hmap-form-error {
 	white-space: pre-wrap;
 	overflow-wrap: anywhere;
-	color: #8b2828;
+	color: var(--hmap-danger);
 	font:
 		12px/1.6 ui-monospace,
 		monospace;
@@ -474,14 +494,14 @@
 	flex-wrap: wrap;
 	position: sticky;
 	bottom: -24px;
-	background: #fafaf5;
+	background: var(--hmap-bg);
 	border-top: 1px solid var(--hmap-line);
 	padding: 14px 0;
 	margin-top: 20px;
 }
 .hmap-form-actions .hmap-delete {
 	margin-left: auto;
-	color: #8b2828;
+	color: var(--hmap-danger);
 }
 .hmap-form-actions button:disabled {
 	opacity: 0.45;
@@ -491,7 +511,7 @@
 	font:
 		11px/1.6 ui-monospace,
 		monospace;
-	color: #72726b;
+	color: var(--hmap-muted);
 }
 .hmap-identity summary {
 	cursor: pointer;
