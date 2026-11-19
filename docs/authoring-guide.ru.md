@@ -34,7 +34,7 @@ The short section before the footer connects HMAP to the earlier review of Knuth
 
 The same English introduction appears when `hmap` starts in a terminal. Its wording comes from `content/project-introduction.json`, shared with the static website. The technical embedding example demonstrates two independent editors; its Host button helps check that editor styles leave the surrounding page intact.
 
-<details><summary><strong>Русский</strong></summary>
+<details><summary>Русский</summary>
 
 Карта начинается с намерения и критериев результата. Затем добавляются компоненты, контракты, маршрут и связанные шаги. Один компонент может участвовать в нескольких маршрутах, сохраняя общий ID. Кнопки «Изменить» открывают формы; нажатие шага выделяет относящиеся к нему элементы.
 
@@ -44,7 +44,7 @@ The same English introduction appears when `hmap` starts in a terminal. Its word
 
 </details>
 
-<details><summary><strong>Українська</strong></summary>
+<details><summary>Українська</summary>
 
 Карта починається з наміру та критеріїв результату. Далі додаються компоненти, контракти, маршрут і зв'язані кроки. Один компонент може брати участь у кількох маршрутах, зберігаючи спільний ID. Кнопки редагування відкривають форми; натискання кроку виділяє пов'язані з ним елементи.
 

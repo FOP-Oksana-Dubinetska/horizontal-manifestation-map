@@ -14,7 +14,7 @@ A hash suggested by the console identifies a particular inline block. Match it t
 
 The [MDN script-src reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/script-src) explains the directive and the distinction between WebAssembly permission and inline JavaScript.
 
-<details><summary><strong>Русский</strong></summary>
+<details><summary>Русский</summary>
 
 Сообщение консоли легче разобрать по полному URL источника и действию, которое его вызвало. Имя `content.js` само по себе не определяет скрипт; origin `moz-extension://` или `chrome-extension://` указывает на расширение. Сравнение с чистым профилем помогает понять происхождение сообщения.
 
@@ -22,7 +22,7 @@ The [MDN script-src reference](https://developer.mozilla.org/en-US/docs/Web/HTTP
 
 </details>
 
-<details><summary><strong>Українська</strong></summary>
+<details><summary>Українська</summary>
 
 Повідомлення консолі легше розібрати за повним URL джерела та дією, яка його спричинила. Назва `content.js` сама собою не визначає скрипт; origin `moz-extension://` або `chrome-extension://` указує на розширення. Порівняння з чистим профілем допомагає з'ясувати походження повідомлення.
 

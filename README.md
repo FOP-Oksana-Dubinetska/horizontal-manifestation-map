@@ -77,7 +77,7 @@ The check runner also accepts `native`, `wasm` and `web`. It uses already prepar
 For a diff delivery, begin with its README and `apply-series.py --check-only`. The patch helper checks the complete sequence against the files before applying it, including projects that have been copied from `TheWorldOfCanon/at-work/horizontal-manifestation-map` into a separate repository.
 
 <details>
-<summary><strong>Русский</strong></summary>
+<summary>Русский</summary>
 
 ## Учебный проект и его идея
 
@@ -104,7 +104,7 @@ HMAP — учебный проект на C++, связывающий архит
 </details>
 
 <details>
-<summary><strong>Українська</strong></summary>
+<summary>Українська</summary>
 
 ## Навчальний проєкт і його ідея
 

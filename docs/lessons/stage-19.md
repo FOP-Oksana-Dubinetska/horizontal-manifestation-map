@@ -88,7 +88,7 @@ The final evidence additions affect only this card, TRACE and stage-index format
 
 This is one patch above the Stage 18 delivery. Begin with the archive's `--check-only` command, apply the patch and rebuild. Its helper checks both a standalone repository and the nested project layout.
 
-<details><summary><strong>Русский</strong></summary>
+<details><summary>Русский</summary>
 
 Этап добавляет учебный контекст и стек в README, короткий идейный текст перед футером и то же английское вступление в терминале. Основной текст английский; русский и украинский раскрываются ниже. Обычная прокрутка читает текущую секцию, усиленный жест переходит к соседней. Формы, клавиатура и длинные раскрытые переводы остаются удобными для чтения и работы.
 
@@ -96,7 +96,7 @@ This is one patch above the Stage 18 delivery. Begin with the archive's `--check
 
 </details>
 
-<details><summary><strong>Українська</strong></summary>
+<details><summary>Українська</summary>
 
 Етап додає навчальний контекст і стек до README, короткий ідейний текст перед футером та той самий англійський вступ у терміналі. Основний текст англійський; російський і український розкриваються нижче. Звичайне прокручування читає поточну секцію, посилений жест переходить до сусідньої. Форми, клавіатура та довгі розкриті переклади залишаються зручними для читання й роботи.
 

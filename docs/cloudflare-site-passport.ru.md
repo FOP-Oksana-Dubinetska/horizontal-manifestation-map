@@ -63,7 +63,7 @@ Push the checked source to the production branch. If a deployment needs to be re
 
 Official configuration references: [Git integration](https://developers.cloudflare.com/pages/get-started/git-integration/), [build configuration](https://developers.cloudflare.com/pages/configuration/build-configuration/), [custom domains](https://developers.cloudflare.com/pages/configuration/custom-domains/) and [headers](https://developers.cloudflare.com/pages/configuration/headers/).
 
-<details><summary><strong>Русский</strong></summary>
+<details><summary>Русский</summary>
 
 ## Настройка сайта
 
@@ -75,7 +75,7 @@ Official configuration references: [Git integration](https://developers.cloudfla
 
 </details>
 
-<details><summary><strong>Українська</strong></summary>
+<details><summary>Українська</summary>
 
 ## Налаштування сайту
 

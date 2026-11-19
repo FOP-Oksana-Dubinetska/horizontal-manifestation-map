@@ -66,13 +66,13 @@ Commands: `npm run test:storage`, `npm run typecheck`, `npm run build`, `npm run
 
 The CLI terminal checks compare the English introduction with `content/project-introduction.json`. Browser tests cover the static translations, native section scrolling and anchor help, inner scrolling, keyboard links, zoom events and open forms. Existing stream and editor checks continue to exercise the surrounding behaviour.
 
-<details><summary><strong>Русский</strong></summary>
+<details><summary>Русский</summary>
 
 Эта таблица помогает найти проверку нужной функции. Актуальные результаты находятся в отчётах, история разработки — в TRACE. Проверки вступления сравнивают английский текст сайта и терминала с общим источником. Браузерные сценарии проверяют переходы между секциями, внутреннюю прокрутку и работу форм.
 
 </details>
 
-<details><summary><strong>Українська</strong></summary>
+<details><summary>Українська</summary>
 
 Ця таблиця допомагає знайти перевірку потрібної функції. Поточні результати зберігаються у звітах, історія розроблення — у TRACE. Перевірки вступу порівнюють англійський текст сайту й термінала зі спільним джерелом. Браузерні сценарії перевіряють переходи між секціями, внутрішнє прокручування та роботу форм.
 

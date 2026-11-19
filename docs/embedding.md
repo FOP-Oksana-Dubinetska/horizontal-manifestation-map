@@ -45,13 +45,13 @@ The shared engine's default `render` JSON DTO now contains `rows[{intent,route|n
 
 For presentation-only replacement of the same document, `setProject(candidate, {preserveView: true, isCurrent: () => stillCurrent})` retains compatible view context and checks the caller's guard immediately before accepting the validated project/projection pair. Omitting these options retains the existing replacement contract. The host uses this path only for a pristine bundled example; accepted user edits and saved/imported maps stay literal.
 
-<details><summary><strong>Русский</strong></summary>
+<details><summary>Русский</summary>
 
 Публичный пакет позволяет встроить карту в другую страницу. Host создаёт движок и адаптер хранения, передаёт их редактору и сохраняет данные по явному действию. Формы проверяют изменения общим движком; readonly оставляет просмотр и навигацию. Пример встраивания показывает два независимых экземпляра с одним движком.
 
 </details>
 
-<details><summary><strong>Українська</strong></summary>
+<details><summary>Українська</summary>
 
 Публічний пакет дає змогу вбудувати карту в іншу сторінку. Host створює рушій та адаптер сховища, передає їх редактору й зберігає дані за явною дією. Форми перевіряють зміни спільним рушієм; readonly залишає перегляд і навігацію. Приклад вбудовування показує два незалежні екземпляри зі спільним рушієм.
 
